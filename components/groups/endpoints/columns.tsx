@@ -71,12 +71,12 @@ export const columns: ColumnDef<Endpoint>[] = [
           size="sm"
           onClick={() => {
             navigator.clipboard.writeText(
-              `https://app.router.so/api/endpoints/${id}`
+              `/api/endpoints/${id}`
             );
             toast.success("Endpoint Copied");
           }}
         >
-          {`https://app.router.so/api/endpoints/${id}`}
+          {`/api/endpoints/${id}`}
         </Button>
       );
     },

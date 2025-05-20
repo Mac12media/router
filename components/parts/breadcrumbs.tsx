@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
-import Icon from "@/public/icon.svg";
+import Icon from "@/public/expo.avif";
 
 export const Breadcrumbs = ({ pageName, isLoading }: { pageName?: string, isLoading?: boolean }) => {
   return (

@@ -16,7 +16,7 @@ import { Usage } from "@/components/parts/usage";
 const pageData = {
   name: "Dashboard",
   title: "Dashboard",
-  description: "Snapshot of your endpoints and leads",
+  description: "Snapshot of your sent emails and more",
 };
 
 export default async function Page() {

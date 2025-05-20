@@ -7,16 +7,21 @@ import { getUsageForUser } from "@/lib/data/users";
 import { LucideProps } from "lucide-react";
 
 // Image Imports
-import Logo from "@/public/logo.svg";
+import Logo from "@/public/expologo.png";
 
 // Icon Imports
 import { BarChart, Contact, Layers, LifeBuoy, Disc3, Book } from "lucide-react";
 
 const links = [
   { href: "/", text: "Dashboard", icon: BarChart },
-  { href: "/endpoints", text: "Endpoints", icon: Layers },
+      { href: "/coaches", text: "Coaches", icon: Contact },
+
+  { href: "/endpoints", text: "Contacts", icon: Layers },
   { href: "/leads", text: "Leads", icon: Contact },
+
   { href: "/logs", text: "Logs", icon: Disc3 },
+    { href: "/toolkit", text: "Toolkit", icon: Disc3 },
+
 ];
 
 const otherLinks = [
@@ -35,10 +40,10 @@ export default async function Nav() {
         className="border bg-muted/50 flex items-center gap-2 rounded-lg p-6"
       >
         <Image
-          className="dark:invert -mt-px mb-px"
+          className="-mt-px mb-px"
           src={Logo}
           width={100}
-          height={18.53}
+          height={100}
           alt="Router.so Wordmark"
         />
       </Link>
@@ -63,7 +68,7 @@ export default async function Nav() {
             <div className="flex justify-between items-center gap-2">
               <ModeToggle />
               <p className="text-xs text-muted-foreground opacity-50">
-                &copy; Router.so, 2024
+                &copy; Expo Recruits, 2025
               </p>
             </div>
           </div>
