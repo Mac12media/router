@@ -73,10 +73,6 @@ export default function RecruitingToolkitCoursePage() {
         {/* Call to Action */}
         <section className="bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h3 className="text-xl font-semibold mb-2">Ready to Get Recruited?</h3>
-          <p className="mb-4 text-gray-700">
-            Use this free text-based course to take actionable steps in your recruiting journey.
-            Whether you're just starting or refining your approach, this toolkit will help.
-          </p>
           <a
             href="#"
             className="inline-block bg-blue-600 text-white px-6 py-2 rounded font-medium hover:bg-blue-700 transition"
