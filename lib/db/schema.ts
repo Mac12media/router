@@ -32,6 +32,8 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  last_name: text("last_name"),
+  grad_year: text("grad_year"),
   leadCount: integer("leadCount").notNull().default(0),
   plan: planEnum("plan").notNull().default("free"),
   stripeCustomerId: text("stripeCustomerId"),
@@ -141,4 +143,27 @@ export const logs = pgTable("log", {
   postType: logPostTypeEnum("postType").notNull(),
   message: jsonb("message").$type<Record<string, any> | unknown>().notNull(),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+});
+
+
+export const fbcoaches = pgTable("fbcoaches", {
+  id: integer("id")
+      .$defaultFn(() => 1)  
+
+    .notNull()
+    .primaryKey(),
+  school: text("school")
+    .notNull(),
+    photo_url: text("photo_url").notNull(),
+  division: text("division").notNull(),
+  head_coach: text("head_coach").notNull(),
+  program_bio: text("program_bio").notNull(),
+  email: text("email").notNull(),
+    phone: text("phone").notNull(),
+        website: text("website"),
+
+
+  created_at: timestamp("created_at", { mode: "date" }).notNull(),
+    updated_at: timestamp("updated_at", { mode: "date" }).notNull(),
+
 });

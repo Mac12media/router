@@ -68,7 +68,7 @@ export const deleteEndpoint = authenticatedAction
     await db
       .delete(endpoints)
       .where(and(eq(endpoints.id, id), eq(endpoints.userId, userId)));
-    revalidatePath("/endpoints");
+    revalidatePath("/campaigns");
   });
 
 /**
@@ -83,7 +83,7 @@ export const disableEndpoint = authenticatedAction
       .update(endpoints)
       .set({ enabled: false, updatedAt: new Date() })
       .where(and(eq(endpoints.id, id), eq(endpoints.userId, userId)));
-    revalidatePath("/endpoints");
+    revalidatePath("/campaigns");
   });
 
 /**
@@ -98,7 +98,7 @@ export const enableEndpoint = authenticatedAction
       .update(endpoints)
       .set({ enabled: true, updatedAt: new Date() })
       .where(and(eq(endpoints.id, id), eq(endpoints.userId, userId)));
-    revalidatePath("/endpoints");
+    revalidatePath("/campaigns");
   });
 
 /**
@@ -127,8 +127,8 @@ export const createEndpoint = authenticatedAction
       updatedAt: new Date(),
     });
 
-    revalidatePath("/endpoints");
-    redirect("/endpoints");
+    revalidatePath("/campaigns");
+    redirect("/campaigns");
   });
 
 /**
@@ -158,6 +158,6 @@ export const updateEndpoint = authenticatedAction
         and(eq(endpoints.id, parsedInput.id), eq(endpoints.userId, userId))
       );
 
-    revalidatePath("/endpoints");
-    redirect("/endpoints");
+    revalidatePath("/campaigns");
+    redirect("/campaigns");
   });

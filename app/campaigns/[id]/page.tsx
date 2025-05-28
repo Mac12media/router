@@ -21,7 +21,7 @@ import { generateShadcnForm } from "@/lib/helpers/generate-form";
 import { notFound } from "next/navigation";
 
 const pageData = {
-  title: "Endpoint",
+  title: "Campaign",
   description: "Schema details and posting instructions for your endpoint",
 };
 
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   const schema = endpointData?.schema as GeneralSchema[];
 
-  const url = `/api/endpoints/${endpointData.id}`;
+  const url = `/api/campaigns/${endpointData.id}`;
 
   //  ---------- TODO: make this into its own function ----------
   const formattedSchema = new Object() as { [key: string]: ValidationType };
@@ -201,7 +201,7 @@ function Breadcrumbs({ endpointId }: { endpointId: string }) {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/endpoints">Endpoints</BreadcrumbLink>
+          <BreadcrumbLink href="/campaigns">My Campaigns</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>

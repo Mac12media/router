@@ -276,7 +276,7 @@ export default function CreateForm() {
         </div>
 
         <Button type="submit" className="mt-12" loading={isExecuting}>
-          Create Endpoint
+          Create Campaign
         </Button>
       </form>
     </Form>

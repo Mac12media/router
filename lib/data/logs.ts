@@ -28,7 +28,7 @@ export async function createLog(
     endpointId,
   });
 
-  revalidatePath("/logs");
+  revalidatePath("/activity");
 }
 
 /**
@@ -54,6 +54,9 @@ export const getLogs = authenticatedAction.action(
       endpointId: log.endpoint?.id || "",
       endpoint: log.endpoint?.name || "",
     }));
+
+
+
 
     return data;
   }
@@ -83,5 +86,5 @@ export const deleteLog = authenticatedAction
     }
 
     await db.delete(logs).where(eq(logs.id, id));
-    revalidatePath("/logs");
+    revalidatePath("/activity");
   });

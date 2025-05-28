@@ -3,6 +3,7 @@ import { Header } from "@/components/parts/header";
 import { DataTable } from "@/components/groups/coaches/data-table"; // Make sure this exists
 import { columns } from "@/components/groups/coaches/columns"; // Define columns for coach data
 import { PageWrapper } from "@/components/parts/page-wrapper";
+import { getCoaches } from "@/lib/data/coaches";
 
 const pageData = {
   name: "Coaches",
@@ -31,7 +32,7 @@ const sampleCoachesData = [
     phone: "555-987-6543",
         logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Stanford_Cardinal_logo.svg/1341px-Stanford_Cardinal_logo.svg.png",
 
-  },
+  }, 
   {
     id: "3",
     name: "Mike Brown",
@@ -44,7 +45,16 @@ const sampleCoachesData = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
+
+    // fetch logs
+    const coaches = await getCoaches();
+
+
+  const { data: coachesdata, serverError: logsServerError } = coaches || {};
+
+
+
   return (
     <>
       <Breadcrumbs pageName={pageData.name} />
@@ -52,7 +62,7 @@ export default function Page() {
         <Header title={pageData.title}>{pageData.description}</Header>
         <DataTable
           columns={columns}
-          data={sampleCoachesData}
+          data={coachesdata ?? []}
         />
       </PageWrapper>
     </>

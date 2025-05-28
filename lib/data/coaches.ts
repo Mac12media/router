@@ -1,6 +1,6 @@
 "use server";
 
-import { logs, endpoints } from "../db/schema";
+import { logs, endpoints, fbcoaches } from "../db/schema";
 import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
@@ -28,7 +28,7 @@ export async function createLog(
     endpointId,
   });
 
-  revalidatePath("/logs");
+  revalidatePath("/activity");
 }
 
 /**
@@ -38,26 +38,47 @@ export async function createLog(
  */
 export const getCoaches = authenticatedAction.action(
   async ({ ctx: { userId } }) => {
-    const logsData = await db
+    // Fetch the coach data from the database
+    const coachData = await db
       .select()
-      .from(logs)
-      .leftJoin(endpoints, eq(logs.endpointId, endpoints.id))
-      .where(eq(endpoints.userId, userId))
-      .orderBy(desc(logs.createdAt));
+      .from(fbcoaches)
+      .orderBy(desc(fbcoaches.created_at));
 
-    const data: LogRow[] = logsData.map((log) => ({
-      id: log.log.id,
-      type: log.log.type,
-      postType: log.log.postType,
-      message: log.log.message,
-      createdAt: log.log.createdAt,
-      endpointId: log.endpoint?.id || "",
-      endpoint: log.endpoint?.name || "",
+    // Map the coach data to the desired shape
+    const data: CoachRow[] = coachData.map((coach) => ({
+      id: coach.id,
+      school: coach.school,
+      photo_url: coach.photo_url,
+      division: coach.division,
+      head_coach: coach.head_coach,
+      program_bio: coach.program_bio,
+      email: coach.email,
+      phone: coach.phone,
+      website: coach.website,
+      created_at: coach.created_at,
+      updated_at: coach.updated_at,
     }));
 
+    // Log the data to the console
+
+    // Return the formatted data
     return data;
   }
 );
+
+
+
+export const getCoach = authenticatedAction
+  .schema(z.object({ id: z.number() }))
+  .action(async ({ parsedInput: { id }, ctx: { userId } }) => {
+    const [data] = await db
+      .select()
+      .from(fbcoaches)
+      .where(eq(fbcoaches.id, id));
+    return data;
+  });
+
+
 
 /**
  * Deletes a log
@@ -83,5 +104,5 @@ export const deleteLog = authenticatedAction
     }
 
     await db.delete(logs).where(eq(logs.id, id));
-    revalidatePath("/logs");
+    revalidatePath("/activity");
   });

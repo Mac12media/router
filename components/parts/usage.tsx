@@ -62,7 +62,35 @@ export const Usage = ({
               {formatNumber(remaining)} leads remaining
             </p>
             <p className="flex items-center space-x-1 text-xs">
-              <CircleAlert className="h-3 w-3 text-green-500" />
+              <CircleAlert className="h-3 w-3 text-yellow-500" />
+              <span>
+                Plan resets in <span className="font-medium">{daysLeft}</span>{" "}
+                day{daysLeft !== 1 ? "s" : ""}
+              </span>
+            </p>
+          </div>
+        </div>
+      </CardContent>
+       <CardContent className="space-y-6 flex-grow">
+        <div className="grid gap-3 p-3 border rounded-sm bg-muted/25">
+          <div className="flex justify-between items-center">
+            <p>
+              {formatNumber(30)} / {formatNumber(totalUsage)}{" "}
+              <span className="text-muted-foreground text-xs">
+                Emails Sent
+              </span>
+            </p>
+            <Badge variant={plan === "Free" ? "outline" : "default"}>
+              {plan}
+            </Badge>
+          </div>
+          <Progress value={30} className="h-2" />
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground">
+              {formatNumber(30)} Emails remaining
+            </p>
+            <p className="flex items-center space-x-1 text-xs">
+              <CircleAlert className="h-3 w-3 text-yellow-500" />
               <span>
                 Plan resets in <span className="font-medium">{daysLeft}</span>{" "}
                 day{daysLeft !== 1 ? "s" : ""}
@@ -86,7 +114,7 @@ const UpgradePlan = () => {
       href="/upgrade"
       target="_blank"
       rel="noopener noreferrer"
-      className="p-4 hover:pl-5 hover:pr-3 transition-all h-full w-full border grid gap-1 border-green-500 rounded-sm bg-green-500/15 hover:bg-green-500/25"
+      className="p-4 hover:pl-5 hover:pr-3 transition-all h-full w-full border grid gap-1 border-yellow-500 rounded-sm bg-yellow-500/15 hover:bg-yellow-500/25"
     >
       <span className="flex items-center gap-1">
         Upgrade Plan

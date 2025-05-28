@@ -88,8 +88,8 @@ export function DataTable<TData, TValue>({
           <DataTableViewOptions table={table} />
         </div>
         {createObject && (
-          <Link href="/endpoints/create">
-            <Button variant="outline">Create endpoint</Button>
+          <Link href="/campaigns/create">
+            <Button variant="outline">Create campaign</Button>
           </Link>
         )}
       </div>

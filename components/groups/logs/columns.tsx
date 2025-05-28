@@ -35,13 +35,13 @@ export const columns: ColumnDef<LogRow>[] = [
   {
     accessorKey: "endpoint",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Endpoint" />;
+      return <DataTableColumnHeader column={column} title="Campaign" />;
     },
     cell: ({ row }) => {
       const endpoint: string = row.getValue("endpoint");
       return (
         <Button asChild variant="link" className="px-0" size="sm">
-          <Link href={`/endpoints/${row.original.endpointId}`}>
+          <Link href={`/campaigns/${row.original.endpointId}`}>
             {endpoint} <InfoCircledIcon className="ml-2" />
           </Link>
         </Button>
@@ -90,10 +90,10 @@ export const columns: ColumnDef<LogRow>[] = [
   {
     accessorKey: "message",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Message" />;
+      return <DataTableColumnHeader column={column} title="Coach" />;
     },
     cell: ({ row }) => {
-      const message: string = row.getValue("message");
+      const message: string = "Coach Bishop";
       const type: "success" | "error" = row.getValue("type");
       const date: Date = row.getValue("createdAt");
       return <LogModal message={message} type={type} date={date} />;

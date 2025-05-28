@@ -6,18 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Link from "next/link";
+import router from "next/router";
 
 
-type CoachRow = {
-  id: string;
-  name: string;
-  college: string;
-    logoUrl: string;
-
-  sport: string;
-  email: string;
-  phone: string;
-};
 
 export const columns: ColumnDef<CoachRow>[] = [
   {
@@ -29,34 +20,30 @@ export const columns: ColumnDef<CoachRow>[] = [
       const id: string = row.getValue("id");
       return (
         <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            navigator.clipboard.writeText(id);
-            toast.success("ID copied");
-          }}
-        >
-                   <Link href={`/coaches/${id}`}>{id}</Link>
+  variant="outline"
+  size="sm"
+  onClick={() => {
+    toast.success(row.original.head_coach);
+        router.push(`/coaches/${id}`);
 
-        </Button>
+  }}
+>
+  <Link href={`/coaches/${id}`} passHref>
+    {id}
+  </Link>
+</Button>
       );
     },
   },
+  
   {
-    accessorKey: "name",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
-    ),
-    cell: ({ row }) => <span>{row.getValue("name")}</span>,
-  },
-  {
-  accessorKey: "college",
+  accessorKey: "school",
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="College" />
+    <DataTableColumnHeader column={column} title="School" />
   ),
   cell: ({ row }) => {
-    const logoUrl = row.original.logoUrl;
-const college = row.getValue("college") as string;
+    const logoUrl = row.original.photo_url;
+const college = row.getValue("school") as string;
     return (
       <div className="flex items-center gap-2">
         {logoUrl && (
@@ -67,22 +54,47 @@ const college = row.getValue("college") as string;
     );
   },
 },
-  {
-    accessorKey: "sport",
+{
+    accessorKey: "head_coach",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Sport" />
+      <DataTableColumnHeader column={column} title="Head Coach" />
+    ),
+    cell: ({ row }) => {
+    const logoUrl = row.original.photo_url;
+const name = row.getValue("head_coach") as string;
+    return ( <Button
+  variant="outline"
+  size="sm"
+  onClick={() => {
+    toast.success(row.original.head_coach);
+        router.push(`/coaches/${row.original.id}`);
+
+  }}
+>
+  <Link href={`/coaches/${row.original.id}`} passHref>
+    {name}
+  </Link>
+</Button> );
+    }
+  },
+  {
+    accessorKey: "division",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Division" />
     ),
     cell: ({ row }) => (
-      <Badge variant="outline">{row.getValue("sport")}</Badge>
+      <Badge variant="outline">{row.getValue("division")}</Badge>
     ),
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
-    ),
-    cell: ({ row }) => <span>{row.getValue("email")}</span>,
-  },
+  accessorKey: "email",
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Email" />
+  ),
+  cell: ({ row }) => (
+    <span style={{ filter: "blur(5px)" }}>{row.getValue("email")}</span>
+  ),
+},
   {
     accessorKey: "phone",
     header: ({ column }) => (

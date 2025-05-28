@@ -12,9 +12,9 @@ import { PostHogProvider } from "@/components/providers/post-hog/post-hog-provid
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Router.so | The world's simplest lead router",
+  title: "Expo | Best recruiting tool",
   description:
-    "Router.so is the world's simplest lead router. Built for developers, by developers.",
+    "Best recruiting tool",
 };
 
 export default function RootLayout({

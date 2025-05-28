@@ -81,7 +81,7 @@ export default function OptionsDropdown({
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel className="sr-only">Options</DropdownMenuLabel>
-          <Link href={`/endpoints/${id}/edit`}>
+          <Link href={`/campaigns/${id}/edit`}>
             <DropdownMenuItem>Edit</DropdownMenuItem>
           </Link>
           <DropdownMenuItem onClick={() => setShowDeleteAlert(true)}>

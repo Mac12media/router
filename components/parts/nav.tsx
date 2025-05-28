@@ -10,22 +10,25 @@ import { LucideProps } from "lucide-react";
 import Logo from "@/public/expologo.png";
 
 // Icon Imports
-import { BarChart, Contact, Layers, LifeBuoy, Disc3, Book } from "lucide-react";
+import { BarChart, GraduationCapIcon, TargetIcon,CheckCircle2Icon, BookCheck, HeartIcon, Layers, LifeBuoy, Disc3, Book, ActivityIcon, MessageCircleIcon } from "lucide-react";
 
 const links = [
   { href: "/", text: "Dashboard", icon: BarChart },
-      { href: "/coaches", text: "Coaches", icon: Contact },
+      { href: "/coaches", text: "College Programs", icon: GraduationCapIcon },
 
-  { href: "/endpoints", text: "Contacts", icon: Layers },
-  { href: "/leads", text: "Leads", icon: Contact },
+  { href: "/campaigns", text: "My Campaigns", icon: Layers },
+  { href: "/leads", text: "Favorites", icon: HeartIcon },
 
-  { href: "/logs", text: "Logs", icon: Disc3 },
-    { href: "/toolkit", text: "Toolkit", icon: Disc3 },
+  { href: "/activity", text: "Activity & Tasks", icon: CheckCircle2Icon },
+    { href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
+
+        { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
+
 
 ];
 
 const otherLinks = [
-  { href: "https://router.so/docs", text: "Documentation", icon: Book },
+  { href: "https://exporecruits.com", text: "Expo Recruits", icon: Book },
   { href: "/support", text: "Support", icon: LifeBuoy },
 ];
 

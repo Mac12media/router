@@ -21,7 +21,7 @@ export const columns: ColumnDef<Endpoint>[] = [
       const name: string = row.getValue("name");
       return (
         <Button asChild variant="link" className="text-sm px-0 group">
-          <Link href={`/endpoints/${row.original.id}`}>
+          <Link href={`/campaigns/${row.original.id}`}>
             {name}{" "}
             <File className="ml-2 w-4 h-4 opacity-5 group-hover:opacity-100 transition-all" />
           </Link>
@@ -38,7 +38,7 @@ export const columns: ColumnDef<Endpoint>[] = [
       const id: string = row.original.id;
       return (
         <Button asChild size="sm">
-          <Link href={`/endpoints/${id}/leads`}>View Leads</Link>
+          <Link href={`/campaigns/${id}/leads`}>View Leads</Link>
         </Button>
       );
     },
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Endpoint>[] = [
     cell: ({ row }) => {
       const id: string = row.getValue("id");
       return (
-        <Link href={`/endpoints/${row.original.id}`}>
+        <Link href={`/campaigns/${row.original.id}`}>
           <span className="text-muted-foreground text-sm"></span> {id}
         </Link>
       );
@@ -71,12 +71,12 @@ export const columns: ColumnDef<Endpoint>[] = [
           size="sm"
           onClick={() => {
             navigator.clipboard.writeText(
-              `/api/endpoints/${id}`
+              `/api/campaigns/${id}`
             );
             toast.success("Endpoint Copied");
           }}
         >
-          {`/api/endpoints/${id}`}
+          {`/api/campaigns/${id}`}
         </Button>
       );
     },

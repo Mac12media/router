@@ -76,6 +76,39 @@ type LogRow = {
   createdAt: Date;
 };
 
+
+type RecruitingTask = {
+  name: string;           // Name of the task, e.g., "Follow up with student X"
+  status: "In Progress" | "Completed" | "Pending";  // The status of the task
+  dueDate: string;        // ISO string format date, e.g., "2025-06-10T00:00:00Z"
+  completed: number;      // Number of steps completed for the task (e.g., 3 out of 5 students contacted)
+  totalSteps: number;     // Total number of steps required for this task (e.g., 5 students to contact)
+  category: "Outreach" | "Follow-up" | "Event Planning" | "Application Review";  // The category of the task
+  assignedTo?: string;    // (Optional) The person assigned to the task (e.g., "John Doe")
+};
+
+
+type Task = {
+  name: string;
+  status: string;
+  dueDate: string;  // ISO string date
+  completed: number;
+};
+
+type CoachRow = {
+  id: number;
+  school: string;
+  photo_url: string;
+  division: string;
+  head_coach: string;
+  program_bio: string;
+  email: string;
+  phone: string;
+  website: string | null;
+  created_at: Date;
+    updated_at: Date;
+
+};
 /**
  * Type for fetched leads
  *

@@ -25,14 +25,14 @@ export const columns: ColumnDef<Lead>[] = [
   {
     accessorKey: "endpoint",
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Endpoint" />;
+      return <DataTableColumnHeader column={column} title="Campaign" />;
     },
     cell: ({ row }) => {
       const endpoint: string = row.getValue("endpoint");
       return (
         <Link
           className="underline underline-offset-4 hover:opacity-70 transition-all"
-          href={`/endpoints/${row.original.endpointId}/leads`}
+          href={`/campaigns/${row.original.endpointId}/leads`}
         >
           {endpoint}
         </Link>

@@ -27,9 +27,7 @@ export default function LogModal({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline" className="text-xs">
-          {messageString.length > 25
-            ? `${messageString.slice(0, 25)}...`
-            : messageString}
+          {message}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

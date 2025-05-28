@@ -7,9 +7,9 @@ import { getEndpoints } from "@/lib/data/endpoints";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 
 const pageData = {
-  name: "Endpoints",
-  title: "Endpoints",
-  description: "All your existing endpoints",
+  name: "Campaigns",
+  title: "Campaigns",
+  description: "All your existing campaigns",
 };
 
 export default async function Page() {

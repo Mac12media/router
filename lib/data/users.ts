@@ -97,3 +97,19 @@ export const getUsageForUser = authenticatedAction.action(
     return result[0];
   }
 );
+
+
+export const getUser = authenticatedAction.action(
+  async ({ ctx: { userId } }) => {
+    const result = await db
+      .select({ leadCount: users.leadCount, name: users.name, last_name: users.last_name, grad_year: users.grad_year, plan: users.plan })
+      .from(users)
+      .where(eq(users.id, userId));
+
+    if (result.length === 0) {
+      throw new Error("User not found");
+    }
+
+    return result[0];
+  }
+);

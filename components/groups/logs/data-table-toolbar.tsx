@@ -81,7 +81,7 @@ export function DataTableToolbar<TData>({
         {table.getColumn("endpoint") && (
           <DataTableFacetedFilter
             column={table.getColumn("endpoint")}
-            title="Endpoints"
+            title="Campaign"
             options={endpointFilters}
           />
         )}

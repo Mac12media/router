@@ -10,8 +10,9 @@ import { getLeads } from "@/lib/data/leads";
 import { getEndpoints } from "@/lib/data/endpoints";
 import { DataTable } from "@/components/groups/leads/data-table";
 import { columns } from "@/components/groups/leads/columns";
-import { getUsageForUser } from "@/lib/data/users";
+import { getUsageForUser, getUser } from "@/lib/data/users";
 import { Usage } from "@/components/parts/usage";
+import { PlayerProfile } from "@/components/parts/playerprofile";
 
 const pageData = {
   name: "Dashboard",
@@ -34,8 +35,10 @@ export default async function Page() {
     endpoints || {};
 
   // fetch number of leads for user this month
-  const usage = await getUsageForUser();
-  const { data: usageData, serverError: usageServerError } = usage || {};
+  const user = await getUser();
+  const { data: usageData, serverError: usageServerError } = user || {};
+
+    console.log("Sending email:", usageData);
 
   // check for errors
   if (
@@ -89,17 +92,19 @@ export default async function Page() {
               usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
             }`}
           />
-          {usageData.plan !== "enterprise" && (
-            <Usage
-              totalUsage={leadLimit}
-              used={usageData.leadCount}
-              plan={usageData.plan}
-            />
-          )}
+          <PlayerProfile
+name={`${usageData.name} ${usageData.last_name}`}
+  gradClass={usageData.grad_year ?? ''}
+  position="Wide Receiver"
+  height="6'1″"
+  weight="190 lbs"
+  imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
+/>
+
           <Links />
         </div>
         <div className="mt-8">
-          <h2 className="text-lg mb-4">Recent Leads</h2>
+          <h2 className="text-lg mb-4">Recent Contacts</h2>
           <DataTable
             columns={columns}
             data={recentLeads}
@@ -113,19 +118,19 @@ export default async function Page() {
 
 const navLinks = [
   {
-    name: "Endpoints",
-    description: "Create and Manage Router.so Endpoints",
-    href: "/endpoints",
+    name: "College Programs",
+    description: "Find coaches and programs",
+    href: "/coaches",
   },
   {
-    name: "Leads",
-    description: "View Lead data and Form Submissions",
+    name: "Track",
+    description: "Track your previous campaigns",
     href: "/leads",
   },
   {
-    name: "Logs",
-    description: "Monitor your API usage and errors",
-    href: "/logs",
+    name: "Activity & Tasks",
+    description: "Monitor your campaign activity",
+    href: "/activity",
   },
 ];
 

@@ -1,4 +1,3 @@
-import { getLeadsByEndpoint } from "@/lib/data/leads";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -18,57 +17,46 @@ import {
 import { Home } from "lucide-react";
 import Icon from "@/public/icon.svg";
 import Image from "next/image";
-import { PageWrapper } from "@/components/parts/page-wrapper";
 import { Header } from "@/components/parts/header";
-import ExportCSV from "@/components/parts/export-csv";
+import { PageWrapper } from "@/components/parts/page-wrapper";
+import { getLeadData } from "@/lib/data/leads";
 import { notFound } from "next/navigation";
 
 const pageData = {
-  name: "Endpoint Leads",
-  title: "Endpoint Leads",
-  description: "All collected leads for this endpoint",
+  name: "Lead data",
+  title: "Lead data",
+  description: "Breakdown of this lead's data",
 };
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const leadsData = await getLeadsByEndpoint({
-    id: params.id,
-  });
-  const { data, serverError } = leadsData || {};
-  if (!data || serverError) notFound();
-  const { leadData: leads, schema } = data;
+  const leadData = await getLeadData({ id: params.id });
+  const { data, serverError } = leadData || {};
+
+  if (!data || serverError) {
+    return notFound();
+  }
+
+  const dataEntries = Object.entries(data.data as any);
 
   return (
     <>
       <Breadcrumbs leadId={params?.id} />
       <PageWrapper>
         <Header title={pageData?.title}>{pageData?.description}</Header>
-        <ExportCSV id={params.id} leads={leads} schema={schema} />
         <Table className="not-prose">
           <TableHeader>
             <TableRow className="bg-secondary hover:bg-secondary">
-              {schema.map((column) => (
-                <TableCell key={column.key}>{column.key}</TableCell>
-              ))}
+              <TableCell>Field</TableCell>
+              <TableCell>Value</TableCell>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {leads.length > 0 ? (
-              leads.map((lead, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {schema.map((column) => (
-                    <TableCell key={column.key}>
-                      {lead.data[column.key]}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={schema.length} className="text-center">
-                  No leads to show.
-                </TableCell>
+            {dataEntries.map(([key, value], index) => (
+              <TableRow key={index}>
+                <TableCell>{key}</TableCell>
+                <TableCell>{value as React.ReactNode}</TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       </PageWrapper>
@@ -87,7 +75,7 @@ function Breadcrumbs({ leadId }: { leadId: string }) {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/endpoints">Endpoints</BreadcrumbLink>
+          <BreadcrumbLink href="/leads">Leads</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -95,8 +83,6 @@ function Breadcrumbs({ leadId }: { leadId: string }) {
             {leadId}
           </BreadcrumbPage>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>Leads</BreadcrumbItem>
       </BreadcrumbList>
       <Image
         className="hover:animate-spin dark:invert"
