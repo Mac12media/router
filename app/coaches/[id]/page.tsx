@@ -8,10 +8,11 @@ import { getCoach } from "@/lib/data/coaches";
 
 
 
-export default async function CoachPage({ params }: { params: { id: string } }) {
+export default async function CoachPage({params}: {params: Promise<{ id: string }>}) {
+const { id } = await params; 
 
-const id = parseInt(params.id, 10);
-  const data = await getCoach({ id });
+const coachid = parseInt(id, 10);
+  const data = await getCoach({ coachid });
       const { data: coach, serverError } = data || {};
 
     const score = 80;

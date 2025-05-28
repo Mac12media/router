@@ -69,12 +69,12 @@ export const getCoaches = authenticatedAction.action(
 
 
 export const getCoach = authenticatedAction
-  .schema(z.object({ id: z.number() }))
-  .action(async ({ parsedInput: { id }, ctx: { userId } }) => {
+  .schema(z.object({ coachid: z.number() }))
+  .action(async ({ parsedInput: { coachid }, ctx: { userId } }) => {
     const [data] = await db
       .select()
       .from(fbcoaches)
-      .where(eq(fbcoaches.id, id));
+      .where(eq(fbcoaches.id, coachid));
     return data;
   });
 

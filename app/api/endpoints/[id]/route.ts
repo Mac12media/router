@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   convertToCorrectTypes,
   generateDynamicSchema,
@@ -19,13 +19,16 @@ import {
 /**
  * API route for posting a lead using POST
  */
-export async function POST(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest) {
+
+   const url = new URL(request.url);
+  const id = url.pathname.split("/").pop();
+  if (!id) {
+  return NextResponse.json({ message: "Invalid or missing ID in URL." }, { status: 400 });
+}
   try {
     const headersList = headers();
-    const authorization = headersList.get("authorization");
+    const authorization = (await headersList).get("authorization");
 
     if (!authorization || !authorization.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -36,7 +39,7 @@ export async function POST(
 
     const token = authorization.split(" ")[1];
     const data = await request.json();
-    const endpoint = await getPostingEndpointById(params.id);
+    const endpoint = await getPostingEndpointById(id);
 
     if (!endpoint)
       return NextResponse.json(
@@ -58,8 +61,8 @@ export async function POST(
       );
     }
 
-    const plan = await getUserPlan(params.id);
-    const leadCount = await getLeadCount(params.id);
+    const plan = await getUserPlan(id);
+    const leadCount = await getLeadCount(id);
 
     let leadLimit: number;
     switch (plan) {
@@ -110,7 +113,7 @@ export async function POST(
     const leadId = await createLead(endpoint.id, parsedData.data);
 
     await createLog("success", "http", leadId, endpoint.id);
-    await incrementLeadCount(params.id);
+    await incrementLeadCount(id);
 
     // webhook posting -- eventually make this a background job
     if (endpoint.webhookEnabled && endpoint.webhook) {
@@ -119,7 +122,7 @@ export async function POST(
       const webhookTimeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(async () => {
           // create a log of the timeout error
-          await createLog("error", "webhook", "Webhook timed out.", params.id);
+          await createLog("error", "webhook", "Webhook timed out.", id);
           webhookController.abort();
           reject(new Error("Request timed out"));
         }, 3000);
@@ -147,20 +150,20 @@ export async function POST(
         } else {
           errorData = "Received non-text response";
         }
-        await createLog("error", "webhook", errorData, params.id);
+        await createLog("error", "webhook", errorData, id);
       } else {
         createLog(
           "success",
           "webhook",
           `${endpoint.webhook} -> Webhook successful`,
-          params.id
+          id
         );
       }
     }
 
     return NextResponse.json({ success: true, id: leadId });
   } catch (error: unknown) {
-    await createLog("error", "http", getErrorMessage(error), params.id);
+    await createLog("error", "http", getErrorMessage(error), id);
 
     console.error(error);
 
@@ -173,16 +176,19 @@ export async function POST(
  *
  * Only used when the user is posting via HTML form element
  */
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
+
+   const url = new URL(request.url);
+  const id = url.pathname.split("/").pop();
+  if (!id) {
+  return NextResponse.json({ message: "Invalid or missing ID in URL." }, { status: 400 });
+}
   try {
     const headersList = headers();
-    const referer = headersList.get("referer");
+    const referer = (await headersList).get("referer");
     const { searchParams } = new URL(request.url);
 
-    const endpoint = await getPostingEndpointById(params.id);
+    const endpoint = await getPostingEndpointById(id);
 
     if (!endpoint) {
       return NextResponse.json(
@@ -198,8 +204,8 @@ export async function GET(
       );
     }
 
-    const plan = await getUserPlan(params.id);
-    const leadCount = await getLeadCount(params.id);
+    const plan = await getUserPlan(id);
+    const leadCount = await getLeadCount(id);
 
     let leadLimit: number;
     switch (plan) {
@@ -251,7 +257,7 @@ export async function GET(
     const leadId = await createLead(endpoint.id, parsedData.data);
 
     await createLog("success", "http", leadId, endpoint.id);
-    await incrementLeadCount(params.id);
+    await incrementLeadCount(id);
 
     // webhook posting -- eventually make this a background job
     if (endpoint.webhookEnabled && endpoint.webhook) {
@@ -259,7 +265,7 @@ export async function GET(
       const webhookController = new AbortController();
       const webhookTimeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(async () => {
-          await createLog("error", "webhook", "Webhook timed out.", params.id);
+          await createLog("error", "webhook", "Webhook timed out.", id);
           webhookController.abort();
           reject(new Error("Request timed out"));
         }, 3000);
@@ -287,13 +293,13 @@ export async function GET(
         } else {
           errorData = "Received non-text response";
         }
-        await createLog("error", "webhook", errorData, params.id);
+        await createLog("error", "webhook", errorData, id);
       } else {
         createLog(
           "success",
           "webhook",
           `${endpoint.webhook} -> Webhook successful`,
-          params.id
+          id
         );
       }
     }
@@ -302,7 +308,7 @@ export async function GET(
       new URL(endpoint?.successUrl || referer || "/success")
     );
   } catch (error: unknown) {
-    await createLog("error", "http", getErrorMessage(error), params.id);
+    await createLog("error", "http", getErrorMessage(error), id);
 
     console.error(error);
 

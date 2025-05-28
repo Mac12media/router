@@ -25,9 +25,9 @@ const pageData = {
   description: "Schema details and posting instructions for your endpoint",
 };
 
-export default async function Page({ params }: { params: { id: string } }) {
-  // fetch endpoint
-  const endpoint = await getEndpointById({ id: params?.id });
+export default async function Page({params}: {params: Promise<{ id: string }>}) {
+const { id } = await params;  // fetch endpoint
+  const endpoint = await getEndpointById({ id: id });
   const { data: endpointData, serverError } = endpoint || {};
 
   // check for errors
