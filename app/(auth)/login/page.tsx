@@ -13,12 +13,12 @@ export default async function LoginPage() {
       <div className="flex flex-col items-center gap-4 rounded-lg border p-6 shadow-sm md:p-12 mt-12 bg-muted">
         <Image
           className="mb-8 dark:invert"
-          src="https://static.wixstatic.com/media/e49d37_c9bd0a5f706f42a69b297163faca7bd1~mv2_d_2000_2000_s_2.png"
+          src="/icon.svg"
           alt="logo"
           width={50}
           height={72}
         ></Image>
-        <p className="text-center text-xl">Welcome to Expo Recruitd</p>
+        <p className="text-center text-xl">Welcome to Expo Recruits</p>
         <p className="text-center text-muted-foreground">
           Login to access your account.
         </p>
