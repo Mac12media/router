@@ -33,6 +33,7 @@ export const users = pgTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   last_name: text("last_name"),
+    hashedPassword: text("hashedPassword").notNull(),
   grad_year: text("grad_year"),
   leadCount: integer("leadCount").notNull().default(0),
   plan: planEnum("plan").notNull().default("free"),
@@ -41,6 +42,17 @@ export const users = pgTable("user", {
     .notNull()
     .defaultNow(),
 });
+
+export const userss = pgTable("users", {
+id: text("id")
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
+      email: text("email").notNull().unique(),
+  name: text("name"),
+  hashedPassword: text("hashedPassword").notNull(),
+});
+
 
 export const accounts = pgTable(
   "account",

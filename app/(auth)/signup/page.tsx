@@ -1,13 +1,12 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
-
-import MagicLinkForm from "@/components/auth/form";
+import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import SignUpForm from "@/components/auth/sign-up";
 
-export default function AuthPage() {
-  const [mode, setMode] = useState<"login" | "signup">("login");
+export default async function SignUpPage() {
+  const session = await auth();
+  if (session) redirect("/");
 
   return (
     <section className="flex fixed top-0 right-0 left-0 h-screen w-screen overflow-hidden flex-col items-center justify-center bg-background/20 backdrop-blur-sm">
@@ -19,39 +18,18 @@ export default function AuthPage() {
           width={50}
           height={72}
         />
-        <p className="text-center text-xl">
-          {mode === "login" ? "Welcome to Expo Recruits" : "Create your account"}
-        </p>
+        <p className="text-center text-xl">Create your Expo Recruits account</p>
         <p className="text-center text-muted-foreground">
-          {mode === "login" ? "Login to access your account." : "Sign up to get started."}
+          Sign up to get started.
         </p>
-
         <div className="flex flex-col items-center w-full gap-2">
-          {mode === "login" ? <MagicLinkForm /> : <SignUpForm />}
+          <SignUpForm />
         </div>
-
         <p className="text-sm text-muted-foreground mt-4">
-          {mode === "login" ? (
-            <>
-              Don&apos;t have an account?{" "}
-              <button
-                className="underline underline-offset-4"
-                onClick={() => setMode("signup")}
-              >
-                Sign up
-              </button>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <button
-                className="underline underline-offset-4"
-                onClick={() => setMode("login")}
-              >
-                Log in
-              </button>
-            </>
-          )}
+          Already have an account?{" "}
+          <Link href="/login" className="underline underline-offset-4">
+            Log in
+          </Link>
         </p>
       </div>
 
