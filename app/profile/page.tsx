@@ -192,11 +192,7 @@ export default function Page() {
           <CardContent className="px-6 pb-6 space-y-6">
             <ProfileTextArea label="Bio" name="bio" value={form.bio} editable={isEditing} onChange={handleChange} />
             <ProfileField label="Highlight Video URL" name="video" value={form.video} editable={isEditing} onChange={handleChange} />
-            {!isEditing && form.video && (
-              <a href={form.video} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm hover:underline">
-                ▶ Watch Highlight Video
-              </a>
-            )}
+            {!isEditing && form.video && <HighlightVideo url={form.video} />}
           </CardContent>
         </Card>
       </PageWrapper>
@@ -243,3 +239,81 @@ function ProfileSelect({ label, name, value, onChange, options }: { label: strin
     </div>
   );
 }
+
+function HighlightVideo({ url }: { url?: string }) {
+  if (!url || typeof url !== "string" || !url.trim()) {
+    return (
+      <p className="text-sm italic text-muted-foreground">
+        No highlight video provided.
+      </p>
+    );
+  }
+
+  const trimmed = url.trim();
+
+  if (isYouTubeUrl(trimmed)) {
+    const id = getYouTubeId(trimmed);
+    if (id) {
+      return (
+        <div className="w-full h-[400px] md:h-[500px] lg:h-[600px]">
+          <iframe
+            src={`https://www.youtube.com/embed/${id}`}
+            title="YouTube video"
+            className="w-full h-full rounded border"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      );
+    }
+  }
+
+  if (isHudlUrl(trimmed)) {
+    const hudlId = getHudlId(trimmed);
+    if (hudlId) {
+      return (
+        <div className="w-full h-[400px] md:h-[500px] lg:h-[600px]">
+          <iframe
+            src={`https://www.hudl.com/embed/video/${hudlId}`}
+            title="Hudl video"
+            className="w-full h-full rounded border"
+            frameBorder="0"
+            allowFullScreen
+          />
+        </div>
+      );
+    }
+  }
+
+  return (
+    <a
+      href={trimmed}
+      className="text-blue-600 hover:underline text-sm"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ▶ Watch Highlight Video
+    </a>
+  );
+}
+
+
+
+function isYouTubeUrl(url: string): boolean {
+  return /youtu\.be|youtube\.com/.test(url);
+}
+
+function getYouTubeId(url: string): string | null {
+  const match = url.match(/(?:youtube\.com.*(?:\/|v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+function isHudlUrl(url: string) {
+  return url.includes("hudl.com/video/");
+}
+
+function getHudlId(url: string): string | null {
+  const match = url.match(/hudl\.com\/video\/([^?#]+)/);
+  return match ? match[1] : null;
+}
+
