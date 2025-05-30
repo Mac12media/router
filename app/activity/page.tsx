@@ -6,7 +6,7 @@ import { DataTable } from "@/components/groups/logs/data-table";
 import { columns } from "@/components/groups/logs/columns";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { notFound } from "next/navigation";
-import { getUsageForUser } from "@/lib/data/users";
+import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import { getLeads } from "@/lib/data/leads";
 import { getLeadAndErrorCounts } from "@/lib/data/dashboard";
 import { RecruitingTasks } from "@/components/parts/tasks";
@@ -42,6 +42,8 @@ export default async function Page() {
     const { data: leadsData, serverError: leadsServerError } = leads || {};
   
 
+  const result = await getUserFull();
+  const user = result?.data; 
   
     // fetch number of leads for user this month
     const usage = await getUsageForUser();
@@ -117,7 +119,7 @@ const totalSteps = 5;    // Total steps for a task (e.g., 5 students to contact)
                     }`}
                   />
                   
-      <RecruitingTasks tasks={tasksData} totalSteps={totalSteps} />
+      <RecruitingTasks user={user} />
                   
                 </div>
         <DataTable

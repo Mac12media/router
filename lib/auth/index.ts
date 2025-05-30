@@ -96,7 +96,7 @@ export const config = {
     },
   },
   pages: {
-    signIn: "/login", // your custom login page
+    signIn: "/login",
     verifyRequest: "/check-email", // after sending magic link
   },
 } satisfies NextAuthConfig;

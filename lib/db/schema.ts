@@ -28,19 +28,36 @@ export const users = pgTable("user", {
     .primaryKey()
     .notNull()
     .$defaultFn(() => crypto.randomUUID()),
+
   name: text("name"),
+  last_name: text("last_name"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  last_name: text("last_name"),
-    hashedPassword: text("hashedPassword").notNull(),
+  hashedPassword: text("hashedPassword").notNull(),
+
   grad_year: text("grad_year"),
-  leadCount: integer("leadCount").notNull().default(0),
+  bio: text("bio"),
+  test_score: text("test_score"),
+  height: text("height"),
+  weight: text("weight"),
+
+  position: text("position"),
+  sport: text("sport"),
+  video: text("video"),
+  high_school: text("high_school"),
+  city: text("city"),
+  state: text("state"),
+  x_username: text("x_username"),
+  ig_username: text("ig_username"),
+
   plan: planEnum("plan").notNull().default("free"),
   stripeCustomerId: text("stripeCustomerId"),
-  createdAt: timestamp("createdAt", { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+
+  leadCount: integer("leadCount").notNull().default(0),
+
+  createdAt: timestamp("createdAt", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
 });
 
 export const userss = pgTable("users", {

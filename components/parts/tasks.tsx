@@ -1,100 +1,80 @@
+"use client";
+
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { CircleAlert } from "lucide-react";
 
-import { Progress } from "@/components/ui/progress";
-import { CircleAlert, ArrowUp } from "lucide-react";
-import { Badge } from "../ui/badge";
+// Define the required fields and display labels
+const requiredFields: { key: string; label: string }[] = [
+  { key: "position", label: "Position" },
+  { key: "sport", label: "Sport" },
+  { key: "state", label: "State" },
+  { key: "city", label: "City" },
+  { key: "video", label: "Highlight Video" },
+  { key: "bio", label: "Bio" },
+  { key: "test_score", label: "Test Score" },
+];
 
-export const RecruitingTasks = ({
-  tasks,
-  totalSteps,
-}: {
-  tasks: RecruitingTask[]; // Array of recruiting tasks
-  totalSteps: number; // Total number of steps per task (e.g., number of students to follow up with)
-}) => {
-  const calculateDaysLeft = (dueDate: string) => {
-    const now = new Date();
-    const due = new Date(dueDate);
-    const timeDiff = due.getTime() - now.getTime();
-    return Math.ceil(timeDiff / (1000 * 3600 * 24));
-  };
+type UserProfile = Record<string, string | null | undefined>;
 
-  const formatNumber = (num: number) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+export const RecruitingTasks = ({ user }: { user?: UserProfile }) => {
+  if (!user) {
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Recruiting Task</CardTitle>
+          <CardDescription>Loading user profile...</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  // Find first missing field
+  const missingField = requiredFields.find(
+    (field) => !user[field.key] || user[field.key]?.trim() === ""
+  );
 
   return (
     <Card className="w-full flex flex-col">
-      <CardHeader className="mb-6 border-b">
-        <CardTitle>Recruiting Task Overview</CardTitle>
-        <CardDescription>Track your high school recruiting tasks.</CardDescription>
+      <CardHeader className="mb-4 border-b">
+        <CardTitle>Recruiting Task</CardTitle>
+        <CardDescription>Complete your recruiting profile step-by-step.</CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-6 flex-grow">
-        {tasks.map((task, index) => {
-          const daysLeft = calculateDaysLeft(task.dueDate);
-          const taskCompletionPercentage = (task.completed / totalSteps) * 100;
-
-          return (
-            <div
-              key={index}
-              className="grid gap-3 p-3 border rounded-sm bg-muted/25"
-            >
-              <div className="flex justify-between items-center">
-                <p className="text-lg font-semibold">{task.name}</p>
-                <Badge variant={task.status === "In Progress" ? "default" : "outline"}>
-                  {task.status}
-                </Badge>
-              </div>
-              <p className="text-xs text-muted-foreground">{task.category}</p>
-              <Progress value={taskCompletionPercentage} className="h-2" />
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">
-                  {task.completed} of {totalSteps} steps completed
-                </p>
-                <p className="flex items-center space-x-1 text-xs">
-                  <CircleAlert className="h-3 w-3 text-yellow-500" />
-                  <span>
-                    Task due in <span className="font-medium">{daysLeft}</span>{" "}
-                    day{daysLeft !== 1 ? "s" : ""}
-                  </span>
-                </p>
-              </div>
+      <CardContent className="space-y-4">
+        {missingField ? (
+          <div className="grid gap-3 p-4 border rounded-sm bg-muted/25">
+            <div className="flex justify-between items-center">
+              <p className="text-lg font-semibold">Add your {missingField.label}</p>
+              <Badge variant="default">Incomplete</Badge>
             </div>
-          );
-        })}
+            <p className="text-xs text-muted-foreground">
+              This field helps recruiters better understand your profile.
+            </p>
+            <div className="flex items-center text-sm gap-2 text-yellow-600">
+              <CircleAlert className="h-4 w-4" />
+              <span>{missingField.label} is missing from your profile</span>
+            </div>
+            <Link
+              href="/profile"
+              className="text-blue-600 text-sm underline hover:text-blue-800"
+            >
+              Go to Profile Page →
+            </Link>
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground italic">
+            ✅ All required profile fields are completed. Great work!
+          </p>
+        )}
       </CardContent>
-
-      <CardFooter className="mt-auto">
-        <AddNewRecruitingTask />
-      </CardFooter>
     </Card>
-  );
-};
-
-const AddNewRecruitingTask = () => {
-  return (
-    <Link
-      href="/recruiting/tasks/add"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="p-4 hover:pl-5 hover:pr-3 transition-all h-full w-full border grid gap-1 border-blue-500 rounded-sm bg-blue-500/15 hover:bg-blue-500/25"
-    >
-      <span className="flex items-center gap-1">
-        Add New Recruiting Task
-        <ArrowUp className="h-4 w-4" />
-      </span>
-      <span className="text-muted-foreground text-xs">
-        Add a new recruiting task to your to-do list
-      </span>
-    </Link>
   );
 };

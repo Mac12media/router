@@ -45,3 +45,20 @@ export const updateEndpointFormSchema = z.object({
   webhookEnabled: z.boolean(),
   webhook: z.string().url().optional(),
 });
+
+export const updateUserProfileSchema = z.object({
+  name: z.string().optional(),
+  grad_year: z.string().optional(),
+  bio: z.string().optional(), // if you added it manually
+  test_score: z.string().optional(),
+  height: z.string().optional(),
+  weight: z.string().optional(),
+  position: z.string().optional(),
+  sport: z.string().optional(),
+  video: z.string().optional(),
+  high_school: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  x_username: z.string().optional(),
+  ig_username: z.string().optional(),
+});

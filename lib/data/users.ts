@@ -1,6 +1,10 @@
 "use server";
 
+import { z } from "zod";
 import { db } from "../db";
+import {
+  updateUserProfileSchema,
+} from "./validations";
 import { users, endpoints } from "../db/schema";
 import { eq, sql } from "drizzle-orm";
 import { authenticatedAction } from "./safe-action";
@@ -113,3 +117,59 @@ export const getUser = authenticatedAction.action(
     return result[0];
   }
 );
+
+export const getUserFull = authenticatedAction.action(
+  async ({ ctx: { userId } }) => {
+    const result = await db
+      .select({
+        name: users.name,
+        last_name: users.last_name,
+        grad_year: users.grad_year,
+        bio: users.bio,
+        test_score: users.test_score,
+        height: users.height,
+        weight: users.weight,
+        position: users.position,
+        sport: users.sport,
+        video: users.video,
+        high_school: users.high_school,
+        city: users.city,
+        state: users.state,
+        x_username: users.x_username,
+        ig_username: users.ig_username,
+      })
+      .from(users)
+      .where(eq(users.id, userId));
+
+    if (result.length === 0) {
+      throw new Error("User not found");
+    }
+
+    return result[0];
+  }
+);
+
+export const updateUserProfile = authenticatedAction
+  .schema(updateUserProfileSchema)
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    await db
+      .update(users)
+      .set({
+        name: parsedInput.name,
+        grad_year: parsedInput.grad_year,
+        bio: parsedInput.bio,
+        test_score: parsedInput.test_score,
+        height: parsedInput.height,
+        weight: parsedInput.weight,
+        position: parsedInput.position,
+        sport: parsedInput.sport,
+        video: parsedInput.video,
+        high_school: parsedInput.high_school,
+        city: parsedInput.city,
+        state: parsedInput.state,
+        x_username: parsedInput.x_username,
+        ig_username: parsedInput.ig_username,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId));
+  });
