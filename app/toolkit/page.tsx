@@ -109,7 +109,7 @@ export default function RecruitingToolkitCoursePage() {
                     href={res.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-600 hover:underline"
+                    className="flex items-center gap-2 text-[#FF7200] hover:underline"
                   >
                     <ExternalLink className="w-4 h-4" />
                     {res.name}
@@ -155,7 +155,7 @@ export default function RecruitingToolkitCoursePage() {
           <h3 className="text-xl font-semibold mb-2">Ready to Get Recruited?</h3>
           <a
             href="#"
-            className="inline-block bg-yellow-600 text-white px-6 py-2 rounded font-medium hover:bg-yellow-700 transition"
+            className="inline-block bg-[#FF7200] text-white px-6 py-2 rounded font-medium hover:bg-[#FF7200] transition"
           >
             Start the Course
           </a>

@@ -106,7 +106,9 @@ export const getUsageForUser = authenticatedAction.action(
 export const getUser = authenticatedAction.action(
   async ({ ctx: { userId } }) => {
     const result = await db
-      .select({ leadCount: users.leadCount, name: users.name, last_name: users.last_name, grad_year: users.grad_year, plan: users.plan })
+      .select({ leadCount: users.leadCount, height: users.height,
+        weight: users.weight,
+        position: users.position, grad_year: users.grad_year, name: users.name, last_name: users.last_name, plan: users.plan })
       .from(users)
       .where(eq(users.id, userId));
 
@@ -148,6 +150,43 @@ export const getUserFull = authenticatedAction.action(
     return result[0];
   }
 );
+
+
+export const getUserFullById = authenticatedAction
+  .schema(z.object({ id: z.string() }))
+  .action(async ({ parsedInput: { id }, ctx: { userId } }) => {
+    const result = await db
+      .select({
+        name: users.name,
+        last_name: users.last_name,
+        grad_year: users.grad_year,
+        bio: users.bio,
+        test_score: users.test_score,
+        height: users.height,
+        weight: users.weight,
+        position: users.position,
+        sport: users.sport,
+        video: users.video,
+        high_school: users.high_school,
+        city: users.city,
+        state: users.state,
+        x_username: users.x_username,
+        ig_username: users.ig_username,
+      })
+      .from(users)
+      .where(eq(users.id, id));
+
+    if (result.length === 0) {
+      throw new Error("User not found");
+    }
+
+    return result[0];
+  }
+);
+
+
+
+
 
 export const updateUserProfile = authenticatedAction
   .schema(updateUserProfileSchema)

@@ -93,11 +93,11 @@ export default async function Page() {
             }`}
           />
           <PlayerProfile
-name={`${usageData.name} ${usageData.last_name}`}
+name={usageData.name ?? ''}
   gradClass={usageData.grad_year ?? ''}
-  position="Wide Receiver"
-  height="6'1″"
-  weight="190 lbs"
+  position={usageData.position ?? ''}
+  height={usageData.height ?? ''}
+  weight={usageData.weight ?? ''}
   imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
 />
 

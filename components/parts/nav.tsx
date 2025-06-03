@@ -7,10 +7,10 @@ import { getUsageForUser } from "@/lib/data/users";
 import { LucideProps } from "lucide-react";
 
 // Image Imports
-import Logo from "@/public/expologo.png";
+import Logo from "@/public/expologo2.png";
 
 // Icon Imports
-import { BarChart, GraduationCapIcon, TargetIcon,CheckCircle2Icon, BookCheck, HeartIcon, Layers, LifeBuoy, Disc3, Book, ActivityIcon, MessageCircleIcon } from "lucide-react";
+import { BarChart, GraduationCapIcon,  TargetIcon,CheckCircle2Icon, BookCheck, HeartIcon, Layers, LifeBuoy, Disc3, Book, ActivityIcon, MessageCircleIcon } from "lucide-react";
 
 const links = [
   { href: "/", text: "Dashboard", icon: BarChart },

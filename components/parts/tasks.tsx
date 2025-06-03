@@ -58,10 +58,11 @@ export const RecruitingTasks = ({ user }: { user?: UserProfile }) => {
             <p className="text-xs text-muted-foreground">
               This field helps recruiters better understand your profile.
             </p>
-            <div className="flex items-center text-sm gap-2 text-yellow-600">
-              <CircleAlert className="h-4 w-4" />
-              <span>{missingField.label} is missing from your profile</span>
-            </div>
+            <div className="flex items-center text-sm gap-2 text-[#FF7200]">
+  <CircleAlert className="h-4 w-4" />
+  <span>{missingField.label} is missing from your profile</span>
+</div>
+
             <Link
               href="/profile"
               className="text-blue-600 text-sm underline hover:text-blue-800"
