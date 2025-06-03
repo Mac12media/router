@@ -13,7 +13,7 @@ const { id } = await params;
 
   if (!user) return notFound();
 
-
+ 
   return (
     <>
       <Breadcrumbs pageName="Player Profile" />
