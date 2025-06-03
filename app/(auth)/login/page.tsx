@@ -5,7 +5,7 @@ import Image from "next/image";
 import MagicLinkForm from "@/components/auth/form";
 import SignUpForm from "@/components/auth/sign-up";
 
-import Logo from "@/public/expologo2.png";
+import Logo from "@/public/expologosecond.png";
 
 export default function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup">("signup");
