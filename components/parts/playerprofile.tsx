@@ -45,7 +45,6 @@ export const PlayerProfile = ({
         <Card className="w-full flex flex-col cursor-pointer hover:shadow-md">
           <CardHeader className="mb-6 border-b">
             <CardTitle>Player Profile</CardTitle>
-            <CardDescription>Basic player information</CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6 flex-grow">

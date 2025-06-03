@@ -10,9 +10,10 @@ import { getLeads } from "@/lib/data/leads";
 import { getEndpoints } from "@/lib/data/endpoints";
 import { DataTable } from "@/components/groups/leads/data-table";
 import { columns } from "@/components/groups/leads/columns";
-import { getUsageForUser, getUser } from "@/lib/data/users";
+import { getUsageForUser, getUser, getUserFull } from "@/lib/data/users";
 import { Usage } from "@/components/parts/usage";
 import { PlayerProfile } from "@/components/parts/playerprofile";
+import { RecruitingTasks } from "@/components/parts/tasks";
 
 const pageData = {
   name: "Dashboard",
@@ -35,8 +36,11 @@ export default async function Page() {
     endpoints || {};
 
   // fetch number of leads for user this month
-  const user = await getUser();
-  const { data: usageData, serverError: usageServerError } = user || {};
+  const result = await getUserFull();
+  const user = result?.data; 
+
+      const usage = await getUsageForUser();
+    const { data: usageData, serverError: usageServerError } = usage || {};
 
     console.log("Sending email:", usageData);
 
@@ -85,21 +89,25 @@ export default async function Page() {
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
         <Header title={pageData?.title}>{pageData?.description}</Header>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
+          <PlayerProfile
+name={user?.name ?? ''}
+  gradClass={user?.grad_year ?? ''}
+  position={user?.position ?? ''}
+  height={user?.height ?? ''}
+  weight={user?.weight ?? ''}
+  imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
+/>
           <Chart
             chartData={chartData}
             className={`${
               usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
             }`}
           />
-          <PlayerProfile
-name={usageData.name ?? ''}
-  gradClass={usageData.grad_year ?? ''}
-  position={usageData.position ?? ''}
-  height={usageData.height ?? ''}
-  weight={usageData.weight ?? ''}
-  imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
-/>
+
+      <RecruitingTasks user={user} />
+
+          
 
           <Links />
         </div>
