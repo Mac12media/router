@@ -6,8 +6,8 @@ import { getUserFullById } from "@/lib/data/users";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Twitter, Instagram, Facebook } from "lucide-react";
 
-export default async function ProfilePage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function ProfilePage({params}: {params: Promise<{ id: string }>}) {
+const { id } = await params; 
   const data = await getUserFullById({ id });
   const { data: user } = data || {};
 
