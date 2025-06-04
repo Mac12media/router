@@ -15,12 +15,26 @@ import { getUserFull, updateUserProfile } from '@/lib/data/users';
 
 const positionsBySport: Record<string, string[]> = {
   Football: [
-    'Quarterback', 'Running Back', 'Wide Receiver', 'Tight End', 'Offensive Lineman',
-    'Defensive Lineman', 'Linebacker', 'Cornerback', 'Safety', 'Kicker', 'Punter',
-  ],
+  'QB',     // Quarterback
+  'RB',     // Running Back
+  'WR',     // Wide Receiver
+  'TE',     // Tight End
+  'OL',     // Offensive Lineman
+  'DL',     // Defensive Lineman
+  'LB',     // Linebacker
+  'CB',     // Cornerback
+  'S',      // Safety
+  'K',      // Kicker
+  'P',      // Punter
+],
   Basketball: [
-    'Point Guard', 'Shooting Guard', 'Small Forward', 'Power Forward', 'Center',
-  ],
+  'PG',     // Point Guard
+  'SG',     // Shooting Guard
+  'SF',     // Small Forward
+  'PF',     // Power Forward
+  'C',      // Center
+]
+
 };
 
 const usStates = [

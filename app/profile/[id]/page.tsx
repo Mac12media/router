@@ -21,8 +21,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
         <Card className="col-span-2 shadow-lg overflow-hidden">
           {/* Header */}
-          <CardHeader className=" p-6 flex flex-col md:flex-row justify-between items-center gap-6 ">
-            <div className="flex items-center gap-5">
+          <CardHeader className=" p-4 flex flex-col md:flex-row justify-between items-center gap-6 ">
+<div className="flex flex-col md:flex-row items-center gap-5">
               <img
                 src={"https://static.wixstatic.com/media/e49d37_a38ac7355793484f9d8076cf676d0f02~mv2.jpg/v1/fill/w_230,h_218,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/38E43FA1-1ACB-4087-8EC0-BCDD0818123B_PNG.jpg"}
                 alt={`${user.name} profile`}
@@ -39,16 +39,19 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
 
           </CardHeader>
-           <CardContent className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-4 rounded-b-xl">
+           <CardContent className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-1 p-4 rounded-b-xl">
             <ProfileField label="Class" value={user.grad_year ?? ""} />
             <ProfileField label="Position" value={user.position ?? ""} />
             <ProfileField label="Height" value={user.height ?? ""} />
             <ProfileField label="Weight" value={user.weight ?? ""} />
-            <ProfileField label="ACT" value={user.test_score ?? ""} />
+                                 </CardContent>
+           <CardContent className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-1 p-4 rounded-b-xl">
+
             <ProfileField label="High School" value={user.high_school ?? ""} />
             <ProfileField label="City" value={user.city ?? ""} />
             <ProfileField label="State" value={user.state ?? ""} />
-                     </CardContent>
+                                             </CardContent>
+
         </Card>
 
  <div className="">
@@ -115,7 +118,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
     <div>
       <p className="text-xs text-muted-foreground">{label}</p>
       <p className="font-medium text-base">
-        {value?.trim() ? value : <span className="italic text-muted-foreground">Not provided</span>}
+        {value?.trim() ? value : <span className="italic text-muted-foreground"></span>}
       </p>
     </div>
   );
