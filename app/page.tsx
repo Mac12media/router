@@ -10,7 +10,7 @@ import { getLeads } from "@/lib/data/leads";
 import { getEndpoints } from "@/lib/data/endpoints";
 import { DataTable } from "@/components/groups/leads/data-table";
 import { columns } from "@/components/groups/leads/columns";
-import { getUsageForUser, getUser, getUserFull } from "@/lib/data/users";
+import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import { Usage } from "@/components/parts/usage";
 import { PlayerProfile } from "@/components/parts/playerprofile";
 import { RecruitingTasks } from "@/components/parts/tasks";
@@ -18,7 +18,6 @@ import { RecruitingTasks } from "@/components/parts/tasks";
 const pageData = {
   name: "Dashboard",
   title: "Dashboard",
-  description: "Snapshot of your sent emails and more",
 };
 
 export default async function Page() {
@@ -37,12 +36,10 @@ export default async function Page() {
 
   // fetch number of leads for user this month
   const result = await getUserFull();
-  const user = result?.data; 
+  const user = result?.data;
 
-      const usage = await getUsageForUser();
-    const { data: usageData, serverError: usageServerError } = usage || {};
-
-    console.log("Sending email:", usageData);
+  const usage = await getUsageForUser();
+  const { data: usageData, serverError: usageServerError } = usage || {};
 
   // check for errors
   if (
@@ -88,29 +85,31 @@ export default async function Page() {
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
-        <Header title={pageData?.title}>{pageData?.description}</Header>
-        <div className="grid grid-cols-4 gap-4">
+        <Header title={pageData?.title}></Header>
+        
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-4 sm:gap-x-4">
+          {/* Player Profile */}
           <PlayerProfile
-name={user?.name ?? ''}
-  gradClass={user?.grad_year ?? ''}
-  position={user?.position ?? ''}
-  height={user?.height ?? ''}
-  weight={user?.weight ?? ''}
-  imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
-/>
+            name={user?.name ?? ""}
+            gradClass={user?.grad_year ?? ""}
+            position={user?.position ?? ""}
+            height={user?.height ?? ""}
+            weight={user?.weight ?? ""}
+            imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
+          />
+          
+          {/* Chart */}
           <Chart
             chartData={chartData}
             className={`${
               usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
-            }`}
+            } sm:col-span-1 lg:col-span-2`}
           />
 
-      <RecruitingTasks user={user} />
-
-          
-
-          <Links />
+          {/* Recruiting Tasks */}
+            <RecruitingTasks user={user} />
         </div>
+
         <div className="mt-8">
           <h2 className="text-lg mb-4">Recent Contacts</h2>
           <DataTable

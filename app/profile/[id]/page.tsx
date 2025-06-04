@@ -4,89 +4,116 @@ import { PageWrapper } from "@/components/parts/page-wrapper";
 import { notFound } from "next/navigation";
 import { getUserFullById } from "@/lib/data/users";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Twitter, Instagram, Facebook } from "lucide-react";
+import { X, Instagram } from "lucide-react";
 
-export default async function ProfilePage({params}: {params: Promise<{ id: string }>}) {
-const { id } = await params; 
+export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const data = await getUserFullById({ id });
   const { data: user } = data || {};
 
   if (!user) return notFound();
 
- 
   return (
     <>
       <Breadcrumbs pageName="Player Profile" />
       <PageWrapper>
-        <Header title="Player Profile">Showcase your athletic journey</Header>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 sm:gap-x-4">
 
-        {/* Cover Image */}
-        <div
-          className="w-full h-48 rounded-xl bg-cover bg-center mt-6"
-          style={{ backgroundImage: `url(${user.x_username || '/placeholder-cover.jpg'})` }}
-        />
-
-        {/* Profile Card */}
-        <Card className="w-full shadow-lg overflow-hidden mt-6">
-          <CardHeader className="border-b p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <Card className="col-span-2 shadow-lg overflow-hidden">
+          {/* Header */}
+          <CardHeader className=" p-6 flex flex-col md:flex-row justify-between items-center gap-6 ">
             <div className="flex items-center gap-5">
               <img
-                src={user.x_username || '/placeholder.jpg'}
+                src={user.x_username || "/placeholder.jpg"}
                 alt={`${user.name} profile`}
                 className="w-28 h-28 rounded-full object-cover border-4 border-white shadow"
               />
               <div>
-                <CardTitle className="text-2xl font-bold text-primary">
+                <CardTitle className="text-3xl font-bold text-[#FF7200]">
                   {user.name} {user.last_name}
                 </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  Class of {user.grad_year} — {user.position}
-                </CardDescription>
+                
+
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <button className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">Contact Coach</button>
-              <button className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition">Request Highlight Video</button>
-            </div>
+
           </CardHeader>
+           <CardContent className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-4 rounded-b-xl">
+            <ProfileField label="Class" value={user.grad_year ?? ""} />
+            <ProfileField label="Position" value={user.position ?? ""} />
+            <ProfileField label="Height" value={user.height ?? ""} />
+            <ProfileField label="Weight" value={user.weight ?? ""} />
+            <ProfileField label="ACT" value={user.test_score ?? ""} />
+            <ProfileField label="High School" value={user.high_school ?? ""} />
+            <ProfileField label="City" value={user.city ?? ""} />
+            <ProfileField label="State" value={user.state ?? ""} />
+                     </CardContent>
+        </Card>
 
-          {/* Info Grid */}
-          <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6 bg-muted rounded-b-xl">
-            <ProfileField label="Sport" value={user.sport ?? ''} />
-            <ProfileField label="Position" value={user.position ?? ''} />
-            <ProfileField label="Height" value={user.height ?? ''} />
-            <ProfileField label="Weight" value={user.weight ?? ''} />
-            <ProfileField label="Test Score" value={user.test_score ?? ''} />
-            <ProfileField label="High School" value={user.high_school ?? ''} />
-            <ProfileField label="City" value={user.city ?? ''} />
-            <ProfileField label="State" value={user.state ?? ''} />
-            <SocialField icon={<Twitter className="text-blue-500" />} label="X Username" value={user.x_username ?? ''} />
-            <SocialField icon={<Instagram className="text-pink-500" />} label="Instagram" value={user.ig_username ?? ''} />
-          </CardContent>
-
-          {/* Bio & Video - Side-by-side layout */}
-          <CardContent className="p-6">
-            <div className="flex flex-col lg:flex-row gap-8">
-              <div className="flex-1 space-y-4">
-                <ProfileField label="Bio" value={user.bio ?? ''} />
-                <ProfileField label="Highlight Video URL" value={user.video ?? ''} />
-              </div>
-              <div className="flex-1">
+ <div className="">
                 {user.video && <HighlightVideo url={user.video} />}
               </div>
+        </div>
+
+        <Card className="w-full shadow-lg overflow-hidden mt-6">
+
+          {/* Info Grid */}
+           <CardContent className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-6 rounded-b-xl">
+            <ProfileField label="Class" value={user.grad_year ?? ""} />
+            <ProfileField label="Position" value={user.position ?? ""} />
+            <ProfileField label="Height" value={user.height ?? ""} />
+            <ProfileField label="Weight" value={user.weight ?? ""} />
+            <ProfileField label="ACT" value={user.test_score ?? ""} />
+            <ProfileField label="High School" value={user.high_school ?? ""} />
+            <ProfileField label="City" value={user.city ?? ""} />
+            <ProfileField label="State" value={user.state ?? ""} />
+                     </CardContent>
+        </Card>
+
+<CardContent className="p-6">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="flex-1 space-y-4">
+                <ProfileField label="Bio" value={user.bio ?? ""} />
+                <ProfileField label="Highlight Video URL" value={user.video ?? ""} />
+              </div>
+             
             </div>
           </CardContent>
-        </Card>
+          {/* Metrics Section */}
+          <CardContent className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start rounded-xl p-6">
+              {/* Measureables */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-[#FF7200] uppercase">Measureables:</h3>
+                <div className="text-2xl font-semibold">
+                  <p>{user.height ?? "N/A"}</p>
+                  <p>{user.weight ? `${user.weight} lbs` : "N/A"}</p>
+                </div>
+              </div>
+
+              {/* Metrics */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold text-[#FF7200] uppercase">Metrics</h3>
+                <div className="grid grid-cols-2 gap-3">
+                 </div>
+              </div>
+
+             
+            </div>
+          </CardContent>
+
+          
       </PageWrapper>
     </>
   );
 }
 
+// Profile Field component
 function ProfileField({ label, value }: { label: string; value?: string }) {
   return (
     <div>
-      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
       <p className="font-medium text-base">
         {value?.trim() ? value : <span className="italic text-muted-foreground">Not provided</span>}
       </p>
@@ -94,6 +121,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
   );
 }
 
+// Social Field with Icon
 function SocialField({ icon, label, value }: { icon: React.ReactNode; label: string; value?: string }) {
   return (
     <div className="flex items-center gap-3">
@@ -104,7 +132,9 @@ function SocialField({ icon, label, value }: { icon: React.ReactNode; label: str
 }
 
 function HighlightVideo({ url }: { url?: string }) {
-  if (!url?.trim()) return <p className="italic text-sm text-muted-foreground">No highlight video provided.</p>;
+  if (!url?.trim()) {
+    return <p className="italic text-sm text-muted-foreground">No highlight video provided.</p>;
+  }
 
   const trimmed = url.trim();
 
@@ -112,11 +142,11 @@ function HighlightVideo({ url }: { url?: string }) {
     const id = getYouTubeId(trimmed);
     if (id) {
       return (
-        <div className="w-full h-[300px] md:h-[400px] lg:h-[500px]">
+        <div className="w-full aspect-[16/9]">
           <iframe
             src={`https://www.youtube.com/embed/${id}`}
             title="YouTube Highlight"
-            className="w-full h-full rounded-lg shadow"
+            className="w-full h-full rounded-lg object-cover shadow"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
@@ -129,11 +159,11 @@ function HighlightVideo({ url }: { url?: string }) {
     const hudlId = getHudlId(trimmed);
     if (hudlId) {
       return (
-        <div className="w-full h-[300px] md:h-[400px] lg:h-[500px]">
+        <div className="w-full aspect-[16/9]">
           <iframe
             src={`https://www.hudl.com/embed/video/${hudlId}`}
             title="Hudl Highlight"
-            className="w-full h-full rounded-lg shadow"
+            className="w-full h-full rounded-lg  object-cover shadow"
             frameBorder="0"
             allowFullScreen
           />
@@ -154,6 +184,7 @@ function HighlightVideo({ url }: { url?: string }) {
   );
 }
 
+// Helpers
 function isYouTubeUrl(url: string): boolean {
   return /youtu\.be|youtube\.com/.test(url);
 }

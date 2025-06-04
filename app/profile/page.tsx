@@ -112,7 +112,7 @@ export default function Page() {
     <>
       <Breadcrumbs pageName="Player Profile" />
       <PageWrapper>
-        <Header title="Player Profile">Showcase your athletic journey</Header>
+        <Header title="Player Profile"></Header>
 
         <Card className="w-full shadow-md overflow-hidden">
           <CardHeader className="border-b flex flex-col md:flex-row justify-between items-center gap-4">

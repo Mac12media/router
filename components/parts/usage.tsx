@@ -62,7 +62,7 @@ export const Usage = ({
               {formatNumber(remaining)} leads remaining
             </p>
             <p className="flex items-center space-x-1 text-xs">
-              <CircleAlert className="h-3 w-3 text-yellow-500" />
+              <CircleAlert className="h-3 w-3 text-[#FF7200]" />
               <span>
                 Plan resets in <span className="font-medium">{daysLeft}</span>{" "}
                 day{daysLeft !== 1 ? "s" : ""}
@@ -90,7 +90,7 @@ export const Usage = ({
               {formatNumber(30)} Emails remaining
             </p>
             <p className="flex items-center space-x-1 text-xs">
-              <CircleAlert className="h-3 w-3 text-yellow-500" />
+              <CircleAlert className="h-3 w-3 text-[#FF7200]" />
               <span>
                 Plan resets in <span className="font-medium">{daysLeft}</span>{" "}
                 day{daysLeft !== 1 ? "s" : ""}

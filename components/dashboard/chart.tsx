@@ -45,8 +45,7 @@ export function Chart({
   const total = React.useMemo(
     () => ({
       errors: chartData.reduce((acc, curr) => acc + curr.errors, 0),
-            leads: chartData.reduce((acc, curr) => acc + curr.leads, 0),
-
+      leads: chartData.reduce((acc, curr) => acc + curr.leads, 0),
     }),
     [chartData]
   );
@@ -60,8 +59,8 @@ export function Chart({
             Showing total emails sent for the past month
           </CardDescription>
         </div>
-        <div className="flex">
-          {["errors","leads"].map((key) => {
+        <div className="flex flex-wrap sm:flex-nowrap">
+          {["errors", "leads"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (
               <button
@@ -84,7 +83,7 @@ export function Chart({
       <CardContent className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[250px] w-full sm:h-[300px]"
         >
           <LineChart
             accessibilityLayer

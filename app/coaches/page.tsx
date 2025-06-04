@@ -59,7 +59,7 @@ export default async function Page() {
     <>
       <Breadcrumbs pageName={pageData.name} />
       <PageWrapper>
-        <Header title={pageData.title}>{pageData.description}</Header>
+        <Header title={pageData.title}></Header>
         <DataTable
           columns={columns}
           data={coachesdata ?? []}

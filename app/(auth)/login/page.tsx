@@ -4,19 +4,23 @@ import { useState } from "react";
 import Image from "next/image";
 import MagicLinkForm from "@/components/auth/form";
 import SignUpForm from "@/components/auth/sign-up";
+import { useTheme } from "next-themes";
 
-import Logo from "@/public/expologosecond.png";
+import LogoDark from "@/public/expologo1logo.png";
+import LogoLight from "@/public/expologo2logo.png";
+import Logo from "@/components/parts/logo";
 
 export default function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup">("signup");
 
   return (
-    <section className="flex items-center justify-center h-screen w-screen bg-background/20 backdrop-blur-sm px-4">
+    <section className="flex fixed top-0 right-0 p-2 left-0 h-screen w-screen overflow-hidden flex-col items-center justify-center bg-background/20 backdrop-blur-sm">
       <div className="flex w-full max-w-4xl rounded-lg shadow-md overflow-hidden border bg-white dark:bg-muted dark:bordermuted">
         {/* Left Panel */}
         <div className="flex flex-col justify-center flex-1 px-8 py-12">
           <div className="flex items-center gap-2 mb-6">
-            <Image src={Logo} alt="logo" width={70} height={70} className="" />
+            {/* Use the appropriate logo based on theme */}
+             <Logo />
           </div>
 
           <h2 className="text-xl font-semibold mb-1 text-zinc-900 dark:text-zinc-100">
@@ -30,7 +34,6 @@ export default function AuthPage() {
 
           <div className="space-y-4">
             {mode === "signup" ? <SignUpForm /> : <MagicLinkForm />}
-           
           </div>
 
           <p className="text-sm text-muted-foreground mt-4">

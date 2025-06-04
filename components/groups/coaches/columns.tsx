@@ -11,30 +11,7 @@ import router from "next/router";
 
 
 export const columns: ColumnDef<CoachRow>[] = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    cell: ({ row }) => {
-      const id: string = row.getValue("id");
-      return (
-        <Button
-  variant="outline"
-  size="sm"
-  onClick={() => {
-    toast.success(row.original.head_coach);
-        router.push(`/coaches/${id}`);
 
-  }}
->
-  <Link href={`/coaches/${id}`} passHref>
-    {id}
-  </Link>
-</Button>
-      );
-    },
-  },
   
   {
   accessorKey: "school",
@@ -95,11 +72,5 @@ const name = row.getValue("head_coach") as string;
     <span style={{ filter: "blur(5px)" }}>{row.getValue("email")}</span>
   ),
 },
-  {
-    accessorKey: "phone",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone" />
-    ),
-    cell: ({ row }) => <span>{row.getValue("phone")}</span>,
-  },
+
 ];

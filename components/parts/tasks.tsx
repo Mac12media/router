@@ -29,7 +29,7 @@ export const RecruitingTasks = ({ user }: { user?: UserProfile }) => {
     return (
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Recruiting Task</CardTitle>
+          <CardTitle>Recruiting Tasks</CardTitle>
           <CardDescription>Loading user profile...</CardDescription>
         </CardHeader>
       </Card>
@@ -44,7 +44,7 @@ export const RecruitingTasks = ({ user }: { user?: UserProfile }) => {
   return (
     <Card className="w-full flex flex-col">
       <CardHeader className="mb-4 border-b">
-        <CardTitle>Recruiting Task</CardTitle>
+        <CardTitle>Recruiting Tasks</CardTitle>
         <CardDescription>Complete your recruiting profile step-by-step.</CardDescription>
       </CardHeader>
 

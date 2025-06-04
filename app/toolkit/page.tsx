@@ -56,7 +56,6 @@ export default function RecruitingToolkitCoursePage() {
   return (
     <PageWrapper>
       <Header title="College Recruiting Toolkit">
-        A practical, self-paced video course to help you navigate the college athletic recruiting process.
       </Header>
 
       <main className="max-w-6xl mx-auto p-6 space-y-16">
@@ -78,10 +77,11 @@ export default function RecruitingToolkitCoursePage() {
     <div className="flex gap-6 snap-x snap-mandatory pb-4 px-1">
       {modules.map((module, i) => (
         <a
-          key={i}
-          href={module.videoUrl}
-          className="min-w-[60%] max-w-[65%] snap-start shrink-0 rounded-xl overflow-hidden border shadow-lg transition hover:shadow-xl"
-        >
+  key={i}
+  href={module.videoUrl}
+  className="w-full sm:min-w-[60%] sm:max-w-[65%] snap-start shrink-0 rounded-xl overflow-hidden border shadow-lg transition hover:shadow-xl"
+>
+
           <img
             src={module.thumbnail}
             alt={module.title}

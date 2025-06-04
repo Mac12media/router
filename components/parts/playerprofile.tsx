@@ -9,19 +9,23 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 
+// Example favorite programs (these will stay but will be displayed as part of EXPO Score)
 const favoritePrograms = [
   {
     name: "Alabama",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Alabama_Crimson_Tide_logo.svg/2048px-Alabama_Crimson_Tide_logo.svg.png",
     link: "https://alabama.com/",
   },
-
   {
     name: "Michigan",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Michigan_Wolverines_logo.svg/1200px-Michigan_Wolverines_logo.svg.png",
     link: "https://texassports.com/",
   },
 ];
+
+// Example scores for academic and athletic performance
+const academicScore = 90; // Example academic score
+const athleticScore = 85; // Example athletic score
 
 export const PlayerProfile = ({
   name,
@@ -79,29 +83,38 @@ export const PlayerProfile = ({
                 </div>
               </div>
             </div>
-                      <CardTitle>Favorite Programs</CardTitle>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-          {favoritePrograms.map((program) => (
-            <Link
-              key={program.name}
-              href={program.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border justify-center rounded-sm p-3 flex items-center space-x-4 hover:bg-muted/50 transition"
-            >
-              <div className=" overflow-hidden">
-                <img
-                  src={program.logo}
-                  alt={program.name}
-                  width={60}
-                  height={60}
-                  className="object-cover justify-center"
-                />
-              </div>
-            </Link>
-          ))}
-        </div>
+            {/* EXPO Score Section */}
+            <CardTitle>EXPO Score</CardTitle>
+
+          
+
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-4">
+
+              <Link
+                  href={''}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border justify-center rounded-sm p-1 flex flex-col items-center hover:bg-muted/50 transition"
+                >
+                <span className="text-sm text-muted-foreground">Academic</span>
+ 
+                <span className="font-semibold text-lg text-[#FF7200]">{academicScore}</span>
+
+                </Link>
+                <Link
+                  href={''}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border justify-center rounded-sm p-1 flex flex-col items-center hover:bg-muted/50 transition"
+                >
+                                  <span className="text-sm text-center text-muted-foreground">Athletic</span>
+
+                                    <span className="font-semibold text-lg text-[#FF7200]">{athleticScore}</span>
+
+                </Link>
+
+            </div>
           </CardContent>
 
           <CardFooter className="mt-auto text-xs text-muted-foreground justify-center">
@@ -109,7 +122,6 @@ export const PlayerProfile = ({
           </CardFooter>
         </Card>
       </Link>
-
     </div>
   );
 };

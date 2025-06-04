@@ -33,100 +33,96 @@ export default async function Page() {
     notFound();
   }
 
-    // fetch chart data
-    const charts = await getLeadAndErrorCounts();
-    const { data: chartData, serverError: chartServerError } = charts || {};
-  
-    // fetch leads
-    const leads = await getLeads();
-    const { data: leadsData, serverError: leadsServerError } = leads || {};
-  
+  // fetch chart data
+  const charts = await getLeadAndErrorCounts();
+  const { data: chartData, serverError: chartServerError } = charts || {};
+
+  // fetch leads
+  const leads = await getLeads();
+  const { data: leadsData, serverError: leadsServerError } = leads || {};
 
   const result = await getUserFull();
-  const user = result?.data; 
-  
-    // fetch number of leads for user this month
-    const usage = await getUsageForUser();
-    const { data: usageData, serverError: usageServerError } = usage || {};
-  
-    // check for errors
-    if (
-      !leadsData ||
-      !endpointsData ||
-      !chartData ||
-      usageData === null ||
-      usageData === undefined ||
-      leadsServerError ||
-      endpointsServerError ||
-      chartServerError ||
-      usageServerError
-    ) {
-      notFound();
-    }
-  
-    // get the 5 most recent leads
-    const recentLeads = leadsData.slice(0, 5);
-  
-    // get the lead limit for the user's plan
-    let leadLimit: number;
-    switch (usageData?.plan) {
-      case "free":
-        leadLimit = 100;
-        break;
-      case "lite":
-        leadLimit = 1000;
-        break;
-      case "pro":
-        leadLimit = 10000;
-        break;
-      case "business":
-        leadLimit = 50000;
-        break;
-      case "enterprise":
-        leadLimit = 999999;
-        break;
-      default:
-        leadLimit = 100; // Fallback to free tier limit
-    }
+  const user = result?.data;
 
+  // fetch number of leads for user this month
+  const usage = await getUsageForUser();
+  const { data: usageData, serverError: usageServerError } = usage || {};
 
+  // check for errors
+  if (
+    !leadsData ||
+    !endpointsData ||
+    !chartData ||
+    usageData === null ||
+    usageData === undefined ||
+    leadsServerError ||
+    endpointsServerError ||
+    chartServerError ||
+    usageServerError
+  ) {
+    notFound();
+  }
 
-const tasksData: RecruitingTask[] = [
-  {
-    name: "Make X Profile",
-    status: "In Progress",
-    dueDate: "2025-06-10T00:00:00Z", 
-    completed: 3,
-    totalSteps: 5,
-    category: "Follow-up",
-    assignedTo: "Jane Doe",
-  },
-];
+  // get the 5 most recent leads
+  const recentLeads = leadsData.slice(0, 5);
 
-const totalSteps = 5;    // Total steps for a task (e.g., 5 students to contact)
+  // get the lead limit for the user's plan
+  let leadLimit: number;
+  switch (usageData?.plan) {
+    case "free":
+      leadLimit = 100;
+      break;
+    case "lite":
+      leadLimit = 1000;
+      break;
+    case "pro":
+      leadLimit = 10000;
+      break;
+    case "business":
+      leadLimit = 50000;
+      break;
+    case "enterprise":
+      leadLimit = 999999;
+      break;
+    default:
+      leadLimit = 100; // Fallback to free tier limit
+  }
 
+  const tasksData: RecruitingTask[] = [
+    {
+      name: "Make X Profile",
+      status: "In Progress",
+      dueDate: "2025-06-10T00:00:00Z",
+      completed: 3,
+      totalSteps: 5,
+      category: "Follow-up",
+      assignedTo: "Jane Doe",
+    },
+  ];
+
+  const totalSteps = 5; // Total steps for a task (e.g., 5 students to contact)
 
   return (
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
         <Header title={pageData?.title}>{pageData?.description}</Header>
-        <div className="grid grid-cols-3 gap-4 pb-4">
-                  <Activity
-                    chartData={chartData}
-                    className={`${
-                      usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
-                    }`}
-                  />
-                  
-      <RecruitingTasks user={user} />
-                  
-                </div>
-        <DataTable
-          columns={columns}
-          data={logsData}
-          endpoints={endpointsData}
-        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+          <Activity
+            chartData={chartData}
+            className={`${
+              usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
+            }`}
+          />
+          <RecruitingTasks user={user} />
+        </div>
+        <div className="overflow-x-auto mt-8">
+          <DataTable
+            columns={columns}
+            data={logsData}
+            endpoints={endpointsData}
+          />
+        </div>
       </PageWrapper>
     </>
   );

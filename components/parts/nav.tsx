@@ -5,7 +5,10 @@ import { ModeToggle } from "@/components/parts/mode-toggle";
 import { getUsageForUser } from "@/lib/data/users";
 import { LucideProps } from "lucide-react";
 
-import Logo from "@/public/expologosecond.png";
+import { useTheme } from "next-themes";
+
+import LogoDark from "@/public/expologo1logo.png";
+import LogoLight from "@/public/expologo2logo.png";
 
 import {
   BarChart,
@@ -21,26 +24,28 @@ import {
   ActivityIcon,
   MessageCircleIcon,
 } from "lucide-react";
+import Logo from "./logo";
 
 // Navigation links
 const links = [
   { href: "/", text: "Dashboard", icon: BarChart },
   { href: "/coaches", text: "College Programs", icon: GraduationCapIcon },
-  { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
-  { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
+ // { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
+ // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
   { href: "/activity", text: "Activity & Tasks", icon: CheckCircle2Icon },
   { href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
-  { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
+ // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
 ];
 
 const otherLinks = [
-  { href: "https://exporecruits.com", text: "Expo Recruits", icon: Book },
-  { href: "/support", text: "Support", icon: LifeBuoy },
+  { href: "https://exporecruits.com", text: "Support", icon: LifeBuoy },
 ];
 
 export default async function Nav() {
   const usage = await getUsageForUser();
   const plan = usage?.data?.plan;
+
+
 
   return (
     <nav className="p-4 flex flex-col gap-4 justify-between h-screen">
@@ -49,13 +54,7 @@ export default async function Nav() {
         href="/"
         className="border bg-muted/50 flex items-center gap-2 rounded-lg p-6"
       >
-        <Image
-          className="-mt-px mb-px"
-          src={Logo}
-          width={100}
-          height={100}
-          alt="Expo Recruits Logo"
-        />
+          <Logo />
       </Link>
 
       {/* Navigation links */}
@@ -67,7 +66,7 @@ export default async function Nav() {
                 key={link.href}
                 icon={link.icon}
                 href={link.href}
-                locked={link.locked}
+             //   locked={link.locked}
               >
                 {link.text}
               </NavLink>

@@ -35,9 +35,10 @@ export default function RootLayout({
         >
           <PostHogProvider>
             <Nav />
-            <main className="py-4 pr-4 pl-4 sm:pl-0 flex flex-col gap-4 min-h-screen">
-              {children}
-            </main>
+            <main className="py-4 pr-2 pl-2 sm:pr-4 sm:pl-4 flex flex-col gap-4 min-h-screen">
+  {children}
+</main>
+
             <Toaster />
           </PostHogProvider>
         </ThemeProvider>
