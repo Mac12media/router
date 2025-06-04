@@ -24,7 +24,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           <CardHeader className=" p-6 flex flex-col md:flex-row justify-between items-center gap-6 ">
             <div className="flex items-center gap-5">
               <img
-                src={user.x_username || "/placeholder.jpg"}
+                src={"https://static.wixstatic.com/media/e49d37_a38ac7355793484f9d8076cf676d0f02~mv2.jpg/v1/fill/w_230,h_218,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/38E43FA1-1ACB-4087-8EC0-BCDD0818123B_PNG.jpg"}
                 alt={`${user.name} profile`}
                 className="w-28 h-28 rounded-full object-cover border-4 border-white shadow"
               />
