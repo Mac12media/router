@@ -98,13 +98,14 @@ export default async function Page() {
             imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
           />
           
-          {/* Chart */}
+          <Link href="/activity" className=" sm:col-span-1 lg:col-span-2 transition-shadow">
           <Chart
             chartData={chartData}
             className={`${
               usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
-            } sm:col-span-1 lg:col-span-2`}
+            } sm:col-span-1 lg:col-span-2 hover:shadow-md`}
           />
+          </Link>
 
           {/* Recruiting Tasks */}
             <RecruitingTasks user={user} />
