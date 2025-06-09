@@ -54,15 +54,14 @@ export const PlayerProfile = ({
           <CardContent className="space-y-6 flex-grow">
             <div className="grid gap-3 p-3 border rounded-sm bg-muted/25">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 rounded-full overflow-hidden">
                   <img
                     src={imageUrl}
                     alt={name}
                     width={64}
                     height={64}
-                    className="object-cover"
+                        className="w-16 h-16 rounded-full object-fill border"
+
                   />
-                </div>
                 <div>
                   <p className="font-semibold text-base">{name}</p>
                   <p className="text-sm text-muted-foreground">

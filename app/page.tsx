@@ -14,6 +14,7 @@ import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import { Usage } from "@/components/parts/usage";
 import { PlayerProfile } from "@/components/parts/playerprofile";
 import { RecruitingTasks } from "@/components/parts/tasks";
+import placeholder from "@/public/userplaceholder.png";
 
 const pageData = {
   name: "Dashboard",
@@ -95,7 +96,7 @@ export default async function Page() {
             position={user?.position ?? ""}
             height={user?.height ?? ""}
             weight={user?.weight ?? ""}
-            imageUrl="https://s3media.247sports.com/Uploads/Assets/110/127/12127110.jpg?width=70&fit=crop" // Replace with your actual image path
+            imageUrl={user?.image ?? placeholder.src} // Replace with your actual image path
           />
           
           <Link href="/activity" className=" sm:col-span-1 lg:col-span-2 transition-shadow">

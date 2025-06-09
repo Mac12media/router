@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { Breadcrumbs } from '@/components/parts/breadcrumbs';
 import { Header } from '@/components/parts/header';
 import { PageWrapper } from '@/components/parts/page-wrapper';
+import placeholder from "@/public/userplaceholder.png";
+
 import {
   Card,
   CardContent,
@@ -12,6 +14,9 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { getUserFull, updateUserProfile } from '@/lib/data/users';
+import { supabase } from '@/lib/supabase'; // import your client
+
+
 
 const positionsBySport: Record<string, string[]> = {
   Football: [
@@ -64,11 +69,16 @@ function formatDisplayValue(value: string) {
   return value?.trim() ? value : <span className="text-muted-foreground italic">Not provided</span>;
 }
 
+
+
+
+
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<any>({});
   const [initialData, setInitialData] = useState<any>({});
   const [isEditing, setIsEditing] = useState(false);
+const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -98,6 +108,8 @@ export default function Page() {
         bio: form.bio,
         test_score: form.test_score,
         height: form.height,
+                image: form.image,
+
         weight: form.weight,
         position: form.position,
         sport: form.sport,
@@ -115,6 +127,39 @@ export default function Page() {
     }
   };
 
+  // Upload handler
+const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  // Show preview immediately
+  const previewUrl = URL.createObjectURL(file);
+  setForm((prev: any) => ({ ...prev, image: previewUrl }));
+
+  // Upload to Supabase
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${form.id || 'user'}-${Date.now()}.${fileExt}`;
+  const filePath = `avatars/${fileName}`;
+
+  setUploading(true);
+  const { error } = await supabase.storage.from('profile-pictures').upload(filePath, file);
+  setUploading(false);
+
+  if (error) {
+    console.error('Upload error:', error.message);
+    return;
+  }
+
+  // Get public URL and replace preview with final image
+  const { data } = supabase.storage.from('profile-pictures').getPublicUrl(filePath);
+  const publicUrl = data?.publicUrl;
+
+  if (publicUrl) {
+    setForm((prev: any) => ({ ...prev, image: publicUrl }));
+  }
+};
+
+
   const handleCancel = () => {
     setForm(initialData);
     setIsEditing(false);
@@ -131,11 +176,22 @@ export default function Page() {
         <Card className="w-full shadow-md overflow-hidden">
           <CardHeader className="border-b flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center space-x-4">
-              <img
-                src={"https://static.wixstatic.com/media/e49d37_a38ac7355793484f9d8076cf676d0f02~mv2.jpg/v1/fill/w_230,h_218,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/38E43FA1-1ACB-4087-8EC0-BCDD0818123B_PNG.jpg"}
-                alt="Profile"
-                className="w-28 h-28 rounded-full object-cover border"
-              />
+              <div className="relative">
+  <img
+  src={form.image?.trim() || placeholder.src}
+    alt="Profile"
+    className="w-28 h-28 rounded-full object-fill border"
+  />
+  {isEditing && (
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleImageUpload}
+      className="absolute top-0 left-0 w-28 h-28 opacity-0 cursor-pointer"
+    />
+  )}
+</div>
+
               <div>
                 <CardTitle className="text-2xl font-semibold">
                   {form.name} {form.last_name}

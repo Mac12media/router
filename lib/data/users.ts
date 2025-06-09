@@ -128,6 +128,8 @@ export const getUserFull = authenticatedAction.action(
         last_name: users.last_name,
         grad_year: users.grad_year,
         bio: users.bio,
+                        image: users.image,
+
         test_score: users.test_score,
         height: users.height,
         weight: users.weight,
@@ -161,6 +163,8 @@ export const getUserFullById = authenticatedAction
         last_name: users.last_name,
         grad_year: users.grad_year,
         bio: users.bio,
+                image: users.image,
+
         test_score: users.test_score,
         height: users.height,
         weight: users.weight,
@@ -199,6 +203,8 @@ export const updateUserProfile = authenticatedAction
         bio: parsedInput.bio,
         test_score: parsedInput.test_score,
         height: parsedInput.height,
+                        image: parsedInput.image,
+
         weight: parsedInput.weight,
         position: parsedInput.position,
         sport: parsedInput.sport,

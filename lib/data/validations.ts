@@ -52,6 +52,8 @@ export const updateUserProfileSchema = z.object({
   bio: z.string().optional(), // if you added it manually
   test_score: z.string().optional(),
   height: z.string().optional(),
+    image: z.string().optional(),
+
   weight: z.string().optional(),
   position: z.string().optional(),
   sport: z.string().optional(),
