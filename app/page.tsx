@@ -116,12 +116,8 @@ imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : plac
         </div>
 
         <div className="mt-8">
-          <h2 className="text-lg mb-4">Recent Campaigns</h2>
-          <DataTable
-            columns={columns}
-            data={recentLeads}
-            endpoints={endpointsData}
-          />
+                                  <RecruitingTasks user={user} />
+
         </div>
       </PageWrapper>
     </>

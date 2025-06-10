@@ -41,7 +41,7 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
     return (
       <Card className="w-full">
         <CardHeader>
-          <CardTitle >Recruiting Calendar</CardTitle>
+          <CardTitle>Recruiting Calendar</CardTitle>
           <CardDescription className="text-xs">Loading user profile...</CardDescription>
         </CardHeader>
       </Card>
@@ -51,11 +51,13 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
   const calendarDays = generateCalendarGrid();
   const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
+  // Filter upcoming events (after today's date)
+  const upcomingEvents = events.filter((event) => event.date > today);
 
   return (
     <Card className="w-full flex flex-col">
       <CardHeader className="mb-2 border-b">
-        <CardTitle >Recruiting Calendar</CardTitle>
+        <CardTitle>Recruiting Calendar</CardTitle>
         <CardDescription className="text-xs">Track your recruiting events for the month.</CardDescription>
       </CardHeader>
 
@@ -66,17 +68,19 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
             <div key={day} className="text-center">{day}</div>
           ))}
 
-   {calendarDays.map((date) => {
+          {/* Calendar Days */}
+          {calendarDays.map((date) => {
             const dayEvents = events.filter((event) => event.date === date);
             const isToday = date === today;
 
             return (
-<div
+              <div
                 key={date}
                 className={`relative p-1 border rounded-sm text-center text-xs ${
                   isToday ? 'bg-[#FF7200]' : ''
                 }`}
-              >                <div>{new Date(date).getDate()}</div>
+              >
+                <div>{new Date(date).getDate()}</div>
                 {dayEvents.length > 0 && (
                   <div className="absolute bottom-0 left-0 right-0 text-ellipsis overflow-hidden text-[4px] text-[#FF7200]">
                     {dayEvents[0].title}
@@ -88,7 +92,6 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
         </div>
 
         <div className="flex justify-between items-center mt-2 text-xs">
-          <p className="italic text-muted-foreground">📅 Track recruiting dates.</p>
 
           {events.length === 0 && (
             <div className="flex items-center gap-1 text-[#FF7200]">
@@ -97,12 +100,24 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
             </div>
           )}
 
-          <Link
-            href="/profile"
-            className="text-blue-600 underline hover:text-blue-800 text-xs"
-          >
-            Go to Profile
-          </Link>
+         
+        </div>
+
+        {/* Upcoming Events Section */}
+        <div className="mt-4 space-y-2">
+          <h3 className="text-sm font-semibold">Upcoming Events</h3>
+          {upcomingEvents.length > 0 ? (
+            <ul className="space-y-1 text-xs">
+              {upcomingEvents.map((event) => (
+                <li key={event.date} className="flex justify-between items-center">
+                  <span>{event.title}</span>
+                  <span className="text-gray-500">{new Date(event.date).toLocaleDateString()}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-muted-foreground">No upcoming events.</p>
+          )}
         </div>
       </CardContent>
     </Card>
