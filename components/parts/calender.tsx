@@ -13,7 +13,7 @@ import { CircleAlert } from "lucide-react";
 
 // Define dummy events for the calendar
 const events = [
-  { date: "2025-06-15", title: "Tryout Day" },
+  { date: "2025-06-15", title: "First Contact" },
 ];
 
 type UserProfile = Record<string, string | null | undefined>;
