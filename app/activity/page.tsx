@@ -11,6 +11,8 @@ import { getLeads } from "@/lib/data/leads";
 import { getLeadAndErrorCounts } from "@/lib/data/dashboard";
 import { RecruitingTasks } from "@/components/parts/tasks";
 import { Activity } from "@/components/dashboard/activity";
+import { Campaigns } from "@/components/parts/campaigns";
+import { FavPrograms } from "@/components/parts/favprograms";
 
 const pageData = {
   name: "Activity",
@@ -106,7 +108,6 @@ export default async function Page() {
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
-        <Header title={pageData?.title}>{pageData?.description}</Header>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
           <Activity
             chartData={chartData}
@@ -114,7 +115,11 @@ export default async function Page() {
               usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
             }`}
           />
-          <RecruitingTasks user={user} />
+                  <div className="grid grid-cols-1 gap-4" style={{gridTemplateRows: '.5fr 2fr'}}>
+  <Campaigns />
+  <FavPrograms />
+</div>
+
         </div>
         <div className="overflow-x-auto mt-8">
           <DataTable

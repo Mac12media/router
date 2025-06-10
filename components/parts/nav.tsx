@@ -19,6 +19,7 @@ import {
   HeartIcon,
   Layers,
   LifeBuoy,
+  User,
   Disc3,
   Book,
   ActivityIcon,
@@ -39,11 +40,13 @@ const links = [
 
 const otherLinks = [
   { href: "https://exporecruits.com", text: "Support", icon: LifeBuoy },
+
 ];
 
 export default async function Nav() {
   const usage = await getUsageForUser();
   const plan = usage?.data?.plan;
+  const id = usage?.data?.id
 
 
 
@@ -80,6 +83,13 @@ export default async function Nav() {
                 {link.text}
               </NavLink>
             ))}
+             <NavLink
+                key={`/profile/${id}`}
+                icon={User}
+                href={`/profile/${id}`}
+              >
+                Profile
+              </NavLink>
           </div>
         </div>
 

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Link from "next/link";
 import router from "next/router";
+import MatchCircleChart from "@/components/parts/matchcirclechart";
 
 
 
@@ -71,6 +72,20 @@ const name = row.getValue("head_coach") as string;
   cell: ({ row }) => (
     <span style={{ filter: "blur(5px)" }}>{row.getValue("email")}</span>
   ),
+},
+
+{
+  accessorKey: "match",
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Match" />
+  ),
+  cell: ({ row }) => {
+    // Generate a random value between 1 and 100
+    const randomValue = Math.floor(Math.random() * 100) + 1;
+    const randomLabel = `${randomValue}%`; // Display the random value as a percentage
+    
+    return <MatchCircleChart label={randomLabel} value={randomValue} max={100} />;
+  },
 },
 
 ];

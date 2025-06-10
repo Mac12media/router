@@ -29,6 +29,7 @@ const athleticScore = 85; // Example athletic score
 
 export const PlayerProfile = ({
   name,
+  id,
   gradClass,
   position,
   height,
@@ -36,6 +37,7 @@ export const PlayerProfile = ({
   imageUrl,
 }: {
   name: string;
+  id: string;
   gradClass: string;
   position: string;
   height: string;
@@ -45,7 +47,7 @@ export const PlayerProfile = ({
   return (
     <div className="space-y-6">
       {/* Profile Card */}
-      <Link href="/profile" className="block transition-shadow">
+      <Link href={`/profile/${id}`} className="block transition-shadow">
         <Card className="w-full flex flex-col cursor-pointer hover:shadow-md">
           <CardHeader className="mb-6 border-b">
             <CardTitle>Player Profile</CardTitle>
@@ -59,7 +61,7 @@ export const PlayerProfile = ({
                     alt={name}
                     width={64}
                     height={64}
-                        className="w-16 h-16 rounded-full object-fill border"
+                        className="w-16 h-16 rounded-full object-cover border"
 
                   />
                 <div>

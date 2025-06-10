@@ -169,18 +169,17 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
   return (
     <>
-      <Breadcrumbs pageName="Player Profile" />
+      <Breadcrumbs pageName="Edit Profile" />
       <PageWrapper>
-        <Header title="Player Profile"></Header>
 
         <Card className="w-full shadow-md overflow-hidden">
           <CardHeader className="border-b flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center space-x-4">
               <div className="relative">
   <img
-  src={form.image?.trim() || placeholder.src}
+src={form.image && !form.image.includes('blob') ? form.image.trim() : placeholder.src}
     alt="Profile"
-    className="w-28 h-28 rounded-full object-fill border"
+    className="w-28 h-28 rounded-full object-cover border"
   />
   {isEditing && (
     <input
@@ -196,16 +195,14 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
                 <CardTitle className="text-2xl font-semibold">
                   {form.name} {form.last_name}
                 </CardTitle>
-                <CardDescription>
-                  Class of {form.grad_year} — {form.position}
-                </CardDescription>
+                
               </div>
             </div>
 
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-4 py-2 border rounded hover:bg-gray-100 text-sm"
+                className="px-4 py-2 border rounded hover:bg-gray-300 text-sm"
               >
                 Edit Profile
               </button>
@@ -213,13 +210,13 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
               <div className="flex gap-2">
                 <button
                   onClick={handleSave}
-                  className="px-4 py-2 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
+                  className="px-4 py-2 bg-[#FF7200] text-white rounded text-sm hover:bg-[#FF7200]"
                 >
                   Save Changes
                 </button>
                 <button
                   onClick={handleCancel}
-                  className="px-4 py-2 border rounded text-sm hover:bg-gray-100"
+                  className="px-4 py-2 border rounded text-sm hover:bg-gray-300"
                 >
                   Cancel
                 </button>
@@ -227,7 +224,7 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
             )}
           </CardHeader>
 
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+           <CardContent className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-1 p-4 rounded-b-xl">
             {isEditing ? (
               <ProfileSelect label="Sport" name="sport" value={form.sport} onChange={handleChange} options={['Football', 'Basketball']} />
             ) : (

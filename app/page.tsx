@@ -15,6 +15,7 @@ import { Usage } from "@/components/parts/usage";
 import { PlayerProfile } from "@/components/parts/playerprofile";
 import { RecruitingTasks } from "@/components/parts/tasks";
 import placeholder from "@/public/userplaceholder.png";
+import { RecruitingCalendar } from "@/components/parts/calender";
 
 const pageData = {
   name: "Dashboard",
@@ -86,17 +87,17 @@ export default async function Page() {
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
-        <Header title={pageData?.title}></Header>
         
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-4 sm:gap-x-4">
           {/* Player Profile */}
           <PlayerProfile
+            id={user?.id ?? ""}
             name={user?.name ?? ""}
             gradClass={user?.grad_year ?? ""}
             position={user?.position ?? ""}
             height={user?.height ?? ""}
             weight={user?.weight ?? ""}
-            imageUrl={user?.image ?? placeholder.src} // Replace with your actual image path
+imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : placeholder.src}
           />
           
           <Link href="/activity" className=" sm:col-span-1 lg:col-span-2 transition-shadow">
@@ -109,11 +110,13 @@ export default async function Page() {
           </Link>
 
           {/* Recruiting Tasks */}
-            <RecruitingTasks user={user} />
+
+                        <RecruitingCalendar user={user} />
+            
         </div>
 
         <div className="mt-8">
-          <h2 className="text-lg mb-4">Recent Contacts</h2>
+          <h2 className="text-lg mb-4">Recent Campaigns</h2>
           <DataTable
             columns={columns}
             data={recentLeads}
