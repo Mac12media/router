@@ -177,7 +177,7 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
             <div className="flex items-center space-x-4">
               <div className="relative">
   <img
-src={form.image && !form.image.includes('blob') ? form.image.trim() : placeholder.src}
+  src={form.image?.trim() || placeholder.src}
     alt="Profile"
     className="w-28 h-28 rounded-full object-cover border"
   />

@@ -34,13 +34,13 @@ export default async function CoachPage({ params }: { params: Promise<{ id: stri
             {/* Profile Overview and Score in the same card */}
             <div className="sm:col-span-1 bg-card p-6 rounded-xl shadow border flex flex-col items-center sm:items-start justify-between space-y-6 sm:space-y-0">
               {/* Coach Photo */}
-              {coach.photo_url && (
+              {coach.image && (
                 <div className="flex justify-center self-center
 ">
                   <img
-                    src={coach.photo_url}
+                    src={coach.image}
                     alt={`${coach.school} logo`}
-                    className="h-28 w-28 sm:h-32 sm:w-32 rounded-xl object-cover shadow border"
+                    className="h-28 w-fit sm:h-32 sm:w-fit rounded-xl object-cover shadow border"
                   />
                 </div>
               )}
@@ -50,7 +50,7 @@ export default async function CoachPage({ params }: { params: Promise<{ id: stri
                 <h1 className="text-3xl font-bold text-primary">{coach.head_coach}</h1>
                 <p className="text-lg">{coach.school}</p>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {coach.created_at ? `20 years of coaching experience` : `Experienced coach`}
+                  {`Experienced coach`}
                 </p>
 
                 {/* Score */}
@@ -120,10 +120,10 @@ export default async function CoachPage({ params }: { params: Promise<{ id: stri
               </section>
               
               {/* Program Bio */}
-              {coach.program_bio && (
+              {coach.bio && (
                 <section className="bg-card p-6 rounded-xl shadow border">
                   <h2 className="text-xl font-semibold mb-2">🏅 Program Bio</h2>
-                  <p className="leading-relaxed text-muted-foreground">{coach.program_bio}</p>
+                  <p className="leading-relaxed text-muted-foreground">{coach.bio}</p>
                 </section>
               )}
             </div>

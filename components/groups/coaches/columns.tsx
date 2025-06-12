@@ -20,7 +20,7 @@ export const columns: ColumnDef<CoachRow>[] = [
     <DataTableColumnHeader column={column} title="School" />
   ),
   cell: ({ row }) => {
-    const logoUrl = row.original.photo_url;
+    const logoUrl = row.original.image;
 const college = row.getValue("school") as string;
     return (
       <div className="flex items-center gap-2">
@@ -38,7 +38,7 @@ const college = row.getValue("school") as string;
       <DataTableColumnHeader column={column} title="Head Coach" />
     ),
     cell: ({ row }) => {
-    const logoUrl = row.original.photo_url;
+    const logoUrl = row.original.image;
 const name = row.getValue("head_coach") as string;
     return ( <Button
   variant="outline"

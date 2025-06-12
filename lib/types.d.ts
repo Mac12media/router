@@ -98,17 +98,23 @@ type Task = {
 type CoachRow = {
   id: number;
   school: string;
-  photo_url: string;
+  image: string;
+  location: string;  // Added location field
   division: string;
+  conference: string;  // Added conference field
   head_coach: string;
-  program_bio: string;
+  bio: string;  // Renamed bio to program_bio to align with the field name in your structure
   email: string;
   phone: string;
-  website: string | null;
-  created_at: Date;
-    updated_at: Date;
+  full_staff: string;  // Added full_staff field
+  website: string;
+  gpa: string;  // Added GPA field
+  act_sat: string;  // Added ACT field
+  camps: string;  // Added camps field
+  expo_score: string;  // Added expo_score field
 
 };
+
 /**
  * Type for fetched leads
  *

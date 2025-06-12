@@ -175,24 +175,39 @@ export const logs = pgTable("log", {
 });
 
 
-export const fbcoaches = pgTable("fbcoaches", {
+export const programs = pgTable("programs", {
   id: integer("id")
-      .$defaultFn(() => 1)  
-
+    .$defaultFn(() => 1)  
     .notNull()
     .primaryKey(),
   school: text("school")
     .notNull(),
-    photo_url: text("photo_url").notNull(),
-  division: text("division").notNull(),
-  head_coach: text("head_coach").notNull(),
-  program_bio: text("program_bio").notNull(),
-  email: text("email").notNull(),
-    phone: text("phone").notNull(),
-        website: text("website"),
-
-
-  created_at: timestamp("created_at", { mode: "date" }).notNull(),
-    updated_at: timestamp("updated_at", { mode: "date" }).notNull(),
-
+  image: text("image")
+    .notNull(),
+  location: text("location")  // Added location field
+    .notNull(),
+  division: text("division")
+    .notNull(),
+  conference: text("conference")  // Added conference field
+    .notNull(),
+  head_coach: text("head_coach")
+    .notNull(),
+  bio: text("bio")
+    .notNull(),
+  email: text("email")
+    .notNull(),
+  phone: text("phone")
+    .notNull(),
+  full_staff: text("full_staff")  // Added full_staff field
+    .notNull(),
+  website: text("website").notNull()
+,  // This can remain nullable
+  gpa: text("gpa")  // Added GPA field
+    .notNull(),
+  act_sat: text("act_sat")  // Added ACT field
+    .notNull(),
+  camps: text("camps")  // Added camps field
+    .notNull(),
+  expo_score: text("expo_score")  // Added expo_score field
+    .notNull(),
 });
