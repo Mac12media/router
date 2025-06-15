@@ -55,6 +55,7 @@ export const users = pgTable("user", {
   stripeCustomerId: text("stripeCustomerId"),
 
   leadCount: integer("leadCount").notNull().default(0),
+  campaigncount: integer("campaigncount").notNull().default(1),
 
   createdAt: timestamp("createdAt", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
@@ -137,6 +138,30 @@ export const endpoints = pgTable("endpoint", {
   token: text("token"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
+});
+export const campaigns = pgTable("campaigns", {
+  id: text("id")
+    .$defaultFn(() => createId())
+    .notNull()
+    .primaryKey(),
+
+  userId: text("user_id") // 👈 FIXED
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+
+  name: text("name").notNull(),
+  status: text("status").default("pending").notNull(),
+
+  segments: jsonb("segments")
+    .$type<Array<"fbs" | "fcs" | "d2" | "d3">>()
+    .notNull(),
+
+  token: text("token"),
+  emailNotify: boolean("email_notify").default(false).notNull(),
+  boostEnabled: boolean("boost_enabled").default(false).notNull(),
+
+  createdAt: timestamp("created_at", { mode: "date" }).notNull(), // 👈 FIXED
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(), // 👈 FIXED
 });
 
 export const leads = pgTable("lead", {

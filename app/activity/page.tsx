@@ -116,7 +116,7 @@ export default async function Page() {
             }`}
           />
                   <div className="grid grid-cols-1 gap-4" style={{gridTemplateRows: '.5fr 2fr'}}>
-  <Campaigns />
+  <Campaigns name={user?.name ?? "New Campaign"} id={user?.id ?? ""} campaigncount={usageData?.campaigncount} />
   <FavPrograms />
 </div>
 

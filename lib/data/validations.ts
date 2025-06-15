@@ -15,6 +15,12 @@ const ValidationType = z.enum(
   }
 );
 
+export const createCampaignSchema = z.object({
+    name: z.string().min(1, "Campaign name is required"),
+  segments: z.array(z.enum(["fbs", "fcs", "d2", "d3"])),
+  status: z.string().optional().default("pending"),
+});
+
 export const createEndpointFormSchema = z.object({
   name: z.string().min(1, "Not a valid name."),
   schema: z.array(

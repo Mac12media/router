@@ -192,9 +192,25 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 </div>
 
               <div>
-                <CardTitle className="text-2xl font-semibold">
-                  {form.name} {form.last_name}
-                </CardTitle>
+                <div>
+  {isEditing ? (
+    <div className="flex gap-2">
+      <input
+        type="text"
+        name="name"
+        value={form.name || ''}
+        onChange={handleChange}
+        placeholder="First Name"
+        className="border px-2 py-1 rounded text-sm"
+      />
+    </div>
+  ) : (
+    <CardTitle className="text-2xl font-semibold">
+      {formatDisplayValue(`${form.name} ${form.last_name}`)}
+    </CardTitle>
+  )}
+</div>
+
                 
               </div>
             </div>

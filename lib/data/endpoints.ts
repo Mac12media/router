@@ -2,12 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { db, Endpoint } from "../db";
-import { endpoints } from "../db/schema";
+import { endpoints, campaigns } from "../db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/helpers/error-message";
 import { authenticatedAction } from "./safe-action";
 import { z } from "zod";
 import {
+  createCampaignSchema,
   createEndpointFormSchema,
   updateEndpointFormSchema,
 } from "./validations";
@@ -129,6 +130,23 @@ export const createEndpoint = authenticatedAction
 
     revalidatePath("/campaigns");
     redirect("/campaigns");
+  });
+
+export const createCampaign = authenticatedAction
+  .schema(createCampaignSchema)
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+      const campaignId = randomBytes(16).toString("hex");
+
+      await db.insert(campaigns).values({
+        id: campaignId,
+        userId,
+        name: parsedInput.name, // ✅ now required by schema
+        segments: parsedInput.segments,
+        status: parsedInput.status,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+   
   });
 
 /**

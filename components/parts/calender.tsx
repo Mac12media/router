@@ -7,34 +7,39 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { CircleAlert } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-// Define dummy events for the calendar
+type UserProfile = Record<string, string | null | undefined>;
+
 const events = [
   { date: "2025-06-15", title: "First Contact" },
 ];
 
-type UserProfile = Record<string, string | null | undefined>;
+const generateCalendarGrid = (year: number, month: number) => {
+  const firstDay = new Date(Date.UTC(year, month, 1));
+  const lastDay = new Date(Date.UTC(year, month + 1, 0));
 
-const generateCalendarGrid = () => {
-  const today = new Date();
-  const currentMonth = today.getMonth();
-  const currentYear = today.getFullYear();
+  const daysInMonth = lastDay.getUTCDate();
+  const startDay = firstDay.getUTCDay(); // 0 = Sunday, 6 = Saturday
+  const totalCells = Math.ceil((startDay + daysInMonth) / 7) * 7;
 
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-  const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
-  const daysInMonth = lastDayOfMonth.getDate();
-  
-  const calendarDays = [];
-  for (let i = 1; i <= daysInMonth; i++) {
-    const date = new Date(currentYear, currentMonth, i);
-    calendarDays.push(date.toISOString().split('T')[0]);
+  const calendarGrid = [];
+
+  for (let i = 0; i < totalCells; i++) {
+    const dayNum = i - startDay + 1;
+
+    if (i < startDay || dayNum > daysInMonth) {
+      calendarGrid.push(null); // empty cell
+    } else {
+      const date = new Date(Date.UTC(year, month, dayNum));
+      calendarGrid.push(date.toISOString().split("T")[0]);
+    }
   }
 
-  return calendarDays;
+  return calendarGrid;
 };
+
 
 export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
   if (!user) {
@@ -48,11 +53,14 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
     );
   }
 
-  const calendarDays = generateCalendarGrid();
-  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  const todayStr = new Date().toISOString().split("T")[0];
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
 
-  // Filter upcoming events (after today's date)
-  const upcomingEvents = events.filter((event) => event.date > today);
+  const calendarDays = generateCalendarGrid(currentYear, currentMonth);
+
+  const upcomingEvents = events.filter((event) => event.date > todayStr);
 
   return (
     <Card className="w-full flex flex-col">
@@ -63,26 +71,30 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
 
       <CardContent className="space-y-2">
         <div className="grid grid-cols-7 gap-1 text-xs mb-3">
-          {/* Weekday headers */}
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-            <div key={day} className="text-center">{day}</div>
+            <div key={day} className="text-center font-semibold">
+              {day}
+            </div>
           ))}
 
-          {/* Calendar Days */}
-          {calendarDays.map((date) => {
+          {calendarDays.map((date, index) => {
+            if (!date) {
+              return <div key={`empty-${index}`} className="p-1">&nbsp;</div>;
+            }
+
+            const isToday = date === todayStr;
             const dayEvents = events.filter((event) => event.date === date);
-            const isToday = date === today;
 
             return (
               <div
                 key={date}
                 className={`relative p-1 border rounded-sm text-center text-xs ${
-                  isToday ? 'bg-[#FF7200]' : ''
+                  isToday ? "bg-[#FF7200] text-white font-bold" : ""
                 }`}
               >
                 <div>{new Date(date).getDate()}</div>
                 {dayEvents.length > 0 && (
-                  <div className="absolute bottom-0 left-0 right-0 text-ellipsis overflow-hidden text-[4px] text-[#FF7200]">
+                  <div className="absolute bottom-0 left-0 right-0 text-[4px] text-[#FF7200] overflow-hidden">
                     {dayEvents[0].title}
                   </div>
                 )}
@@ -91,19 +103,14 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
           })}
         </div>
 
-        <div className="flex justify-between items-center mt-2 text-xs">
+        {events.length === 0 && (
+          <div className="flex items-center gap-1 text-[#FF7200] text-xs">
+            <CircleAlert className="h-3 w-3" />
+            <span>No events this month.</span>
+          </div>
+        )}
 
-          {events.length === 0 && (
-            <div className="flex items-center gap-1 text-[#FF7200]">
-              <CircleAlert className="h-3 w-3" />
-              <span>No events this month.</span>
-            </div>
-          )}
-
-         
-        </div>
-
-        {/* Upcoming Events Section */}
+        {/* Upcoming Events */}
         <div className="mt-4 space-y-2">
           <h3 className="text-sm font-semibold">Upcoming Events</h3>
           {upcomingEvents.length > 0 ? (
@@ -111,7 +118,9 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
               {upcomingEvents.map((event) => (
                 <li key={event.date} className="flex justify-between items-center">
                   <span>{event.title}</span>
-                  <span className="text-gray-500">{new Date(event.date).toLocaleDateString()}</span>
+                  <span className="text-gray-500">
+                    {new Date(event.date).toLocaleDateString()}
+                  </span>
                 </li>
               ))}
             </ul>

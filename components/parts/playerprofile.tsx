@@ -8,6 +8,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { LockIcon } from "lucide-react";
 
 // Example favorite programs (these will stay but will be displayed as part of EXPO Score)
 const favoritePrograms = [
@@ -66,10 +67,13 @@ export const PlayerProfile = ({
                   />
                 <div>
                   <p className="font-semibold text-base">{name}</p>
+                                  <div className="flex flex-row">
+
                   <p className="text-sm text-muted-foreground">
-                    Class of {gradClass}
+                    {gradClass}
                   </p>
                   <p className="text-sm text-muted-foreground">{position}</p>
+</div>
                 </div>
               </div>
 
@@ -86,7 +90,7 @@ export const PlayerProfile = ({
             </div>
 
             {/* EXPO Score Section */}
-            <CardTitle>EXPO Score</CardTitle>
+          <h3 className="text-sm font-semibold">EXPO Score</h3>
 
           
 

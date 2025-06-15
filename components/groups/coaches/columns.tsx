@@ -80,11 +80,14 @@ const name = row.getValue("head_coach") as string;
     <DataTableColumnHeader column={column} title="Match" />
   ),
   cell: ({ row }) => {
-    // Generate a random value between 1 and 100
     const randomValue = Math.floor(Math.random() * 100) + 1;
-    const randomLabel = `${randomValue}%`; // Display the random value as a percentage
-    
-    return <MatchCircleChart label={randomLabel} value={randomValue} max={100} />;
+    const randomLabel = `${randomValue}%`;
+
+    return (
+      <div className="blur-sm">
+        <MatchCircleChart label={randomLabel} value={randomValue} max={100} />
+      </div>
+    );
   },
 },
 
