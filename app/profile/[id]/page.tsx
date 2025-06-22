@@ -196,7 +196,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
       {/* Evaluation Box */}
       <div className="mt-6 bg-gray-800 rounded-lg p-4 text-sm text-gray-300">
-        <p><span className="font-bold text-white">Coach's Evaluation:</span> </p>
+<p><span className="font-bold text-white">Coach&rsquo;s Evaluation:</span></p>
       </div>
     </div>
 </Card>
