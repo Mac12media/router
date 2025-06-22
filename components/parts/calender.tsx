@@ -135,7 +135,7 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
             <p className="text-xs font-semibold text-muted-foreground">Coach Al - Coming Soon</p>
           </div>
           {/* Placeholder content behind the overlay */}
-          <div className="h-16 opacity-0">Reserved for Coach Al's Features</div>
+<div className="h-16 opacity-0">Reserved for Coach Al&rsquo;s Features</div>
         </div>
       </CardContent>
     </Card>
