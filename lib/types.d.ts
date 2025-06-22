@@ -115,6 +115,16 @@ type CoachRow = {
 
 };
 
+type CampaignRow = {
+  id: string;
+  userId: string;
+  name: string;
+  segments: string[];
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 /**
  * Type for fetched leads
  *

@@ -136,7 +136,7 @@ const navLinks = [
     href: "/leads",
   },
   {
-    name: "Activity & Tasks",
+    name: "Activity",
     description: "Monitor your campaign activity",
     href: "/activity",
   },

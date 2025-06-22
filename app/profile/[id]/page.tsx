@@ -35,25 +35,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     <>
       <Breadcrumbs pageName="Player Profile" />
       <PageWrapper>
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 sm:gap-x-4">
+<div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-y-2 sm:gap-x-4">
+
+<Card className="bg-[#FF7200] rounded-2xl shadow-xl p-6 grid place-items-center text-white">
+  <img
+    src={user?.image && !user.image.includes('blob') ? user.image : placeholder.src}
+    alt={`${user.name} profile`}
+    className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg transition-transform hover:scale-105"
+  />
+
+  <div className="text-center">
+    <CardTitle className="text-3xl font-bold drop-shadow-sm">
+      {user.name} {user.last_name}
+    </CardTitle>
+  </div>
+</Card>
 
         <Card className="col-span-2 shadow-lg overflow-hidden">
           {/* Header */}
           <CardHeader className=" p-4 flex flex-col md:flex-row justify-between items-center gap-6 ">
 <div className="flex flex-col md:flex-row items-center gap-5">
-              <img
-src={user?.image && !user.image.includes('blob') ? user.image : placeholder.src}
-  alt={`${user.name} profile`}
-  className="w-28 h-28 rounded-full object-cover  border-white shadow"
-/>
-
-              <div>
-                <CardTitle className="text-3xl font-bold text-[#FF7200]">
-                  {user.name} {user.last_name}
-                </CardTitle>
-                
-
-              </div>
+              
                
 
             </div>
@@ -101,49 +103,104 @@ src={user?.image && !user.image.includes('blob') ? user.image : placeholder.src}
 
         </Card>
 
- <div className="">
-                {user.video && <HighlightVideo url={user.video} />}
-              </div>
-        </div>
-
-        <Card className="w-full shadow-lg overflow-hidden mt-6">
-
-          {/* Info Grid */}
-           <CardContent className="p-6">
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start rounded-xl p-1">
-    {/* Measureables */}
-    
-
-    {/* ACT & GPA Circle Graphs */}
-    <div className="flex justify-center gap-8">
-      {user.name && (
-<CircleChart label="ACT" value={ 24} max={36} />
-      )}
-      {user.name && (
-<CircleChart label="GPA" value={ 3.5} max={4.0} />
-      )}
-    </div>
-    <div className="">
-      <h3 className="text-lg font-bold text-[#FF7200] uppercase">Measureables:</h3>
-      <div className="text-2xl font-semibold">
-        <p>{user.height ?? "N/A"}</p>
-        <p>{user.weight ? `${user.weight} lbs` : "N/A"}</p>
-      </div>
-    </div>
-
-    {/* Metrics */}
-    <div className="space-y-6">
-      <h3 className="text-lg font-bold text-[#FF7200] uppercase">Metrics</h3>
-      <div className="grid grid-cols-2 gap-3">
-        {/* Add any metric fields here if needed */}
-      </div>
-    </div>
+<div className="w-full flex flex-col gap-2 self-center
+ items-center">
+  <div className="w-full aspect-[16/9] bg-muted rounded-lg flex items-center justify-center ">
+    {user.video ? (
+      <HighlightVideo url={user.video} />
+    ) : (
+      <span className="text-muted-foreground text-sm italic">Video</span>
+    )}
   </div>
 
-  
-</CardContent>
+  <div className="w-full flex justify-center">
+    {user.video ? (
+      <a
+        href={user.video}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-4 py-2 text-sm rounded-md border bg-muted hover:bg-gray-300 transition"
+      >
+        Watch More
+      </a>
+    ) : (
+      <button
+        disabled
+        className="px-4 py-2 text-sm rounded-md border bg-muted text-muted-foreground"
+      >
+        Watch More
+      </button>
+    )}
+  </div>
+</div>
 
-        </Card>
+        </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-y-2 sm:gap-x-4">
+
+<Card className="w-full rounded-2xl shadow-lg  mt-6 p-6 ">
+    {/* EXPO+ SCORES */}
+    <div className=" rounded-xl p-6 flex flex-col items-center text-center ">
+      <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-4">EXPO+ Scores</h2>
+      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">82</p>
+      <div className="w-full border-t border-gray-600 my-4"></div>
+      <div className="flex justify-around w-full text-lg font-semibold">
+        <div>
+          <p className="t">91</p>
+          <p className="text-sm text-gray-300 mt-1">ACD</p>
+        </div>
+        <div>
+          <p className="">73</p>
+          <p className="text-sm text-gray-300 mt-1">ATH</p>
+        </div>
+      </div>
+    </div>
+    </Card>
+<Card className="w-full col-span-3 rounded-2xl shadow-2xl mt-6 p-6 ">
+    {/* EXPO+ METRICS */}
+    <div className=" rounded-xl p-6 ">
+      <h2 className="text-[#FF7200] text-lg font-bold uppercase justify-self-center mb-6">EXPO+ Metrics</h2>
+
+      <div className="sm:grid grid-cols-2 flex-col sm:flex-row justify-around
+ gap-6 sm:gap-12">
+        {/* Academics */}
+        <div>
+          <h3 className="uppercase text-sm text-gray-400 justify-self-center
+ mb-2">Academics</h3>
+          <div className="flex justify-self-center
+ gap-4">
+            <CircleChart label="GPA" value={3.5} max={4.0} />
+            <CircleChart label="ACT" value={24} max={36} />
+          </div>
+        </div>
+
+        {/* Athletic */}
+        <div>
+          <h3 className="uppercase text-sm text-gray-400  justify-self-center
+ mb-2">Athletic</h3>
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p className="font-bold text-[#FF7200]">{user.height || "N/A"}</p>
+              <p className="text-xs text-gray-400">Height</p>
+            </div>
+            <div>
+              <p className="font-bold text-[#FF7200]">{user.weight ? `${user.weight} lbs` : "N/A"}</p>
+              <p className="text-xs text-gray-400">Weight</p>
+            </div>
+            <div>
+              <p className="font-bold text-[#FF7200]">4.6s</p>
+              <p className="text-xs text-gray-400">Speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Evaluation Box */}
+      <div className="mt-6 bg-gray-800 rounded-lg p-4 text-sm text-gray-300">
+        <p><span className="font-bold text-white">Coach's Evaluation:</span> </p>
+      </div>
+    </div>
+</Card>
+  </div>
 
 
           {/* Metrics Section */}

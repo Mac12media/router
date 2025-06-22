@@ -149,6 +149,28 @@ export const createCampaign = authenticatedAction
    
   });
 
+
+export const getCampaigns = authenticatedAction.action(
+  async ({ ctx: { userId } }) => {
+    const result = await db
+      .select()
+      .from(campaigns)
+      .where(eq(campaigns.userId, userId));
+
+    // Ensure data matches CampaignRow structure
+    const data: CampaignRow[] = result.map((row) => ({
+      id: row.id,
+      userId: row.userId,
+      name: row.name,
+      segments: row.segments,
+      status: row.status,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    }));
+
+    return data;
+  }
+);
 /**
  * Updates an endpoint
  *

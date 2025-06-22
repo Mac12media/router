@@ -1,9 +1,9 @@
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
 import { Header } from "@/components/parts/header";
 import { getLogs } from "@/lib/data/logs";
-import { getEndpoints } from "@/lib/data/endpoints";
-import { DataTable } from "@/components/groups/logs/data-table";
-import { columns } from "@/components/groups/logs/columns";
+import { getCampaigns, getEndpoints } from "@/lib/data/endpoints";
+import { DataTable } from "@/components/groups/campaigns/data-table";
+import { columns } from "@/components/groups/campaigns/columns";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { notFound } from "next/navigation";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
@@ -15,8 +15,8 @@ import { Campaigns } from "@/components/parts/campaigns";
 import { FavPrograms } from "@/components/parts/favprograms";
 
 const pageData = {
-  name: "Activity",
-  title: "Activity",
+  name: "My Campaigns",
+  title: "Campaigns",
   description: "View of all your activity",
 };
 
@@ -30,8 +30,11 @@ export default async function Page() {
   const { data: endpointsData, serverError: endpointsServerError } =
     endpoints || {};
 
+      const campaigns = await getCampaigns();
+  const { data: campaignsData, serverError: campaignssServerError } =
+    campaigns || {};
   // check for errors
-  if (!logsData || !endpointsData || logsServerError || endpointsServerError) {
+  if (!logsData || !endpointsData || !campaignsData || logsServerError || endpointsServerError) {
     notFound();
   }
 
@@ -124,8 +127,7 @@ export default async function Page() {
         <div className="overflow-x-auto mt-8">
           <DataTable
             columns={columns}
-            data={logsData}
-            endpoints={endpointsData}
+            data={campaignsData}
           />
         </div>
       </PageWrapper>

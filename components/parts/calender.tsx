@@ -7,7 +7,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Lock as LockIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 type UserProfile = Record<string, string | null | undefined>;
@@ -21,7 +21,7 @@ const generateCalendarGrid = (year: number, month: number) => {
   const lastDay = new Date(Date.UTC(year, month + 1, 0));
 
   const daysInMonth = lastDay.getUTCDate();
-  const startDay = firstDay.getUTCDay(); // 0 = Sunday, 6 = Saturday
+  const startDay = firstDay.getUTCDay();
   const totalCells = Math.ceil((startDay + daysInMonth) / 7) * 7;
 
   const calendarGrid = [];
@@ -30,7 +30,7 @@ const generateCalendarGrid = (year: number, month: number) => {
     const dayNum = i - startDay + 1;
 
     if (i < startDay || dayNum > daysInMonth) {
-      calendarGrid.push(null); // empty cell
+      calendarGrid.push(null);
     } else {
       const date = new Date(Date.UTC(year, month, dayNum));
       calendarGrid.push(date.toISOString().split("T")[0]);
@@ -39,7 +39,6 @@ const generateCalendarGrid = (year: number, month: number) => {
 
   return calendarGrid;
 };
-
 
 export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
   if (!user) {
@@ -127,6 +126,16 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
           ) : (
             <p className="text-xs text-muted-foreground">No upcoming events.</p>
           )}
+        </div>
+
+        {/* Coming Soon Section for Coach Al */}
+        <div className="relative border h-16 rounded-md  bg-muted">
+          <div className="absolute inset-0 flex-row flex z-10 backdrop-blur-sm bg-background/80 dark:bg-black/60 flex flex-col items-center justify-center text-center rounded-md pointer-events-none">
+            <LockIcon className="w-6 h-6 mb-2 text-muted-foreground" />
+            <p className="text-xs font-semibold text-muted-foreground">Coach Al - Coming Soon</p>
+          </div>
+          {/* Placeholder content behind the overlay */}
+          <div className="h-16 opacity-0">Reserved for Coach Al's Features</div>
         </div>
       </CardContent>
     </Card>
