@@ -131,28 +131,28 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </div>
           <div className="grid grid-cols-1 md:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full rounded-2xl shadow-lg col-span-2 mt-6 p-6 ">
+<Card className="w-full bg-black rounded-2xl shadow-lg col-span-2 mt-6 p-6 ">
     {/* EXPO+ SCORES */}
     <div className=" rounded-xl p-6 flex flex-col  items-center text-center ">
-      <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-4">EXPO+ Scores</h2>
-      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">0</p>
+      <h2 className="text-[#ffd000] text-lg font-bold uppercase mb-4">EXPO+ Scores</h2>
+      <p className="text-6xl font-extrabold text-[#ffd000] mb-2">0</p>
       <div className="w-full border-t border-gray-600 my-4"></div>
-      <div className="flex justify-around w-full text-lg font-semibold">
+      <div className="flex justify-around w-full text-[#ffd000] text-lg font-semibold">
         <div>
-          <p className="t">0</p>
+          <p className="text-xl">0</p>
           <p className="text-sm text-gray-300 mt-1">ACD</p>
         </div>
         <div>
-          <p className="">0</p>
+          <p className="text-xl">0</p>
           <p className="text-sm text-gray-300 mt-1">ATH</p>
         </div>
       </div>
     </div>
     </Card>
-<Card className="w-full col-span-6 rounded-2xl shadow-2xl mt-6 p-6 ">
+<Card className="w-full col-span-6 rounded-2xl  bg-black shadow-2xl mt-6 p-6 ">
     {/* EXPO+ METRICS */}
     <div className=" rounded-xl p-6 ">
-      <h2 className="text-[#FF7200] text-lg font-bold uppercase justify-self-center mb-6">EXPO+ Metrics</h2>
+      <h2 className="text-[#ffd000] text-lg font-bold uppercase justify-self-center mb-6">EXPO+ Metrics</h2>
 
       <div className="sm:grid grid-cols-2 flex-col sm:flex-row justify-around
  gap-6 sm:gap-12">
@@ -173,15 +173,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
  mb-2">Athletic</h3>
           <div className="grid grid-cols-3 gap-2 text-center">
             <div>
-              <p className="font-bold text-[#FF7200]">{user.height || "N/A"}</p>
+              <p className="font-bold text-[#ffd000]">{user.height || "N/A"}</p>
               <p className="text-xs text-gray-400">Height</p>
             </div>
             <div>
-              <p className="font-bold text-[#FF7200]">{user.weight ? `${user.weight} lbs` : "N/A"}</p>
+              <p className="font-bold text-[#ffd000]">{user.weight ? `${user.weight} lbs` : "N/A"}</p>
               <p className="text-xs text-gray-400">Weight</p>
             </div>
             <div>
-              <p className="font-bold text-[#FF7200]">4.6s</p>
+              <p className="font-bold text-[#ffd000]">4.6s</p>
               <p className="text-xs text-gray-400">Speed</p>
             </div>
           </div>
