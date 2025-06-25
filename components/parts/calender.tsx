@@ -16,6 +16,20 @@ const events = [
   { date: "2025-06-15", title: "First Contact" },
 ];
 
+// Get current date in America/Chicago timezone
+const getChicagoDate = () => {
+  const now = new Date();
+  const chicagoTime = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now);
+
+  const [month, day, year] = chicagoTime.split("/");
+  return new Date(`${year}-${month}-${day}T00:00:00-06:00`);
+};
+
 const generateCalendarGrid = (year: number, month: number) => {
   const firstDay = new Date(Date.UTC(year, month, 1));
   const lastDay = new Date(Date.UTC(year, month + 1, 0));
@@ -46,26 +60,29 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Recruiting Calendar</CardTitle>
-          <CardDescription className="text-xs">Loading user profile...</CardDescription>
+          <CardDescription className="text-xs">
+            Loading user profile...
+          </CardDescription>
         </CardHeader>
       </Card>
     );
   }
 
-  const todayStr = new Date().toISOString().split("T")[0];
-  const today = new Date();
+  const today = getChicagoDate();
+  const todayStr = today.toISOString().split("T")[0];
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
 
   const calendarDays = generateCalendarGrid(currentYear, currentMonth);
-
   const upcomingEvents = events.filter((event) => event.date > todayStr);
 
   return (
     <Card className="w-full flex flex-col">
       <CardHeader className="mb-2 border-b">
         <CardTitle>Recruiting Calendar</CardTitle>
-        <CardDescription className="text-xs">Track your recruiting events for the month.</CardDescription>
+        <CardDescription className="text-xs">
+          Track your recruiting events for the month.
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-2">
@@ -118,7 +135,9 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
                 <li key={event.date} className="flex justify-between items-center">
                   <span>{event.title}</span>
                   <span className="text-gray-500">
-                    {new Date(event.date).toLocaleDateString()}
+                    {new Date(event.date).toLocaleDateString("en-US", {
+                      timeZone: "America/Chicago",
+                    })}
                   </span>
                 </li>
               ))}
@@ -129,13 +148,13 @@ export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
         </div>
 
         {/* Coming Soon Section for Coach Al */}
-        <div className="relative border h-16 rounded-md  bg-muted">
+        <div className="relative border h-16 rounded-md bg-muted">
           <div className="absolute inset-0 flex-row flex z-10 backdrop-blur-sm bg-background/80 dark:bg-black/60 flex flex-col items-center justify-center text-center rounded-md pointer-events-none">
             <LockIcon className="w-6 h-6 mb-2 text-muted-foreground" />
             <p className="text-xs font-semibold text-muted-foreground">Coach Al - Coming Soon</p>
           </div>
           {/* Placeholder content behind the overlay */}
-<div className="h-16 opacity-0">Reserved for Coach Al&rsquo;s Features</div>
+          <div className="h-16 opacity-0">Reserved for Coach Al&rsquo;s Features</div>
         </div>
       </CardContent>
     </Card>

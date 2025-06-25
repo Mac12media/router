@@ -100,7 +100,7 @@ export default async function Page() {
 imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : placeholder.src}
           />
           
-          <Link href="/activity" className=" sm:col-span-1 lg:col-span-2 transition-shadow">
+          <Link href="/campaigns" className=" sm:col-span-1 lg:col-span-2 transition-shadow">
           <Chart
             chartData={chartData}
             className={`${
@@ -136,9 +136,9 @@ const navLinks = [
     href: "/leads",
   },
   {
-    name: "Activity",
+    name: "Campaigns",
     description: "Monitor your campaign activity",
-    href: "/activity",
+    href: "/campaigns",
   },
 ];
 

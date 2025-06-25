@@ -35,36 +35,30 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     <>
       <Breadcrumbs pageName="Player Profile" />
       <PageWrapper>
-<div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 gap-y-2 sm:gap-x-4">
+<div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="bg-[#FF7200] rounded-2xl shadow-xl p-6 grid place-items-center text-white">
+<Card className="bg-[#FF7200] content-center col-span-2 rounded-2xl shadow-xl justify-evenly p-6 place-items-center text-white">
   <img
     src={user?.image && !user.image.includes('blob') ? user.image : placeholder.src}
     alt={`${user.name} profile`}
     className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg transition-transform hover:scale-105"
   />
 
-  <div className="text-center">
-    <CardTitle className="text-3xl font-bold drop-shadow-sm">
+    <CardTitle className="text-3xl font-bold pt-6 drop-shadow-sm">
       {user.name} {user.last_name}
     </CardTitle>
-  </div>
 </Card>
 
-        <Card className="col-span-2 shadow-lg overflow-hidden">
+        <Card className="col-span-3 shadow-lg overflow-hidden">
           {/* Header */}
-          <CardHeader className=" p-4 flex flex-col md:flex-row justify-between items-center gap-6 ">
-<div className="flex flex-col md:flex-row items-center gap-5">
-              
-               
+          <CardHeader className=" p-4 flex flex-col  gap-6 ">
 
-            </div>
-            <div className="flex gap-2">
+            <div className="flex justify-between gap-2">
 
             {real?.id === id && (
   <Link
     href="/profile"
-    className="px-4 py-2 border rounded hover:bg-gray-300 text-sm"
+    className="px-4 py-2 border rounded  hover:bg-gray-300 text-sm"
   >
     Edit Profile
   </Link>
@@ -94,7 +88,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             <ProfileField label="Height" value={user.height ?? ""} />
             <ProfileField label="Weight" value={user.weight ?? ""} />
                                  </CardContent>
-           <CardContent className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-1 p-4 rounded-b-xl">
+           <CardContent className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-1 p-4 rounded-b-xl">
 
             <ProfileField label="High School" value={user.high_school ?? ""} />
             <ProfileField label="City" value={user.city ?? ""} />
@@ -103,7 +97,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
         </Card>
 
-<div className="w-full flex flex-col gap-2 self-center
+<div className="w-full flex flex-col col-span-3  gap-2 self-center
  items-center">
   <div className="w-full aspect-[16/9] bg-muted rounded-lg flex items-center justify-center ">
     {user.video ? (
@@ -135,27 +129,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 </div>
 
         </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-y-2 sm:gap-x-4">
+          <div className="grid grid-cols-1 md:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full rounded-2xl shadow-lg  mt-6 p-6 ">
+<Card className="w-full rounded-2xl shadow-lg col-span-2 mt-6 p-6 ">
     {/* EXPO+ SCORES */}
-    <div className=" rounded-xl p-6 flex flex-col items-center text-center ">
+    <div className=" rounded-xl p-6 flex flex-col  items-center text-center ">
       <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-4">EXPO+ Scores</h2>
-      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">82</p>
+      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">0</p>
       <div className="w-full border-t border-gray-600 my-4"></div>
       <div className="flex justify-around w-full text-lg font-semibold">
         <div>
-          <p className="t">91</p>
+          <p className="t">0</p>
           <p className="text-sm text-gray-300 mt-1">ACD</p>
         </div>
         <div>
-          <p className="">73</p>
+          <p className="">0</p>
           <p className="text-sm text-gray-300 mt-1">ATH</p>
         </div>
       </div>
     </div>
     </Card>
-<Card className="w-full col-span-3 rounded-2xl shadow-2xl mt-6 p-6 ">
+<Card className="w-full col-span-6 rounded-2xl shadow-2xl mt-6 p-6 ">
     {/* EXPO+ METRICS */}
     <div className=" rounded-xl p-6 ">
       <h2 className="text-[#FF7200] text-lg font-bold uppercase justify-self-center mb-6">EXPO+ Metrics</h2>

@@ -25,8 +25,8 @@ const favoritePrograms = [
 ];
 
 // Example scores for academic and athletic performance
-const academicScore = 90; // Example academic score
-const athleticScore = 85; // Example athletic score
+const academicScore = 0; // Example academic score
+const athleticScore = 0; // Example athletic score
 
 export const PlayerProfile = ({
   name,
@@ -55,36 +55,36 @@ export const PlayerProfile = ({
           </CardHeader>
 
           <CardContent className="space-y-6 flex-grow">
-            <div className="grid gap-3 p-3 border rounded-sm bg-muted/25">
+            <div className="grid gap-3 p-3 border rounded-2xl bg-[#FF7200]">
               <div className="flex items-center space-x-4">
                   <img
                     src={imageUrl}
                     alt={name}
                     width={64}
                     height={64}
-                        className="w-16 h-16 rounded-full object-cover border"
+                        className="w-16 h-16 rounded-full object-cover border border-white"
 
                   />
                 <div>
-                  <p className="font-semibold text-base">{name}</p>
-                                  <div className="flex flex-row">
+                  <p className="font-semibold text-white text-base">{name}</p>
+                                  <div className="flex gap-2 flex-row">
 
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white text-muted-foreground">
                     {gradClass}
                   </p>
-                  <p className="text-sm text-muted-foreground">{position}</p>
+                  <p className="text-sm text-white  text-muted-foreground">{position}</p>
 </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t mt-2 text-center text-sm">
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white mt-2 text-center text-sm">
                 <div>
-                  <p className="font-semibold">{height}</p>
-                  <p className="text-muted-foreground">Height</p>
+                  <p className="font-semibold text-white ">{height}</p>
+                  <p className="text-muted-foreground text-white ">Height</p>
                 </div>
                 <div>
-                  <p className="font-semibold">{weight}</p>
-                  <p className="text-muted-foreground">Weight</p>
+                  <p className="font-semibold text-white ">{weight}</p>
+                  <p className="text-muted-foreground text-white ">Weight</p>
                 </div>
               </div>
             </div>

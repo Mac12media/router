@@ -145,24 +145,34 @@ export const campaigns = pgTable("campaigns", {
     .notNull()
     .primaryKey(),
 
-  userId: text("user_id") // 👈 FIXED
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
 
   name: text("name").notNull(),
-  status: text("status").default("pending").notNull(),
+  status: text("status").default("started").notNull(),
 
   segments: jsonb("segments")
-    .$type<Array<"fbs" | "fcs" | "d2" | "d3">>()
+    .$type<Array<"fbs" | "fcs" | "d2" | "d3" | "my">>()
     .notNull(),
+
+  types: jsonb("types").$type<string[]>().default([]).notNull(),
+  material: text("material").notNull(), // 'profile' or 'custom'
+
+  bio: text("bio").notNull(),
+  filmLink: text("film_link").notNull(),
+  classYear: text("class_year").notNull(),
+  height: text("height").notNull(),
+  weight: text("weight").notNull(),
 
   token: text("token"),
   emailNotify: boolean("email_notify").default(false).notNull(),
   boostEnabled: boolean("boost_enabled").default(false).notNull(),
 
-  createdAt: timestamp("created_at", { mode: "date" }).notNull(), // 👈 FIXED
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(), // 👈 FIXED
+  createdAt: timestamp("created_at", { mode: "date" }).notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(),
 });
+
 
 export const leads = pgTable("lead", {
   id: text("id")

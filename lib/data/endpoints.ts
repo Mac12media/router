@@ -132,22 +132,33 @@ export const createEndpoint = authenticatedAction
     redirect("/campaigns");
   });
 
+  
 export const createCampaign = authenticatedAction
   .schema(createCampaignSchema)
   .action(async ({ parsedInput, ctx: { userId } }) => {
-      const campaignId = randomBytes(16).toString("hex");
+    const campaignId = randomBytes(16).toString("hex");
 
-      await db.insert(campaigns).values({
-        id: campaignId,
-        userId,
-        name: parsedInput.name, // ✅ now required by schema
-        segments: parsedInput.segments,
-        status: parsedInput.status,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-   
+    await db.insert(campaigns).values({
+      id: campaignId,
+      userId, // overrides parsedInput.userId if needed
+      name: parsedInput.name,
+      segments: parsedInput.segments,
+      types: parsedInput.types ?? [],
+      material: parsedInput.material,
+      bio: parsedInput.bio,
+      filmLink: parsedInput.filmLink,
+      classYear: parsedInput.classYear,
+      height: parsedInput.height,
+      weight: parsedInput.weight,
+      status: parsedInput.status ?? "pending",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    // Optional: Return the campaignId or confirmation
+    return { success: true, id: campaignId };
   });
+
 
 
 export const getCampaigns = authenticatedAction.action(

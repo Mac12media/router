@@ -56,7 +56,7 @@ export default async function AccountWidget({ plan }: AccountWidgetProps) {
                 <div className="grid gap-0.5">
                   <span className="font-medium">Upgrade Plan</span>
                   <span className="text-xs text-muted-foreground">
-                    Capture more leads
+                    Get recruited
                   </span>
                 </div>
               </Link>

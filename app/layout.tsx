@@ -12,9 +12,9 @@ import { PostHogProvider } from "@/components/providers/post-hog/post-hog-provid
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Expo | Best recruiting tool",
+  title: "Expo Recruits | Boost Your Recruitment",
   description:
-    "Best recruiting tool",
+    "Boost Your Recruitment",
 };
 
 export default function RootLayout({

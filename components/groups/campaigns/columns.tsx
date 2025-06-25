@@ -34,7 +34,7 @@ export const columns: ColumnDef<CampaignRow>[] = [
   header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
   cell: ({ row }) => {
     const status: string = row.getValue("status");
-    const isPending = status === "pending";
+    const isPending = status === "started";
 
     return (
       <Badge

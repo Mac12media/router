@@ -16,9 +16,17 @@ const ValidationType = z.enum(
 );
 
 export const createCampaignSchema = z.object({
-    name: z.string().min(1, "Campaign name is required"),
-  segments: z.array(z.enum(["fbs", "fcs", "d2", "d3"])),
-  status: z.string().optional().default("pending"),
+  name: z.string().min(1, "Campaign name is required"),
+  userId: z.string(),
+  segments: z.array(z.enum(["fbs", "fcs", "d2", "d3", "my"])).min(1, "At least one segment is required"),
+  types: z.array(z.string()).optional(), // campaign types like "Intro Campaign"
+  material: z.enum(["profile", "custom"]),
+  bio: z.string(),
+  filmLink: z.string(),
+  classYear: z.string().min(2, "Class year is required"),
+  height: z.string().min(1, "Height is required"),
+  weight: z.string().min(1, "Weight is required"),
+  status: z.string().optional().default("started"),
 });
 
 export const createEndpointFormSchema = z.object({
