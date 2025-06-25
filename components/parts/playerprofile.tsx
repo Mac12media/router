@@ -55,7 +55,7 @@ export const PlayerProfile = ({
           </CardHeader>
 
           <CardContent className="space-y-6 flex-grow">
-            <div className="grid gap-3 p-3 border rounded-2xl bg-[#FF7200]">
+            <div className="grid gap-3 p-3 shadow-lg border rounded-2xl bg-[#FF7200]">
               <div className="flex items-center space-x-4">
                   <img
                     src={imageUrl}
