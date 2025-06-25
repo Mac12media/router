@@ -7,7 +7,7 @@ import {
   Label,
 } from "recharts";
 
-const COLORS = ["#ffd000", "#000000"];
+const COLORS = ["#FF7200", "#000000"];
 
 export default function CircleChart({ label, value, max }: { label: string; value: number; max: number }) {
   const data = [
