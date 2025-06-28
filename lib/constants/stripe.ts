@@ -14,52 +14,52 @@ interface StripePlanConfig {
 }
 
 interface StripePlansConfig {
-  lite: StripePlanConfig;
-  pro: StripePlanConfig;
-  business: StripePlanConfig;
+  rookie: StripePlanConfig;
+  mvp: StripePlanConfig;
+  elite: StripePlanConfig;
 }
 
 export const STRIPE_PLANS: StripePlansConfig = {
-  lite: {
+  rookie: {
     productId: {
-      dev: "prod_RO4s2U30VgdeFN",
-      prod: "prod_RUs75BH3nWi3Ul",
+      dev: "prod_SYR3SGGNS8DMfw",
+      prod: "prod_SYR3SGGNS8DMfw",
     },
     monthlyPriceId: {
-      dev: "price_1QVIiNCr7fYvZ7eq3SRX0YGS",
-      prod: "price_1QbsNLCr7fYvZ7eqoMYV6x6i",
+      dev: "price_1RdKBbGG5Z3i5YX8UZshGJyF",
+      prod: "price_1RdKBbGG5Z3i5YX8UZshGJyF",
     },
     yearlyPriceId: {
-      dev: "price_1QVIiNCr7fYvZ7eqmJT5DnJc",
-      prod: "price_1QbsNLCr7fYvZ7eqUl3feFYH",
+      dev: "price_1RdKBbGG5Z3i5YX8UZshGJyF",
+      prod: "price_1RdKBbGG5Z3i5YX8UZshGJyF",
     },
   },
-  pro: {
+  mvp: {
     productId: {
-      dev: "prod_RO4sb2253IZWhU",
-      prod: "prod_RUs7T3eo9UPxDv",
+      dev: "prod_SYR5OHPLCWkQNS",
+      prod: "prod_SYR5OHPLCWkQNS",
     },
     monthlyPriceId: {
-      dev: "price_1QVIjDCr7fYvZ7eqYZ884nMA",
-      prod: "price_1QbsNJCr7fYvZ7eqPlAHuLud",
+      dev: "price_1RdKD9GG5Z3i5YX8t0sVsFR0",
+      prod: "price_1RdKD9GG5Z3i5YX8t0sVsFR0",
     },
     yearlyPriceId: {
-      dev: "price_1QVIjDCr7fYvZ7eqcw53Mtin",
-      prod: "price_1QbsNJCr7fYvZ7eqB4M2rvjR",
+      dev: "price_1RdKD9GG5Z3i5YX8t0sVsFR0",
+      prod: "price_1RdKD9GG5Z3i5YX8t0sVsFR0",
     },
   },
-  business: {
+  elite: {
     productId: {
-      dev: "prod_RO4xe0gGxzWtSb",
-      prod: "prod_RUs7q0aCgaYhNF",
+      dev: "prod_SYR6VrdIwTCmeV",
+      prod: "prod_SYR6VrdIwTCmeV",
     },
     monthlyPriceId: {
-      dev: "price_1QVInWCr7fYvZ7eqZ3FSVlFE",
-      prod: "price_1QbsN7Cr7fYvZ7eqCCdyk03H",
+      dev: "price_1RdKE5GG5Z3i5YX8SQrteq3v",
+      prod: "price_1RdKE5GG5Z3i5YX8SQrteq3v",
     },
     yearlyPriceId: {
-      dev: "price_1QVInWCr7fYvZ7eqZg6AMiIv",
-      prod: "price_1QbsN7Cr7fYvZ7eqYxJo3vZd",
+      dev: "price_1RdKE5GG5Z3i5YX8SQrteq3v",
+      prod: "price_1RdKE5GG5Z3i5YX8SQrteq3v",
     },
   },
 };

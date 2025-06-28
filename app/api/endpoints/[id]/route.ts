@@ -65,25 +65,23 @@ export async function POST(request: NextRequest) {
     const leadCount = await getLeadCount(id);
 
     let leadLimit: number;
-    switch (plan) {
-      case "free":
-        leadLimit = 100;
-        break;
-      case "lite":
-        leadLimit = 1000;
-        break;
-      case "pro":
-        leadLimit = 10000;
-        break;
-      case "business":
-        leadLimit = 50000;
-        break;
-      case "enterprise":
-        leadLimit = 999999;
-        break;
-      default:
-        leadLimit = 100; // Fallback to free tier limit
-    }
+switch (plan) {
+  case "free":
+    leadLimit = 100;
+    break;
+  case "rookie":
+    leadLimit = 1000;
+    break;
+  case "mvp":
+    leadLimit = 10000;
+    break;
+  case "elite":
+    leadLimit = 50000;
+    break;
+  default:
+    leadLimit = 100; // Fallback to free tier limit
+}
+
 
     if (leadCount >= leadLimit) {
       return NextResponse.json(
@@ -208,25 +206,23 @@ export async function GET(request: NextRequest) {
     const leadCount = await getLeadCount(id);
 
     let leadLimit: number;
-    switch (plan) {
-      case "free":
-        leadLimit = 100;
-        break;
-      case "lite":
-        leadLimit = 1000;
-        break;
-      case "pro":
-        leadLimit = 10000;
-        break;
-      case "business":
-        leadLimit = 50000;
-        break;
-      case "enterprise":
-        leadLimit = 999999;
-        break;
-      default:
-        leadLimit = 100; // Fallback to free tier limit
-    }
+switch (plan) {
+  case "free":
+    leadLimit = 100;
+    break;
+  case "rookie":
+    leadLimit = 1000;
+    break;
+  case "mvp":
+    leadLimit = 10000;
+    break;
+  case "elite":
+    leadLimit = 50000;
+    break;
+  default:
+    leadLimit = 100; // Fallback to free tier limit
+}
+
 
     if (leadCount >= leadLimit) {
       return NextResponse.json(

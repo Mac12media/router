@@ -63,25 +63,23 @@ export default async function Page() {
 
   // get the lead limit for the user's plan
   let leadLimit: number;
-  switch (usageData?.plan) {
-    case "free":
-      leadLimit = 100;
-      break;
-    case "lite":
-      leadLimit = 1000;
-      break;
-    case "pro":
-      leadLimit = 10000;
-      break;
-    case "business":
-      leadLimit = 50000;
-      break;
-    case "enterprise":
-      leadLimit = 999999;
-      break;
-    default:
-      leadLimit = 100; // Fallback to free tier limit
-  }
+switch (usageData?.plan) {
+  case "free":
+    leadLimit = 100;
+    break;
+  case "rookie":
+    leadLimit = 1000;
+    break;
+  case "mvp":
+    leadLimit = 10000;
+    break;
+  case "elite":
+    leadLimit = 50000;
+    break;
+  default:
+    leadLimit = 100; // Fallback to free tier limit
+}
+
 
   return (
     <>
@@ -104,7 +102,7 @@ imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : plac
           <Chart
             chartData={chartData}
             className={`${
-              usageData.plan === "enterprise" ? "col-span-3" : "col-span-2"
+              usageData.plan === "elite" ? "col-span-3" : "col-span-2"
             } sm:col-span-1 lg:col-span-2 hover:shadow-md`}
           />
           </Link>

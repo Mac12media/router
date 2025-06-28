@@ -1,107 +1,121 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Check, Link } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { postStripeSession } from "@/lib/data/stripe";
-import { createCustomerPortalSession } from "@/lib/data/stripe";
+import {
+  postStripeSession,
+  createCustomerPortalSession,
+} from "@/lib/data/stripe";
 import { STRIPE_PLANS } from "@/lib/constants/stripe";
 
 interface PlanProps {
   name: string;
   description: string;
   monthlyPrice: number | "Contact For Pricing";
+  /**  Used for ELITE+ one-time cost  */
   yearlyPrice: number | "Contact For Pricing";
   monthlyStripePriceId?: string;
   yearlyStripePriceId?: string;
   stripeProductId?: string;
-  features?: string[];
+  features: string[];
 }
 
 const ENV = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
+/** ------------------------------------------------------------------ */
+/**  PLAN DEFINITIONS – matches the screenshot (ROOKIE, MVP, ELITE+)  */
+/** ------------------------------------------------------------------ */
 const plans: PlanProps[] = [
   {
-    name: "Lite",
-    description: "Perfect for small projects and individual developers.",
-    monthlyPrice: 7,
-    yearlyPrice: 60,
-    stripeProductId: STRIPE_PLANS.lite.productId[ENV],
-    monthlyStripePriceId: STRIPE_PLANS.lite.monthlyPriceId[ENV],
-    yearlyStripePriceId: STRIPE_PLANS.lite.yearlyPriceId[ENV],
+    name: "ROOKIE",
+    description: "Entry-level access to recruiting tools.",
+    monthlyPrice: 14.95,
+    yearlyPrice: 179.4,
+    stripeProductId: STRIPE_PLANS.rookie.productId[ENV],
+    monthlyStripePriceId: STRIPE_PLANS.rookie.monthlyPriceId[ENV],
+    yearlyStripePriceId: STRIPE_PLANS.rookie.yearlyPriceId[ENV],
     features: [
-      "1,000 form submissions",
-      "Unlimited endpoints",
-      "Unlimited Form Generations",
-      "Unlimited Webhooks",
+      "Player Campaign",
+      "Social Boost",
+      "Coach Contact Access",
+      "EXPO+ Score",
+      "Recruiting Toolkit",
     ],
   },
   {
-    name: "Pro",
-    description: "Best for growing teams and businesses.",
-    monthlyPrice: 20,
-    yearlyPrice: 200,
-    stripeProductId: STRIPE_PLANS.pro.productId[ENV],
-    monthlyStripePriceId: STRIPE_PLANS.pro.monthlyPriceId[ENV],
-    yearlyStripePriceId: STRIPE_PLANS.pro.yearlyPriceId[ENV],
+    name: "MVP",
+    description: "More exposure and tools to boost recruiting.",
+    monthlyPrice: 24.95,
+    yearlyPrice: 299.4,
+    stripeProductId: STRIPE_PLANS.mvp.productId[ENV],
+    monthlyStripePriceId: STRIPE_PLANS.mvp.monthlyPriceId[ENV],
+    yearlyStripePriceId: STRIPE_PLANS.mvp.yearlyPriceId[ENV],
     features: [
-      "10,000 form submissions",
-      "Unlimited endpoints",
-      "Unlimited Form Generations",
-      "Unlimited Webhooks",
+      "2x Player Campaign",
+      "2x Social Boost",
+      "Coach Contact Access",
+      "EXPO+ Score + Metrics",
+      "Recruiting Toolkit",
+      "College Openings Group",
+      "Recruiting Coordinator",
+      "Campaign Analytics",
     ],
   },
   {
-    name: "Business",
-    description: "Advanced features for larger organizations.",
-    monthlyPrice: 50,
-    yearlyPrice: 500,
-    stripeProductId: STRIPE_PLANS.business.productId[ENV],
-    monthlyStripePriceId: STRIPE_PLANS.business.monthlyPriceId[ENV],
-    yearlyStripePriceId: STRIPE_PLANS.business.yearlyPriceId[ENV],
-    features: [
-      "50,000 form submissions",
-      "Unlimited endpoints",
-      "Unlimited Form Generations",
-      "Unlimited Webhooks",
-      "CRM Integrations (Beta)",
-      "Slack Support",
-    ],
-  },
-  {
-    name: "Enterprise",
-    description: "Custom solutions for enterprise needs.",
+    name: "ELITE+",
+    description: "Premium recruiting access with a one-time payment.",
+    /**  No monthly subscription – charge once via yearlyPrice  */
     monthlyPrice: "Contact For Pricing",
-    yearlyPrice: "Contact For Pricing",
+    yearlyPrice: 119.95,
+    stripeProductId: STRIPE_PLANS.elite.productId[ENV],
+    /**  Use the yearly price ID for the one-time charge  */
+    yearlyStripePriceId: STRIPE_PLANS.elite.yearlyPriceId[ENV],
     features: [
-      "Unlimited form submissions",
-      "Unlimited endpoints",
-      "Unlimited Form Generations",
-      "Unlimited Webhooks",
-      "CRM Integrations (Beta)",
-      "Slack Support",
+      "3x Player Campaign",
+      "3x Social Boost",
+      "Coach Contact Access",
+      "EXPO+ Score & Metrics",
+      "Recruiting Toolkit +",
+      "College Openings Group",
+      "Recruiting Coordinator",
+      "Campaign Analytics +",
+      "EXPO+ Event Discounts",
+      "Player Evaluation",
+      "ONE TIME PAYMENT",
     ],
   },
 ];
 
-export const PlanTiles = ({ usage }: { usage: any }) => {
-  return (
-    <section className="grid gap-12">
-      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4">
-        {plans.map((plan) => (
-          <Tile key={plan.name} plan={plan} currentPlan={usage?.plan} />
-        ))}
-      </div>
+/* -------------------------------------------------------------------- */
 
+export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => (
+  <section className="grid gap-12 px-4  max-w-6xl mx-auto">
+    <div className="text-center space-y-2">
+      <h2 className="text-3xl font-bold">Compare Plans</h2>
+      <p className="text-muted-foreground">
+        There's a plan for everyone. Choose the one that works for you...
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {plans.map((plan) => (
+        <Tile key={plan.name} plan={plan} currentPlan={usage?.plan} />
+      ))}
+    </div>
+
+    {usage?.plan && (
       <p className="text-center text-muted-foreground">
         Current Plan:{" "}
         <span className="font-medium text-foreground uppercase">
-          {usage?.plan}
+          {usage.plan}
         </span>
       </p>
-    </section>
-  );
-};
+    )}
+  </section>
+);
+
+/* ---------------------------  Tile  --------------------------------- */
 
 const Tile = ({
   plan,
@@ -110,88 +124,108 @@ const Tile = ({
   plan: PlanProps;
   currentPlan?: string;
 }) => {
-  const isCurrentPlan = currentPlan?.toLowerCase() === plan.name.toLowerCase();
+  const isCurrentPlan =
+    currentPlan?.toLowerCase() === plan.name.toLowerCase();
+  const isElite = plan.name === "ELITE+";
+
+  /* --------------------------------- */
 
   return (
     <div
       className={cn(
-        "relative bg-background p-6 rounded-lg border flex flex-col gap-4 transition-all",
-        isCurrentPlan && "border-2 border-primary bg-primary/5"
+        "relative bg-black text-white p-6 rounded-xl shadow-md flex flex-col gap-4 transition-all",
+        isCurrentPlan && "border-2 border-yellow-400"
       )}
     >
+      {/* Badge for active plan */}
       {isCurrentPlan && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-3 py-1 rounded-full">
-          <p className="text-xs text-primary-foreground font-medium">
-            Current Plan
-          </p>
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 px-3 py-1 rounded-full">
+          <p className="text-xs text-black font-medium">Current Plan</p>
         </div>
       )}
 
+      {/* Plan name & blurb */}
       <div className="space-y-2">
-        <h3 className="text-xl font-semibold">{plan.name}</h3>
-        <p className="text-muted-foreground text-sm">{plan.description}</p>
+        <h3 className="text-2xl font-bold text-center">{plan.name}</h3>
+        <p className="text-muted-foreground text-sm text-center">
+          {plan.description}
+        </p>
       </div>
 
-      <div className="space-y-4 flex-1">
-        <div className="space-y-2">
-          {plan.monthlyPrice !== "Contact For Pricing" ? (
-            <div className="space-y-1">
-              <p className="text-3xl font-bold">
-                ${plan.monthlyPrice}
-                <span className="text-muted-foreground text-sm font-normal">
-                  /month
-                </span>
-              </p>
-              <p className="text-muted-foreground text-sm">
-                ${plan.yearlyPrice}/year
-                {typeof plan.monthlyPrice === "number" &&
-                  typeof plan.yearlyPrice === "number" &&
-                  ` (save $${plan.monthlyPrice * 12 - plan.yearlyPrice})`}
-              </p>
-            </div>
-          ) : (
-            <p className="text-xl font-semibold">{plan.monthlyPrice}</p>
-          )}
-        </div>
+      {/* Feature list */}
+      <ul className="space-y-2 text-sm">
+        {plan.features.map((feature) => (
+          <li key={feature} className="flex gap-2 items-start">
+            <Check
+              size={16}
+              className={isElite ? "text-yellow-400 mt-1" : "text-orange-500 mt-1"}
+            />
+            {feature}
+          </li>
+        ))}
+      </ul>
 
-        <div className="space-y-2">
-          {plan.features?.map((feature) => (
-            <p className="flex items-center gap-2 text-sm" key={feature}>
-              <Check className="text-primary" size={14} /> {feature}
+      {/* Pricing */}
+      <div className="pt-4 mt-auto">
+        {plan.monthlyPrice === "Contact For Pricing" ? (
+          <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
+            ${plan.yearlyPrice}
+          </p>
+        ) : (
+          <>
+            <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
+              ${plan.monthlyPrice}/mo
             </p>
-          ))}
-        </div>
+            <p className="text-center text-sm text-muted-foreground mt-1">
+              ${plan.yearlyPrice}/year (save $
+              {plan.monthlyPrice * 12 - (plan.yearlyPrice as number)})
+            </p>
+          </>
+        )}
       </div>
 
-      <div className="space-y-2 pt-4">
+      {/* Action buttons */}
+      <div className="pt-4 space-y-2">
         {!isCurrentPlan &&
-          (plan.monthlyPrice !== "Contact For Pricing" ? (
+          (plan.monthlyPrice === "Contact For Pricing" ? (
+            /*  One-time payment (ELITE+)  */
+            <Button
+              className="w-full"
+              onClick={() =>
+                postStripeSession({
+                  priceId: plan.yearlyStripePriceId!,
+                })
+              }
+            >
+              One-Time Purchase
+            </Button>
+          ) : (
+            /*  Subscription plans  */
             <>
               <Button
+                className="w-full"
                 onClick={() =>
                   postStripeSession({
                     priceId: plan.monthlyStripePriceId!,
                   })
                 }
-                className="w-full"
               >
                 Purchase Monthly
               </Button>
               <Button
+                variant="outline"
+                className="w-full text-black dark:text-white"
                 onClick={() =>
                   postStripeSession({
                     priceId: plan.yearlyStripePriceId!,
                   })
                 }
-                className="w-full"
-                variant="outline"
               >
                 Purchase Yearly
               </Button>
             </>
-          ) : (
-            <Button className="w-full">Contact Sales</Button>
           ))}
+
         {isCurrentPlan && (
           <>
             <Button

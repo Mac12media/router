@@ -15,14 +15,15 @@ import { Button } from "../ui/button";
 import { ArrowUp } from "lucide-react";
 
 interface AccountWidgetProps {
-  plan?: "free" | "lite" | "pro" | "business" | "enterprise";
+  plan?: "free" | "rookie" | "mvp" | "elite";
 }
 
 export default async function AccountWidget({ plan }: AccountWidgetProps) {
   const session = await auth();
   if (!session) return;
 
-  const showUpgrade = plan === "free" || plan === "lite";
+  // Show "Upgrade Plan" for free and rookie users
+  const showUpgrade = plan === "free" || plan === "rookie";
 
   return (
     <DropdownMenu>
@@ -40,11 +41,13 @@ export default async function AccountWidget({ plan }: AccountWidgetProps) {
           </div>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent side="top">
         <DropdownMenuLabel className="text-xs">
           {session.user?.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+
         {showUpgrade && (
           <>
             <DropdownMenuItem asChild className="p-0">
@@ -64,6 +67,7 @@ export default async function AccountWidget({ plan }: AccountWidgetProps) {
             <DropdownMenuSeparator />
           </>
         )}
+
         <SignOut>
           <DropdownMenuItem className="cursor-pointer">
             Log out

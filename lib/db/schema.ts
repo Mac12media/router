@@ -17,11 +17,11 @@ const createId = init({
 
 export const planEnum = pgEnum("plan", [
   "free",
-  "lite",
-  "pro",
-  "business",
-  "enterprise",
+  "rookie",
+  "mvp",
+  "elite",
 ]);
+
 
 export const users = pgTable("user", {
   id: text("id")
