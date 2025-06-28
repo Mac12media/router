@@ -93,9 +93,10 @@ export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => (
   <section className="grid gap-12 px-4  max-w-6xl mx-auto">
     <div className="text-center space-y-2">
       <h2 className="text-3xl font-bold">Compare Plans</h2>
-      <p className="text-muted-foreground">
-        There's a plan for everyone. Choose the one that works for you...
-      </p>
+     <p className="text-muted-foreground">
+  There&rsquo;s a plan for everyone. Choose the one that works for you...
+</p>
+
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -176,10 +177,7 @@ const Tile = ({
             <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
               ${plan.monthlyPrice}/mo
             </p>
-            <p className="text-center text-sm text-muted-foreground mt-1">
-              ${plan.yearlyPrice}/year (save $
-              {plan.monthlyPrice * 12 - (plan.yearlyPrice as number)})
-            </p>
+           
           </>
         )}
       </div>
