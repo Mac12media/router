@@ -88,35 +88,35 @@ const plans: PlanProps[] = [
 ];
 
 /* -------------------------------------------------------------------- */
+export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => {
+  console.log("[PlanTiles] Rendered with usage:", usage);
 
-export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => (
-  <section className="grid gap-12 px-4  max-w-6xl mx-auto">
-    <div className="text-center space-y-2">
-      <h2 className="text-3xl font-bold">Compare Plans</h2>
-     <p className="text-muted-foreground">
-  There&rsquo;s a plan for everyone. Choose the one that works for you...
-</p>
+  return (
+    <section className="grid gap-12 px-4 max-w-6xl mx-auto">
+      <div className="text-center space-y-2">
+        <h2 className="text-3xl font-bold">Compare Plans</h2>
+        <p className="text-muted-foreground">
+          There&rsquo;s a plan for everyone. Choose the one that works for you...
+        </p>
+      </div>
 
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {plans.map((plan) => (
+          <Tile key={plan.name} plan={plan} currentPlan={usage?.plan} />
+        ))}
+      </div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {plans.map((plan) => (
-        <Tile key={plan.name} plan={plan} currentPlan={usage?.plan} />
-      ))}
-    </div>
-
-    {usage?.plan && (
-      <p className="text-center text-muted-foreground">
-        Current Plan:{" "}
-        <span className="font-medium text-foreground uppercase">
-          {usage.plan}
-        </span>
-      </p>
-    )}
-  </section>
-);
-
-/* ---------------------------  Tile  --------------------------------- */
+      {usage?.plan && (
+        <p className="text-center text-muted-foreground">
+          Current Plan:{" "}
+          <span className="font-medium text-foreground uppercase">
+            {usage.plan}
+          </span>
+        </p>
+      )}
+    </section>
+  );
+};
 
 const Tile = ({
   plan,
@@ -129,7 +129,10 @@ const Tile = ({
     currentPlan?.toLowerCase() === plan.name.toLowerCase();
   const isElite = plan.name === "ELITE+";
 
-  /* --------------------------------- */
+  console.log("[Tile] Rendering plan:", plan.name);
+  console.log(" - isCurrentPlan:", isCurrentPlan);
+  console.log(" - monthlyPriceId:", plan.monthlyStripePriceId);
+  console.log(" - yearlyPriceId:", plan.yearlyStripePriceId);
 
   return (
     <div
@@ -138,14 +141,12 @@ const Tile = ({
         isCurrentPlan && "border-2 border-yellow-400"
       )}
     >
-      {/* Badge for active plan */}
       {isCurrentPlan && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 px-3 py-1 rounded-full">
           <p className="text-xs text-black font-medium">Current Plan</p>
         </div>
       )}
 
-      {/* Plan name & blurb */}
       <div className="space-y-2">
         <h3 className="text-2xl font-bold text-center">{plan.name}</h3>
         <p className="text-muted-foreground text-sm text-center">
@@ -153,7 +154,6 @@ const Tile = ({
         </p>
       </div>
 
-      {/* Feature list */}
       <ul className="space-y-2 text-sm">
         {plan.features.map((feature) => (
           <li key={feature} className="flex gap-2 items-start">
@@ -166,7 +166,6 @@ const Tile = ({
         ))}
       </ul>
 
-      {/* Pricing */}
       <div className="pt-4 mt-auto">
         {plan.monthlyPrice === "Contact For Pricing" ? (
           <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
@@ -177,51 +176,42 @@ const Tile = ({
             <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
               ${plan.monthlyPrice}/mo
             </p>
-           
           </>
         )}
       </div>
 
-      {/* Action buttons */}
       <div className="pt-4 space-y-2">
         {!isCurrentPlan &&
           (plan.monthlyPrice === "Contact For Pricing" ? (
-            /*  One-time payment (ELITE+)  */
             <Button
               className="w-full"
-              onClick={() =>
+              onClick={() => {
+                console.log("[Tile] ONE-TIME checkout initiated", {
+                  plan: plan.name,
+                  priceId: plan.yearlyStripePriceId,
+                });
                 postStripeSession({
                   priceId: plan.yearlyStripePriceId!,
-                })
-              }
+                });
+              }}
             >
               One-Time Purchase
             </Button>
           ) : (
-            /*  Subscription plans  */
-            <>
-              <Button
-                className="w-full"
-                onClick={() =>
-                  postStripeSession({
-                    priceId: plan.monthlyStripePriceId!,
-                  })
-                }
-              >
-                Purchase Monthly
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full text-black dark:text-white"
-                onClick={() =>
-                  postStripeSession({
-                    priceId: plan.yearlyStripePriceId!,
-                  })
-                }
-              >
-                Purchase Yearly
-              </Button>
-            </>
+            <Button
+              className="w-full"
+              onClick={() => {
+                console.log("[Tile] MONTHLY checkout initiated", {
+                  plan: plan.name,
+                  priceId: plan.monthlyStripePriceId,
+                });
+                postStripeSession({
+                  priceId: plan.monthlyStripePriceId!,
+                });
+              }}
+            >
+              Purchase Monthly
+            </Button>
           ))}
 
         {isCurrentPlan && (
@@ -235,7 +225,10 @@ const Tile = ({
             <Button
               variant="secondary"
               className="w-full"
-              onClick={() => createCustomerPortalSession()}
+              onClick={() => {
+                console.log("[Tile] Manage Plan portal opened for", plan.name);
+                createCustomerPortalSession();
+              }}
             >
               Manage Your Plan
             </Button>

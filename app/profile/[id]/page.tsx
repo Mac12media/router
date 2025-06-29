@@ -37,17 +37,52 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       <PageWrapper>
 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="bg-[#FF7200] content-center col-span-2 rounded-2xl shadow-xl justify-evenly p-6 place-items-center text-white">
-  <img
-    src={user?.image && !user.image.includes('blob') ? user.image : placeholder.src}
-    alt={`${user.name} profile`}
-    className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg transition-transform hover:scale-105"
-  />
+<Card className="w-full bg-[#FF7200] rounded-2xl content-center col-span-2 shadow-xl text-white p-6 sm:p-8">
+  <div className="w-full flex flex-col lg:flex-row items-center lg:items-start lg:justify-start gap-6">
+    {/* Profile Image */}
+    <img
+      src={
+        user?.image && !user.image.includes('blob')
+          ? user.image
+          : placeholder.src
+      }
+      alt={`${user.name} profile`}
+      className="w-28 h-28 lg:w-28 lg:h-28 rounded-full object-cover border-4 border-white shadow-lg"
+    />
 
-    <CardTitle className="text-3xl font-bold pt-6 drop-shadow-sm">
-      {user.name} {user.last_name}
-    </CardTitle>
+    {/* Name, Class, Position */}
+    <div className="flex flex-col self-center items-center lg:items-start text-center lg:text-left space-y-1">
+      <CardTitle className="text-2xl font-bold tracking-tight">
+        {user.name} {user.last_name}
+      </CardTitle>
+      <div className="text-lg font-medium">
+        {user.grad_year} {user.position}
+      </div>
+    </div>
+  </div>
+
+  <div className="w-full h-px bg-white/70 my-6" />
+
+  {/* Bottom Row: Height & Weight */}
+  <div className="w-full flex justify-center gap-16">
+    <div className="text-center">
+      <div className="text-xl font-bold">{user.height ?? "—"}</div>
+      <div className="text-sm uppercase tracking-wider">Height</div>
+    </div>
+    <div className="text-center">
+      <div className="text-xl font-bold">{user.weight ?? "—"}</div>
+      <div className="text-sm uppercase tracking-wider">Weight</div>
+    </div>
+  </div>
+
+  {/* Contact Me Button */}
+  <div className="w-full mt-6 flex justify-center">
+    <button className="bg-black text-white text-sm font-semibold px-6 py-2 rounded-full shadow-md hover:bg-gray-900 transition">
+      Contact Me
+    </button>
+  </div>
 </Card>
+
 
         <Card className="col-span-3 shadow-lg overflow-hidden">
           {/* Header */}
@@ -82,12 +117,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
  
 
           </CardHeader>
-           <CardContent className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-1 p-4 rounded-b-xl">
-            <ProfileField label="Class" value={user.grad_year ?? ""} />
-            <ProfileField label="Position" value={user.position ?? ""} />
-            <ProfileField label="Height" value={user.height ?? ""} />
-            <ProfileField label="Weight" value={user.weight ?? ""} />
-                                 </CardContent>
            <CardContent className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-1 p-4 rounded-b-xl">
 
             <ProfileField label="High School" value={user.high_school ?? ""} />

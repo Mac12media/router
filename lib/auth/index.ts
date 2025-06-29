@@ -73,7 +73,7 @@ export const config = {
     // ✉️ Magic Link Provider
     Resend({
       apiKey: process.env.RESEND_API_KEY!,
-      from: "contact@hystericglam.com",
+      from: "mail@expo-recruits.com",
       // Optional: sendVerificationRequest
     }),
 

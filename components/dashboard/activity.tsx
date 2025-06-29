@@ -27,7 +27,7 @@ const chartConfig = {
     color: "hsl(var(--chart-1))",
   },
   errors: {
-    label: "Campaigns",
+    label: "Activty",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;

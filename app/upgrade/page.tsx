@@ -18,7 +18,7 @@ export default async function Page() {
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
-        <PlanTiles />
+        <PlanTiles usage={usageData} />
       </PageWrapper>
     </>
   );
