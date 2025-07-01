@@ -12,7 +12,7 @@ export async function sendVerificationRequest(params: {
 
   try {
     const data = await resend.emails.send({
-      from: "moneypopop125@gmail.com",
+      from: "mail@expo-recruits.com",
       to: [identifier],
       subject: `Log in to ${host}`,
       text: text({ url, host }),

@@ -64,31 +64,29 @@ const name = row.getValue("head_coach") as string;
       <Badge variant="outline">{row.getValue("division")}</Badge>
     ),
   },
-  {
+{
   accessorKey: "email",
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Email" />
   ),
-  cell: ({ row }) => (
-    <span style={{ filter: "blur(5px)" }}>{row.getValue("email")}</span>
-  ),
-},
-
-{
-  accessorKey: "match",
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Match" />
-  ),
-  cell: ({ row }) => {
-    const randomValue = Math.floor(Math.random() * 100) + 1;
-    const randomLabel = `${randomValue}%`;
+  cell: () => {
+    // Generate a random string of 1 to 5 letters
+    const randomLetters = Math.random().toString(36).substring(2, 7);
+    const dummyEmail = `${randomLetters}@example.com`;
 
     return (
-      <div className="blur-sm">
-        <MatchCircleChart label={randomLabel} value={randomValue} max={100} />
-      </div>
+      <span 
+        style={{ 
+          filter: "blur(5px)", 
+          userSelect: "none", 
+          pointerEvents: "none" 
+        }}
+      >
+        {dummyEmail}
+      </span>
     );
   },
 },
+
 
 ];

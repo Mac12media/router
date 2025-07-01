@@ -3,6 +3,6 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ExpoRecruits",
+  title: "EXPO",
   description: "Boost Your Recruitment",
 };

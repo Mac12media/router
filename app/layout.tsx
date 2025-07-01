@@ -12,7 +12,7 @@ import { PostHogProvider } from "@/components/providers/post-hog/post-hog-provid
 const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ExpoRecruits",
+  title: "EXPO",
   description:
     "Boost Your Recruitment",
 };

@@ -85,7 +85,7 @@ export const getUserPlan = async (endpointId: string) => {
  * Runs once a month on a CRON trigger
  */
 export const clearLeadCount = async () => {
-  await db.update(users).set({ leadCount: 0 });
+  await db.update(users).set({ campaigncount: 0,  });
 };
 
 /**
