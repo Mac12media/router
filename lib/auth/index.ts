@@ -77,7 +77,7 @@ export const config = {
       // Optional: sendVerificationRequest
     }),
 
-    // 🐙 GitHub Provider (optional)
+    // 🐙 GitHub Provider (optional) 
     GitHub,
   ],
   callbacks: {
