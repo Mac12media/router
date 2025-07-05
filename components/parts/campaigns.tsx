@@ -18,7 +18,6 @@ import { cn } from "@/lib/utils";
 const CAMPAIGN_TYPE_OPTIONS = [
   "Intro Campaign (1st Campaign)",
   "Basic Marketing Campaign",
-  "Important Announcement",
 ];
 
 const SEGMENT_KEYS = {
@@ -321,11 +320,12 @@ const payload = {
           <div className="flex space-x-2">
             {/* Campaign Button */}
             <div className="flex-col space-y-4 flex text-xs text-gray-500">
-              <button
-                onClick={() => setShowModal(true)}
-                disabled={isOutOfCampaigns}
-                className="bg-orange-500 hover:bg-orange-600 gap-2 flex text-white px-4 py-2 rounded text-sm disabled:opacity-50"
-              >
+<button
+  onClick={() => setShowModal(true)}
+  className="bg-orange-500 hover:bg-orange-600 gap-2 flex text-white px-4 py-2 rounded text-sm"
+>
+
+
                 <SendIcon className="w-5 h-5 self-center" />
                 Start New Campaign
               </button>
@@ -353,7 +353,7 @@ const payload = {
         {/* ---------------- Modal: Start Campaign ---------------- */}
         {showModal && (
           <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
-            <div className="bg-white text-black p-8 rounded-2xl w-full max-w-xl relative shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-gray-100">
+<div className="bg-white text-black p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-gray-100 overflow-y-auto max-h-[90vh]">
               <h2 className="text-2xl font-bold mb-6">Start a New Campaign</h2>
 
               {/* Close Button */}
@@ -377,14 +377,20 @@ const payload = {
               {renderSegmentSelect()}
 
               {/* Submit Button */}
-              <button
-                disabled={isPending || isOutOfCampaigns}
-                onClick={handleStartCampaign}
-                className="w-full flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg text-sm font-medium transition disabled:opacity-50"
-              >
-                <SendIcon className="w-4 h-4 mr-2" />
-                {isPending ? "Starting..." : "Start Campaign"}
-              </button>
+             <button
+  disabled={isPending || isOutOfCampaigns}
+  onClick={handleStartCampaign}
+  className="w-full flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg text-sm font-medium transition disabled:opacity-50"
+>
+  <SendIcon className="w-4 h-4 mr-2" />
+  {isPending ? "Starting..." : "Start Campaign"}
+</button>
+{isOutOfCampaigns && (
+  <p className="text-xs text-center mt-2 text-orange-600">
+    You’ve used all your campaigns.
+  </p>
+)}
+
             </div>
           </div>
         )}
@@ -392,7 +398,7 @@ const payload = {
         {/* ---------------- Modal: Boost ---------------- */}
         {showBoostModal && (
           <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
-            <div className="bg-black text-white p-8 rounded-2xl w-full max-w-md relative shadow-[0_15px_30px_rgba(0,0,0,0.5)] border border-gray-800">
+<div className="bg-white text-black p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-gray-100 overflow-y-auto max-h-[90vh]">
               {/* Header */}
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold">Boost Your Film on</h2>
