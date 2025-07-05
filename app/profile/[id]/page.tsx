@@ -183,8 +183,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
  mb-2">Academics</h3>
           <div className="flex justify-self-center
  gap-4">
-            <CircleChart label="GPA" value={3.5} max={4.0} />
-            <CircleChart label="ACT" value={24} max={36} />
+            <CircleChart label="GPA" value={0} max={4.0} />
+            <CircleChart label="ACT" value={0} max={36} />
           </div>
         </div>
 
@@ -200,10 +200,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             <div>
               <p className="font-bold text-[#FF7200]">{user.weight ? `${user.weight} lbs` : "N/A"}</p>
               <p className="text-xs text-gray-400">Weight</p>
-            </div>
-            <div>
-              <p className="font-bold text-[#FF7200]">4.6s</p>
-              <p className="text-xs text-gray-400">Speed</p>
             </div>
           </div>
         </div>

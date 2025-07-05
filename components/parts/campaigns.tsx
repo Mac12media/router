@@ -80,6 +80,9 @@ export function Campaigns({
   /** ----------------------------------------------------
    *  Boost form state
    * -------------------------------------------------- */
+  const [xUsername, setXUsername] = useState("");
+const [selectedBoostType, setSelectedBoostType] = useState<"custom" | "repost" | "">("");
+
   const [boostType, setBoostType] = useState({ custom: false, repost: true });
   const [boostLink, setBoostLink] = useState("");
 
@@ -405,85 +408,94 @@ const payload = {
 
         {/* ---------------- Modal: Boost ---------------- */}
         {showBoostModal && (
-          <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
-<div className="bg-black text-white p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)]  overflow-y-auto max-h-[90vh]">
-              {/* Header */}
-              <div className="flex items-center mb-6">
-                <h2 className="text-2xl font-bold">Boost Your Film on</h2>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://www.mrl.ims.cam.ac.uk/sites/default/files/media/x-logo.png"
-                  alt="X Logo"
-                  className="w-10 invert ml-2"
-                />
-              </div>
+  <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
+    <div className="bg-black text-white p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)] overflow-y-auto max-h-[90vh]">
+      
+      {/* Header */}
+      <div className="flex items-center mb-6">
+        <h2 className="text-2xl font-bold">Boost Your Film on</h2>
+        <img
+          src="https://www.mrl.ims.cam.ac.uk/sites/default/files/media/x-logo.png"
+          alt="X Logo"
+          className="w-10 invert ml-2"
+        />
+      </div>
 
-              {/* Close Button */}
-              <button
-                onClick={() => setShowBoostModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white hover:bg-gray-800 p-2 rounded-full transition"
-              >
-                ✕
-              </button>
+      {/* Close Button */}
+      <button
+        onClick={() => setShowBoostModal(false)}
+        className="absolute top-4 right-4 text-gray-400 hover:text-white hover:bg-gray-800 p-2 rounded-full transition"
+      >
+        ✕
+      </button>
 
-              {/* Boost Type */}
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold text-orange-500 mb-2">Boost Type</h3>
-                {["Custom Post", "Repost"].map((label) => {
-                  const key = label.toLowerCase().includes("custom") ? "custom" : "repost";
-                  return (
-                    <label
-                      key={label}
-                      className="flex items-center mb-2 text-sm rounded-md px-3 py-2 shadow-sm"
-                    >
-                      <input
-                        type="checkbox"
-                        className="mr-2 accent-orange-500 text-black rounded"
-                        checked={boostType[key as keyof typeof boostType]}
-                        onChange={() =>
-                          setBoostType((prev) => ({
-                            ...prev,
-                            [key]: !prev[key as keyof typeof boostType],
-                          }))
-                        }
-                      />
-                      {label}
-                    </label>
-                  );
-                })}
-              </div>
+      {/* X Username Input */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-1">X Username</label>
+        <input
+          type="text"
+          placeholder="@yourhandle"
+          value={xUsername}
+          onChange={(e) => setXUsername(e.target.value)}
+          className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+        />
+      </div>
 
-              {/* Boost Link Input */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-1">Add Boost Content (Link)</label>
-                <input
-                  type="text"
-                  placeholder="Add custom post film or Repost (X Post)"
-                  value={boostLink}
-                  onChange={(e) => setBoostLink(e.target.value)}
-                  className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                />
-              </div>
+      {/* Boost Type (Radio Buttons for Single Selection) */}
+      <div className="mb-6">
+        <h3 className="text-sm font-semibold text-orange-500 mb-2">Boost Type</h3>
+        {["Custom Post", "Repost"].map((label) => {
+          const key = label.toLowerCase().includes("custom") ? "custom" : "repost";
+          return (
+            <label
+              key={label}
+              className="flex items-center mb-2 text-sm rounded-md px-3 py-2 shadow-sm cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="boostType"
+                className="mr-2 accent-orange-500 text-black"
+                checked={selectedBoostType === key}
+                onChange={() => setSelectedBoostType(key)}
+              />
+              {label}
+            </label>
+          );
+        })}
+      </div>
 
-              {/* Submit Button */}
-              <button
-                className="w-full flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg text-sm font-medium transition disabled:opacity-50"
-              >
-                <RocketIcon className="w-4 h-4 mr-2" />
-                Boost On X
-              </button>
+      {/* Boost Link Input */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-1">Add Boost Content (Link)</label>
+        <input
+          type="text"
+          placeholder="Add custom post film or Repost (X Post)"
+          value={boostLink}
+          onChange={(e) => setBoostLink(e.target.value)}
+          className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+        />
+      </div>
 
-              {/* Promo Banner */}
-              <div className="mt-6 p-4 rounded-lg text-sm space-y-1 text-center shadow-sm">
-                <p>
-                  🚀 <strong>Get Your Film Seen</strong> by 250,000+ followers & 10,000+ College
-                  Coaches!
-                </p>
-                <p className="font-bold text-orange-600">The Largest Player Marketing Platform</p>
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Submit Button */}
+      <button
+        className="w-full flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg text-sm font-medium transition disabled:opacity-50"
+        disabled={!selectedBoostType || !boostLink || !xUsername}
+      >
+        <RocketIcon className="w-4 h-4 mr-2" />
+        Boost On X
+      </button>
+
+      {/* Promo Banner */}
+      <div className="mt-6 p-4 rounded-lg text-sm space-y-1 text-center shadow-sm">
+        <p>
+          🚀 <strong>Get Your Film Seen</strong> by 250,000+ followers & 10,000+ College Coaches!
+        </p>
+        <p className="font-bold text-orange-600">The Largest Player Marketing Platform</p>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </Card>
   );
