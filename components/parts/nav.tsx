@@ -34,7 +34,7 @@ const links = [
  // { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
  // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
   { href: "/campaigns", text: "Campaigns", icon: CheckCircle2Icon },
-  { href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
+  //{ href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
  // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
 ];
 

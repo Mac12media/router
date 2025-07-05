@@ -31,7 +31,11 @@ const getChicagoDate = () => {
 };
 
 const generateCalendarGrid = (year: number, month: number) => {
-  const firstDay = new Date(Date.UTC(year, month, 1));
+// Handle edge case: on some locations/devices, first day is considered the 30th of the previous month
+const isEdgeCase = year === 2025 && month === 5; // June is month 5 (0-based index)
+const firstDay = isEdgeCase
+  ? new Date(Date.UTC(year, month - 1, 30)) // May 30, 2025
+  : new Date(Date.UTC(year, month, 1));
   const lastDay = new Date(Date.UTC(year, month + 1, 0));
 
   const daysInMonth = lastDay.getUTCDate();

@@ -203,7 +203,44 @@ const payload = {
       <div className="mb-4 space-y-4">
         {useCustomInfo ? (
           <>
+
+
+           <div className="grid grid-cols-3 gap-4">
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Class</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
+                  placeholder="e.g. 2026"
+                  value={customClass}
+                  onChange={(e) => setCustomClass(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Height</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
+                  placeholder="e.g. 6'1\"
+                  value={customHeight}
+                  onChange={(e) => setCustomHeight(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Weight</label>
+                <input
+                  type="text"
+                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
+                  placeholder="e.g. 190 lbs"
+                  value={customWeight}
+                  onChange={(e) => setCustomWeight(e.target.value)}
+                />
+              </div>
+            </div>
             {/* Custom Bio */}
+
             <div>
               <label className="block text-sm font-medium mb-1">Custom Bio</label>
               <textarea
@@ -228,56 +265,27 @@ const payload = {
             </div>
 
             {/* Class & Ht/Wt */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Class</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
-                  placeholder="e.g. 2026"
-                  value={customClass}
-                  onChange={(e) => setCustomClass(e.target.value)}
-                />
-              </div>
-                          <div className="grid grid-cols-2 gap-4">
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Height</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
-                  placeholder="e.g. 6'1\"
-                  value={customHeight}
-                  onChange={(e) => setCustomHeight(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Weight</label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
-                  placeholder="e.g. 190 lbs"
-                  value={customWeight}
-                  onChange={(e) => setCustomWeight(e.target.value)}
-                />
-              </div>
-            </div>
+                                     
           </>
         ) : (
           <div className="text-sm bg-gray-100 text-black rounded-lg px-4 py-3 border border-gray-200 space-y-2">
             <div>
               <strong>Bio:</strong> {profileData.bio}
             </div>
-            <div>
-              <strong>Film:</strong>{" "}
-              <a
-                href={profileData.video}
-                target="_blank"
-                rel="noreferrer"
-                className="text-orange-600 underline"
-              >
-                {profileData.video}
-              </a>
-            </div>
+           <div>
+  <strong>Film:</strong>{" "}
+  <a
+    href={profileData.video}
+    target="_blank"
+    rel="noreferrer"
+    className="text-orange-600 underline"
+  >
+    {profileData.video.length > 30
+      ? profileData.video.slice(0, 30) + "..."
+      : profileData.video}
+  </a>
+</div>
+
             <div>
               <strong>Class:</strong> {profileData.grad_year}
             </div>
@@ -398,7 +406,7 @@ const payload = {
         {/* ---------------- Modal: Boost ---------------- */}
         {showBoostModal && (
           <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
-<div className="bg-white text-black p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-gray-100 overflow-y-auto max-h-[90vh]">
+<div className="bg-black text-white p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)]  overflow-y-auto max-h-[90vh]">
               {/* Header */}
               <div className="flex items-center mb-6">
                 <h2 className="text-2xl font-bold">Boost Your Film on</h2>
