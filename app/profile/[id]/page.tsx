@@ -2,7 +2,7 @@ import { Breadcrumbs } from "@/components/parts/breadcrumbs";
 import { Header } from "@/components/parts/header";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { notFound } from "next/navigation";
-import { getUser, getUserFullById } from "@/lib/data/users";
+import { getPublicUserById, getUser, getUserFullById } from "@/lib/data/users";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { X, Instagram } from "lucide-react";
 import Link from "next/link";
@@ -20,12 +20,12 @@ const COLORS = ["#FF7200", "#e5e5e5"];
 
 const CircleChart = dynamic(() => import("@/components/parts/charts"));
 
+const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const data = await getUserFullById({ id });
-  const { data: user } = data || {};
 
+  const user = await getPublicUserById({ id: id ?? DEFAULT_ID });
     const result = await getUser();
     const real = result?.data;
 

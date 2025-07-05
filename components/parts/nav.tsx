@@ -27,6 +27,8 @@ import {
 } from "lucide-react";
 import Logo from "./logo";
 
+const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
+
 // Navigation links
 const links = [
   { href: "/", text: "Dashboard", icon: BarChart },
@@ -83,13 +85,13 @@ export default async function Nav() {
                 {link.text}
               </NavLink>
             ))}
-             <NavLink
-                key={`/profile/${id}`}
-                icon={User}
-                href={`/profile/${id}`}
-              >
-                Profile
-              </NavLink>
+            <NavLink
+  key={`/profile/${id ?? DEFAULT_ID}`}
+  icon={User}
+  href={`/profile/${id ?? DEFAULT_ID}`}
+>
+  Profile
+</NavLink>
           </div>
         </div>
 

@@ -198,6 +198,44 @@ export const getUserFullById = authenticatedAction
   }
 );
 
+const schema = z.object({ id: z.string() });
+
+
+export async function getPublicUserById(formData: FormData | { id: string }) {
+  // Allow usage from client or internal call
+  const parsed =
+    formData instanceof FormData
+      ? schema.parse({ id: formData.get("id") })
+      : schema.parse(formData);
+
+  const result = await db
+    .select({
+      name: users.name,
+      last_name: users.last_name,
+      grad_year: users.grad_year,
+      bio: users.bio,
+      image: users.image,
+      test_score: users.test_score,
+      height: users.height,
+      weight: users.weight,
+      position: users.position,
+      sport: users.sport,
+      video: users.video,
+      high_school: users.high_school,
+      city: users.city,
+      state: users.state,
+      x_username: users.x_username,
+      ig_username: users.ig_username,
+    })
+    .from(users)
+    .where(eq(users.id, parsed.id));
+
+  if (result.length === 0) {
+    throw new Error("User not found");
+  }
+
+  return result[0];
+}
 
 
 
