@@ -51,7 +51,7 @@ export const columns: ColumnDef<CampaignRow>[] = [
 },
   {
     accessorKey: "segments",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Segments" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Reach" />,
     cell: ({ row }) => {
       const segments: string[] = row.getValue("segments");
       return (
@@ -68,7 +68,7 @@ export const columns: ColumnDef<CampaignRow>[] = [
 
   {
     accessorKey: "createdAt",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Created" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
     cell: ({ row }) => {
       const createdAt: Date = row.getValue("createdAt");
       const date = new Date(createdAt);

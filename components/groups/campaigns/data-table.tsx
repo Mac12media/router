@@ -28,6 +28,7 @@ import {
 
 import { DataTablePagination } from "@/components/data-table/pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { CardTitle } from "@/components/ui/card";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

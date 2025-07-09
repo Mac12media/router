@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { CircleCheck, CircleX } from "lucide-react";
+import { CardTitle } from "@/components/ui/card";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -50,6 +51,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         
+                          <CardTitle>Campaign Log</CardTitle>
 
         {table.getColumn("school") && (
           <Input

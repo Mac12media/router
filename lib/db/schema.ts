@@ -56,6 +56,7 @@ export const users = pgTable("user", {
 
   leadCount: integer("leadCount").notNull().default(0),
   campaigncount: integer("campaigncount").notNull().default(1),
+  boostcount: integer("boostcount").notNull().default(1),
 
   createdAt: timestamp("createdAt", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
@@ -139,6 +140,26 @@ export const endpoints = pgTable("endpoint", {
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
 });
+
+
+export const boosts = pgTable("boosts", {
+  id: text("id")
+    .$defaultFn(() => createId()) // Automatically generate a unique boost ID
+    .notNull()
+    .primaryKey(), // The boost ID will be the primary key
+
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }), // References the user who created the boost
+
+  xUsername: text("x_username").notNull(), // X Username (formerly Twitter) for the boost
+  boostTypes: text("boost_type").notNull(),
+  boostLink: text("boost_link").notNull(), // The link to the content being boosted (e.g., a custom post or repost)
+
+  createdAt: timestamp("created_at", { mode: "date" }).notNull(), // Timestamp when the boost was created
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull(), // Timestamp when the boost was last updated
+});
+
 export const campaigns = pgTable("campaigns", {
   id: text("id")
     .$defaultFn(() => createId())

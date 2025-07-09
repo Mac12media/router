@@ -51,7 +51,7 @@ export const PlayerProfile = ({
       <Link href={`/profile/${id}`} className="block transition-shadow">
         <Card className="w-full flex flex-col cursor-pointer hover:shadow-md">
           <CardHeader className="mb-6 border-b">
-            <CardTitle>Player Profile</CardTitle>
+            <CardTitle>Recruiting Dashboard</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-6 flex-grow">
@@ -90,7 +90,7 @@ export const PlayerProfile = ({
             </div>
 
             {/* EXPO Score Section */}
-          <h3 className="text-sm font-semibold">EXPO Score</h3>
+          <h3 className="text-sm font-semibold">EXPO+ Scores</h3>
 
           
 

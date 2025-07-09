@@ -37,6 +37,13 @@ export const decreaseCampaignCount = async (userId: string) => {
     .where(eq(users.id, userId));
 };
 
+export const decreaseBoostCount = async (userId: string) => {
+  await db
+    .update(users)
+    .set({ boostcount: sql`${users.boostcount} - 1` })
+    .where(eq(users.id, userId));
+};
+
 /**
  * Retrieves the lead count for a specific endpoint
  *
@@ -97,7 +104,7 @@ export const clearLeadCount = async () => {
 export const getUsageForUser = authenticatedAction.action(
   async ({ ctx: { userId } }) => {
     const result = await db
-      .select({ leadCount: users.leadCount,         campaigncount: users.campaigncount,
+      .select({ leadCount: users.leadCount,  boostcount: users.boostcount,     campaigncount: users.campaigncount,
  id: users.id, plan: users.plan })
       .from(users)
       .where(eq(users.id, userId));

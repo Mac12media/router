@@ -6,9 +6,9 @@ import { PageWrapper } from "@/components/parts/page-wrapper";
 import { getCoaches } from "@/lib/data/coaches";
 
 const pageData = {
-  name: "Coaches",
-  title: "Coaches",
-  description: "All college coaches",
+  name: "Football Coaches",
+  title: "Football Coaches",
+  description: "All college football coaches",
 };
 
 // Sample data for college coaches

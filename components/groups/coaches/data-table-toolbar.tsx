@@ -73,7 +73,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
          {table.getColumn("division") && (
                   <DataTableFacetedFilter
                     column={table.getColumn("division")}
-                    title="Division"
+                    title="Divisions"
                     options={divisionTypeFilter}
                   />
                 )}

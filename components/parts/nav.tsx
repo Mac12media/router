@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ModeToggle } from "@/components/parts/mode-toggle";
 import { getUsageForUser } from "@/lib/data/users";
-import { LucideProps } from "lucide-react";
+import { LucideProps, RocketIcon } from "lucide-react";
 
 import { useTheme } from "next-themes";
 
@@ -35,7 +35,7 @@ const links = [
   { href: "/coaches", text: "College Programs", icon: GraduationCapIcon },
  // { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
  // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
-  { href: "/campaigns", text: "Campaigns", icon: CheckCircle2Icon },
+  { href: "/campaigns", text: "Campaigns", icon: RocketIcon },
   //{ href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
  // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
 ];

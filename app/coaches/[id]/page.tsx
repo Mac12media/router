@@ -38,9 +38,9 @@ export default async function CoachPage({ params }: { params: Promise<{ id: stri
         <Header title={coach.school}></Header>
 
         {/* Profile Overview and Score Card in a Single Card */}
-        <section className={`grid grid-cols-1 sm:grid-cols-3 gap-6 rounded-xl ${!isPlanValid ? 'filter blur-sm' : ''}`}>
+        <section className={`grid grid-cols-1 sm:grid-cols-3 gap-6 rounded-xl ${!isPlanValid ? 'filter  blur-sm' : ''}`}>
           {/* Profile Overview and Score in the same card */}
-          <div className="sm:col-span-1 bg-card p-6 rounded-xl shadow border flex flex-col items-center sm:items-start justify-between space-y-6 sm:space-y-0">
+          <div className="sm:col-span-1 bg-card bg-black opacity-50 p-6 rounded-xl shadow border flex flex-col items-center sm:items-start justify-between space-y-6 sm:space-y-0">
             {/* Coach Photo */}
             {coach.image && (
               <div className="flex justify-center self-center">
@@ -136,22 +136,20 @@ export default async function CoachPage({ params }: { params: Promise<{ id: stri
           </div>
         </section>
 
-        {/* Locked Message */}
+       
         {!isPlanValid && (
-          <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10"></div>
-        )}
-        {!isPlanValid && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-center text-white">
-            <h2 className="text-4xl font-bold mb-4">This content is locked</h2>
-            <p className="text-lg mb-6">Upgrade your plan to view this content.</p>
-            <a
-              href="/upgrade"
-              className="bg-primary text-white py-3 px-8 rounded-lg text-xl hover:bg-primary-dark transition duration-300"
-            >
-              Upgrade Now
-            </a>
-          </div>
-        )}
+  <div className="relative  border-4 border-[#FF7200] p-24 left-1/2 transform bg-black opacity-50 -translate-x-1/2 -translate-y-1/2 z-20 text-center text-white rounded-xl shadow-xl">
+    <h2 className="text-4xl font-bold mb-4">This content is locked</h2>
+    <p className="text-lg mb-6">Upgrade your plan to view this content.</p>
+    <a
+      href="/upgrade"
+      className="bg-primary text-white dark:text-black py-3 px-8 rounded-lg text-xl hover:bg-primary-dark transition duration-300"
+    >
+      Upgrade Now
+    </a>
+  </div>
+)}
+
       </PageWrapper>
     </>
   );

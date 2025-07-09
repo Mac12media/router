@@ -71,7 +71,7 @@ export const RecruitingTasks = ({ user }: { user?: UserProfile }) => {
             </Link>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground italic">
+          <p className="text-sm text-muted-foreground">
             ✅ All required profile fields are completed. Great work!
           </p>
         )}

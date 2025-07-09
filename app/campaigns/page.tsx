@@ -13,10 +13,11 @@ import { RecruitingTasks } from "@/components/parts/tasks";
 import { Activity } from "@/components/dashboard/activity";
 import { Campaigns } from "@/components/parts/campaigns";
 import { FavPrograms } from "@/components/parts/favprograms";
+import { CardTitle } from "@/components/ui/card";
 
 const pageData = {
-  name: "My Campaigns",
-  title: "Campaigns",
+  name: "Campaign Activity",
+  title: "Campaign Activity",
   description: "View of all your activity",
 };
 
@@ -116,11 +117,12 @@ switch (usageData?.plan) {
             }`}
           />
                   <div className="grid grid-cols-1 gap-4" style={{gridTemplateRows: '.5fr 2fr'}}>
-  <Campaigns name={user?.name ?? "New Campaign"} id={user?.id ?? ""} campaigncount={usageData?.campaigncount} profile={user} />
+  <Campaigns name={user?.name ?? "New Campaign"} id={user?.id ?? ""} campaigncount={usageData?.campaigncount} boostcount={usageData?.boostcount} profile={user} />
   <FavPrograms />
 </div>
 
         </div>
+
         <div className="overflow-x-auto mt-8">
           <DataTable
             columns={columns}

@@ -29,6 +29,13 @@ export const createCampaignSchema = z.object({
   status: z.string().optional().default("started"),
 });
 
+export const createBoostSchema = z.object({
+  userId: z.string(),
+  xUsername: z.string().min(1, "X Username is required"), // username for X (formerly Twitter)
+  boostTypes: z.string().min(1, "Boost type is required"), // A single string for boost type
+boostLink: z.string().min(1, "Boost link is required"),
+});
+
 export const createEndpointFormSchema = z.object({
   name: z.string().min(1, "Not a valid name."),
   schema: z.array(

@@ -6,6 +6,8 @@ import { User } from "next-auth";
 import Resend from "next-auth/providers/resend";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
+import Loops from "next-auth/providers/loops";
+
 import bcrypt from "bcryptjs";
 
 // Extend session to include `id`

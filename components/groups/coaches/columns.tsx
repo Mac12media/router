@@ -23,7 +23,7 @@ export const columns: ColumnDef<CoachRow>[] = [
     const logoUrl = row.original.image;
 const college = row.getValue("school") as string;
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
         {logoUrl && (
           <img src={logoUrl} alt={college} className="h-10 w-10 rounded" />
         )}
@@ -42,6 +42,7 @@ const college = row.getValue("school") as string;
 const name = row.getValue("head_coach") as string;
     return ( <Button
   variant="outline"
+  className="bg-[#FF7200] text-white"
   size="sm"
   onClick={() => {
     toast.success(row.original.head_coach);

@@ -2,12 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { db, Endpoint } from "../db";
-import { endpoints, campaigns } from "../db/schema";
+import { endpoints, campaigns, boosts } from "../db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/helpers/error-message";
 import { authenticatedAction } from "./safe-action";
 import { z } from "zod";
 import {
+  createBoostSchema,
   createCampaignSchema,
   createEndpointFormSchema,
   updateEndpointFormSchema,
@@ -159,6 +160,37 @@ export const createCampaign = authenticatedAction
     return { success: true, id: campaignId };
   });
 
+export const createBoost = authenticatedAction
+  .schema(createBoostSchema) // Use the validation schema for boost
+  .action(async ({ parsedInput, ctx: { userId } }) => {
+    try {
+
+      // Generate a random ID for the boost (UUID or unique identifier)
+      const boostId = randomBytes(16).toString("hex");
+
+      // Ensure boostTypes is a string, not an array
+      const boostType = parsedInput.boostTypes; // It should now be a single string
+
+
+      // Insert the boost into the database
+      await db.insert(boosts).values({
+        id: boostId,
+        userId,
+        xUsername: parsedInput.xUsername,
+        boostTypes: boostType,  // Directly insert the boostType string
+        boostLink: parsedInput.boostLink,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+
+      return { success: true, id: boostId };
+
+    } catch (error) {
+      console.error("Error while creating boost:", error);
+      return { success: false, message: "An error occurred while creating the boost." };
+    }
+  });
 
 
 export const getCampaigns = authenticatedAction.action(
