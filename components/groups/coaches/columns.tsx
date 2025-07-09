@@ -23,7 +23,7 @@ export const columns: ColumnDef<CoachRow>[] = [
     const logoUrl = row.original.image;
 const college = row.getValue("school") as string;
     return (
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-8">
         {logoUrl && (
           <img src={logoUrl} alt={college} className="h-10 w-10 rounded" />
         )}
