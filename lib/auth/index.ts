@@ -72,6 +72,7 @@ export const config = {
 }),
 
 
+
     // ✉️ Magic Link Provider
     Resend({
       apiKey: process.env.RESEND_API_KEY!,
