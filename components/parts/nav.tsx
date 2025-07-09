@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ModeToggle } from "@/components/parts/mode-toggle";
 import { getUsageForUser } from "@/lib/data/users";
-import { LucideProps, RocketIcon } from "lucide-react";
+import { LogInIcon, LucideProps, RocketIcon } from "lucide-react";
 
 import { useTheme } from "next-themes";
 
@@ -40,6 +40,12 @@ const links = [
  // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
 ];
 
+const guestLinks = [
+      { href: "/login", text: "Login", icon: LogInIcon },
+
+    { href: "/coaches", text: "College Programs", icon: GraduationCapIcon },
+
+];
 const otherLinks = [
   { href: "https://exporecruits.com", text: "Support", icon: LifeBuoy },
 
@@ -50,7 +56,9 @@ export default async function Nav() {
   const plan = usage?.data?.plan;
   const id = usage?.data?.id
 
+ const hasValidId = Boolean(id);
 
+  const navigationLinks = hasValidId ? links : guestLinks;
 
   return (
     <nav className="p-4 flex flex-col gap-4 justify-between h-screen">
@@ -62,40 +70,32 @@ export default async function Nav() {
           <Logo />
       </Link>
 
-      {/* Navigation links */}
       <div className="border bg-muted/50 rounded-lg flex flex-col justify-between p-6 h-full">
         <div className="flex flex-col gap-8">
           <div className="grid gap-2">
-            {links.map((link) => (
-              <NavLink
-                key={link.href}
-                icon={link.icon}
-                href={link.href}
-             //   locked={link.locked}
-              >
+            {navigationLinks.map((link) => (
+              <NavLink key={link.href} icon={link.icon} href={link.href}>
                 {link.text}
               </NavLink>
             ))}
+
+            {/* Only show profile if ID is available */}
+            {hasValidId && (
+              <NavLink icon={User} href={`/profile/${id}`}>
+                Profile
+              </NavLink>
+            )}
+
+            {/* Always show support link */}
             {otherLinks.map((link) => (
-              <NavLink
-                key={link.href}
-                icon={link.icon}
-                href={link.href}
-              >
+              <NavLink key={link.href} icon={link.icon} href={link.href}>
                 {link.text}
               </NavLink>
             ))}
-            <NavLink
-  key={`/profile/${id ?? DEFAULT_ID}`}
-  icon={User}
-  href={`/profile/${id ?? DEFAULT_ID}`}
->
-  Profile
-</NavLink>
           </div>
         </div>
 
-        {/* Footer section */}
+        {/* Footer */}
         <div className="flex flex-col gap-8">
           <AccountWidget plan={plan} />
           <div className="flex justify-between items-center gap-2">
