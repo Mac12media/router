@@ -372,6 +372,19 @@ const payload = {
   function renderBoostForm() {
     return (
       <div>
+
+               {/* X Username Input */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-1">X Username</label>
+          <input
+            type="text"
+            placeholder="@yourhandle"
+            value={xUsername}
+            onChange={(e) => setXUsername(e.target.value)}
+            className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
+        </div>
+        
         {/* Boost Type (Radio Buttons for Single Selection) */}
         <div className="mb-6">
           <h3 className="text-sm font-semibold text-orange-500 mb-2">Boost Type</h3>
@@ -407,17 +420,7 @@ const payload = {
           />
         </div>
 
-        {/* X Username Input */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">X Username</label>
-          <input
-            type="text"
-            placeholder="@yourhandle"
-            value={xUsername}
-            onChange={(e) => setXUsername(e.target.value)}
-            className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          />
-        </div>
+ 
 
         {/* Submit Button */}
         <button
@@ -428,6 +431,15 @@ const payload = {
           <RocketIcon className="w-4 h-4 mr-2" />
           Boost On X
         </button>
+
+        {/* Promo Banner */}
+      <div className="mt-6 p-4 rounded-lg text-sm space-y-1 text-center shadow-sm">
+        <p>
+          🚀 <strong>Get Your Film Seen</strong> by 250,000+ followers & 10,000+ College Coaches!
+        </p>
+        <p className="font-bold text-orange-600">The Largest Player Marketing Platform</p>
+      </div>
+
       </div>
     );
   }
