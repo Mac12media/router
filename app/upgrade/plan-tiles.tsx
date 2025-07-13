@@ -8,12 +8,12 @@ import {
   createCustomerPortalSession,
 } from "@/lib/data/stripe";
 import { STRIPE_PLANS } from "@/lib/constants/stripe";
-import { StripePricingTable } from "@/components/parts/Stripetable";
 
 interface PlanProps {
   name: string;
   description: string;
   monthlyPrice: number | "Contact For Pricing";
+  /**  Used for ELITE+ one-time cost  */
   yearlyPrice: number | "Contact For Pricing";
   monthlyStripePriceId?: string;
   yearlyStripePriceId?: string;
@@ -23,6 +23,9 @@ interface PlanProps {
 
 const ENV = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
+/** ------------------------------------------------------------------ */
+/**  PLAN DEFINITIONS – matches the screenshot (ROOKIE, MVP, ELITE+)  */
+/** ------------------------------------------------------------------ */
 const plans: PlanProps[] = [
   {
     name: "ROOKIE",
@@ -62,9 +65,11 @@ const plans: PlanProps[] = [
   {
     name: "ELITE+",
     description: "Premium recruiting access with a one-time payment.",
+    /**  No monthly subscription – charge once via yearlyPrice  */
     monthlyPrice: "Contact For Pricing",
     yearlyPrice: 119.95,
-    stripeProductId: STRIPE_PLANS.elite.monthlyPriceId[ENV],
+    stripeProductId: STRIPE_PLANS.elite.productId[ENV],
+    /**  Use the yearly price ID for the one-time charge  */
     yearlyStripePriceId: STRIPE_PLANS.elite.yearlyPriceId[ENV],
     features: [
       "3x Player Campaign",
@@ -82,11 +87,24 @@ const plans: PlanProps[] = [
   },
 ];
 
+/* -------------------------------------------------------------------- */
 export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => {
+  console.log("[PlanTiles] Rendered with usage:", usage);
+
   return (
-    <section className="grid  px-4 max-w-6xl mx-auto">
+    <section className="grid gap-12 px-4 max-w-6xl mx-auto">
+      <div className="text-center space-y-2">
+        <h2 className="text-3xl font-bold">Compare Plans</h2>
+        <p className="text-muted-foreground">
+          There&rsquo;s a plan for everyone. Choose the one that works for you...
+        </p>
+      </div>
 
-
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {plans.map((plan) => (
+          <Tile key={plan.name} plan={plan} currentPlan={usage?.plan} />
+        ))}
+      </div>
 
       {usage?.plan && (
         <p className="text-center text-muted-foreground">
@@ -96,11 +114,6 @@ export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => {
           </span>
         </p>
       )}
-
-      {/* Stripe Pricing Table Below */}
-      <div className="">
-        <StripePricingTable />
-      </div>
     </section>
   );
 };
@@ -115,6 +128,11 @@ const Tile = ({
   const isCurrentPlan =
     currentPlan?.toLowerCase() === plan.name.toLowerCase();
   const isElite = plan.name === "ELITE+";
+
+  console.log("[Tile] Rendering plan:", plan.name);
+  console.log(" - isCurrentPlan:", isCurrentPlan);
+  console.log(" - monthlyPriceId:", plan.monthlyStripePriceId);
+  console.log(" - yearlyPriceId:", plan.yearlyStripePriceId);
 
   return (
     <div
@@ -154,9 +172,11 @@ const Tile = ({
             ${plan.yearlyPrice}
           </p>
         ) : (
-          <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
-            ${plan.monthlyPrice}/mo
-          </p>
+          <>
+            <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
+              ${plan.monthlyPrice}/mo
+            </p>
+          </>
         )}
       </div>
 
@@ -166,6 +186,10 @@ const Tile = ({
             <Button
               className="w-full"
               onClick={() => {
+                console.log("[Tile] ONE-TIME checkout initiated", {
+                  plan: plan.name,
+                  priceId: plan.yearlyStripePriceId,
+                });
                 postStripeSession({
                   priceId: plan.yearlyStripePriceId!,
                 });
@@ -177,6 +201,10 @@ const Tile = ({
             <Button
               className="w-full"
               onClick={() => {
+                console.log("[Tile] MONTHLY checkout initiated", {
+                  plan: plan.name,
+                  priceId: plan.monthlyStripePriceId,
+                });
                 postStripeSession({
                   priceId: plan.monthlyStripePriceId!,
                 });
@@ -198,6 +226,7 @@ const Tile = ({
               variant="secondary"
               className="w-full"
               onClick={() => {
+                console.log("[Tile] Manage Plan portal opened for", plan.name);
                 createCustomerPortalSession();
               }}
             >
