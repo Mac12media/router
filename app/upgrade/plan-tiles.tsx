@@ -184,19 +184,18 @@ const Tile = ({
         {!isCurrentPlan &&
           (plan.monthlyPrice === "Contact For Pricing" ? (
             <Button
-              className="w-full"
-              onClick={() => {
-                console.log("[Tile] ONE-TIME checkout initiated", {
-                  plan: plan.name,
-                  priceId: plan.yearlyStripePriceId,
-                });
-                postStripeSession({
-                  priceId: plan.yearlyStripePriceId!,
-                });
-              }}
-            >
-              One-Time Purchase
-            </Button>
+  className="w-full"
+  onClick={() => {
+    console.log("[Tile] ONE-TIME checkout initiated", {
+      plan: plan.name,
+      priceId: plan.yearlyStripePriceId,
+    });
+    window.location.href = "https://buy.stripe.com/28E14naixbAmcNL5TLafS00";
+  }}
+>
+  One-Time Purchase
+</Button>
+
           ) : (
             <Button
               className="w-full"
