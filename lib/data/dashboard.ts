@@ -25,28 +25,28 @@ export const getLeadAndErrorCounts = authenticatedAction.action(
         FROM endpoint
         WHERE "userId" = ${userId}
     ),
-    lead_counts AS (
-        SELECT
-            date_trunc('day', lead."createdAt") AS date,
-            COUNT(*)::int AS leads
-        FROM
-            lead
-        INNER JOIN user_endpoints ue ON lead."endpointId" = ue."id"
-        WHERE
-            lead."createdAt" >= now() - interval '1 month'
-        GROUP BY
-            date
-    ),
+lead_counts AS (
+    SELECT
+        date_trunc('day', lead."createdAt") AS date,
+        COUNT(*)::int AS leads
+    FROM
+        lead
+    WHERE
+        lead."createdAt" >= now() - interval '1 month'
+        AND lead."userId" = ${userId}
+    GROUP BY
+        date
+),
+
     error_counts AS (
         SELECT
-            date_trunc('day', log."createdAt") AS date,
+            date_trunc('day', campaigns."created_at") AS date,
             COUNT(*)::int AS errors
         FROM
-            log
-        INNER JOIN user_endpoints ue ON log."endpointId" = ue."id"
+            campaigns
         WHERE
-            log."type" = 'error'
-            AND log."createdAt" >= now() - interval '1 month'
+            campaigns."user_id" = ${userId}
+            AND campaigns."created_at" >= now() - interval '1 month'
         GROUP BY
             date
     )

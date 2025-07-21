@@ -108,9 +108,7 @@ switch (plan) {
       );
     }
 
-    const leadId = await createLead(endpoint.id, parsedData.data);
 
-    await createLog("success", "http", leadId, endpoint.id);
     await incrementLeadCount(id);
 
     // webhook posting -- eventually make this a background job
@@ -158,8 +156,8 @@ switch (plan) {
         );
       }
     }
+     
 
-    return NextResponse.json({ success: true, id: leadId });
   } catch (error: unknown) {
     await createLog("error", "http", getErrorMessage(error), id);
 
@@ -250,9 +248,7 @@ switch (plan) {
       );
     }
 
-    const leadId = await createLead(endpoint.id, parsedData.data);
 
-    await createLog("success", "http", leadId, endpoint.id);
     await incrementLeadCount(id);
 
     // webhook posting -- eventually make this a background job

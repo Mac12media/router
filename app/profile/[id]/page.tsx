@@ -15,6 +15,7 @@ import {
 import dynamic from "next/dynamic";
 
 import placeholder from "@/public/userplaceholder.png";
+import { createLead } from "@/lib/data/leads";
 
 const COLORS = ["#FF7200", "#e5e5e5"];
 
@@ -28,6 +29,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   const user = await getPublicUserById({ id: id ?? DEFAULT_ID });
     const result = await getUser();
     const real = result?.data;
+
+        const leadId = await createLead(id);
 
   if (!user) return notFound();
 

@@ -19,15 +19,12 @@ import {
 } from "@/components/ui/chart";
 
 const chartConfig = {
-  views: {
-    label: "Overview",
-  },
   leads: {
-    label: "Campaigns",
+    label: "Leads",
     color: "hsl(var(--chart-1))",
   },
   errors: {
-    label: "Activty",
+    label: "Activity",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
@@ -40,13 +37,12 @@ export function Activity({
   className?: string;
 }) {
   const [activeChart, setActiveChart] =
-    React.useState<keyof typeof chartConfig>("errors");
+    React.useState<keyof typeof chartConfig>("leads");
 
   const total = React.useMemo(
     () => ({
+      leads: chartData.reduce((acc, curr) => acc + curr.leads, 0),
       errors: chartData.reduce((acc, curr) => acc + curr.errors, 0),
-            leads: chartData.reduce((acc, curr) => acc + curr.leads, 0),
-
     }),
     [chartData]
   );
@@ -57,11 +53,11 @@ export function Activity({
         <div className="flex flex-1 flex-col justify-center gap-1 px-6">
           <CardTitle>Campaign Activity</CardTitle>
           <CardDescription>
-            Total Campaigns Sent & Profile Activity
+            Total Leads Captured & Profile Activity
           </CardDescription>
         </div>
         <div className="flex">
-          {["errors","leads"].map((key) => {
+          {["leads", "errors"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (
               <button
@@ -74,7 +70,7 @@ export function Activity({
                   {chartConfig[chart].label}
                 </span>
                 <span className="text-lg font-bold leading-none sm:text-3xl">
-                  {total[key as keyof typeof total].toLocaleString()}
+                  {total[chart].toLocaleString()}
                 </span>
               </button>
             );
@@ -89,10 +85,7 @@ export function Activity({
           <LineChart
             accessibilityLayer
             data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+            margin={{ left: 12, right: 12 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
@@ -114,14 +107,14 @@ export function Activity({
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey="views"
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                  labelFormatter={(value) =>
+                    new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
                       timeZone: "UTC",
-                    });
-                  }}
+                    })
+                  }
                 />
               }
             />

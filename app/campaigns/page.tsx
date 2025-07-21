@@ -10,10 +10,10 @@ import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import { getLeads } from "@/lib/data/leads";
 import { getLeadAndErrorCounts } from "@/lib/data/dashboard";
 import { RecruitingTasks } from "@/components/parts/tasks";
-import { Activity } from "@/components/dashboard/activity";
 import { Campaigns } from "@/components/parts/campaigns";
 import { FavPrograms } from "@/components/parts/favprograms";
 import { CardTitle } from "@/components/ui/card";
+import { Chart } from "@/components/dashboard/chart";
 
 const pageData = {
   name: "Campaign Activity",
@@ -22,24 +22,17 @@ const pageData = {
 };
 
 export default async function Page() {
-  // fetch logs
-  const logs = await getLogs();
-  const { data: logsData, serverError: logsServerError } = logs || {};
 
-  // fetch endpoints
-  const endpoints = await getEndpoints();
-  const { data: endpointsData, serverError: endpointsServerError } =
-    endpoints || {};
+
 
       const campaigns = await getCampaigns();
   const { data: campaignsData, serverError: campaignssServerError } =
     campaigns || {};
   // check for errors
-  if (!logsData || !endpointsData || !campaignsData || logsServerError || endpointsServerError) {
+  if ( !campaignsData) {
     notFound();
   }
 
-  // fetch chart data
   const charts = await getLeadAndErrorCounts();
   const { data: chartData, serverError: chartServerError } = charts || {};
 
@@ -47,10 +40,15 @@ export default async function Page() {
   const leads = await getLeads();
   const { data: leadsData, serverError: leadsServerError } = leads || {};
 
+  // fetch endpoints
+  const endpoints = await getEndpoints();
+  const { data: endpointsData, serverError: endpointsServerError } =
+    endpoints || {};
+
+  // fetch number of leads for user this month
   const result = await getUserFull();
   const user = result?.data;
 
-  // fetch number of leads for user this month
   const usage = await getUsageForUser();
   const { data: usageData, serverError: usageServerError } = usage || {};
 
@@ -110,7 +108,7 @@ switch (usageData?.plan) {
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-          <Activity
+          <Chart
             chartData={chartData}
             className={`${
               usageData.plan === "elite" ? "col-span-3" : "col-span-2"

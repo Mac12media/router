@@ -14,18 +14,15 @@ import { z } from "zod";
  * User does not need to be authenticated for this to happen
  */
 export async function createLead(
-  endpointId: string,
-  data: {
-    [x: string]: any;
-  }
+  userId: string,
+
 ): Promise<string> {
   const [{ leadId }] = await db
     .insert(leads)
     .values({
-      data,
       createdAt: new Date(),
       updatedAt: new Date(),
-      endpointId: endpointId,
+      userId: userId,
     })
     .returning({ leadId: leads.id });
 
@@ -42,18 +39,14 @@ export const getLeads = authenticatedAction.action(
     const leadsData = await db
       .select()
       .from(leads)
-      .leftJoin(endpoints, eq(leads.endpointId, endpoints.id))
-      .where(eq(endpoints.userId, userId))
+      .where(eq(leads.userId, userId))
       .orderBy(desc(leads.createdAt));
 
     const data: LeadRow[] = leadsData.map((lead) => ({
-      id: lead.lead.id,
-      data: lead.lead.data,
-      schema: lead.endpoint?.schema || [],
-      createdAt: lead.lead.createdAt,
-      updatedAt: lead.lead.updatedAt,
-      endpointId: lead.endpoint?.id as string,
-      endpoint: lead.endpoint?.name || undefined,
+      id: lead.id,
+      createdAt: lead.createdAt,
+      updatedAt: lead.updatedAt,
+      userId: lead.userId as string,
     }));
 
     return data;
@@ -73,7 +66,7 @@ export const getLeadData = authenticatedAction
         endpointUserId: endpoints.userId,
       })
       .from(leads)
-      .innerJoin(endpoints, eq(leads.endpointId, endpoints.id))
+      .innerJoin(endpoints, eq(leads.userId, endpoints.id))
       .where(eq(leads.id, id));
 
     if (
@@ -111,7 +104,7 @@ export const getLeadsByEndpoint = authenticatedAction
     const leadData = await db
       .select()
       .from(leads)
-      .where(eq(leads.endpointId, id));
+      .where(eq(leads.userId, id));
 
     return { leadData, schema: endpoint[0].schema };
   });
@@ -127,7 +120,7 @@ export const deleteLead = authenticatedAction
     const leadWithEndpoint = await db
       .select({ endpointUserId: endpoints.userId })
       .from(leads)
-      .innerJoin(endpoints, eq(leads.endpointId, endpoints.id))
+      .innerJoin(endpoints, eq(leads.userId, endpoints.id))
       .where(eq(leads.id, id));
 
     if (

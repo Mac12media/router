@@ -132,12 +132,9 @@ type CampaignRow = {
  */
 type LeadRow = {
   id: string;
-  data: { [key: string]: any };
-  schema?: { key: string; value: ValidationType }[];
   createdAt: Date;
   updatedAt: Date;
-  endpointId: string;
-  endpoint?: string;
+  userId: string;
 };
 
 /**

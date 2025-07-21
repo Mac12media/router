@@ -23,11 +23,11 @@ const chartConfig = {
     label: "Overview",
   },
   leads: {
-    label: "Campaigns",
+    label: "Activity",
     color: "hsl(var(--chart-1))",
   },
   errors: {
-    label: "Activity",
+    label: "Campaigns",
     color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
@@ -40,7 +40,7 @@ export function Chart({
   className?: string;
 }) {
   const [activeChart, setActiveChart] =
-    React.useState<keyof typeof chartConfig>("errors");
+    React.useState<keyof typeof chartConfig>("leads");
 
   const total = React.useMemo(
     () => ({
@@ -60,7 +60,7 @@ export function Chart({
           </CardDescription>
         </div>
         <div className="flex flex-wrap sm:flex-nowrap">
-          {["errors", "leads"].map((key) => {
+          {["leads", "errors"].map((key) => {
             const chart = key as keyof typeof chartConfig;
             return (
               <button

@@ -200,10 +200,9 @@ export const leads = pgTable("lead", {
     .$defaultFn(() => createId())
     .notNull()
     .primaryKey(),
-  endpointId: text("endpointId")
+  userId: text("userId")
     .notNull()
-    .references(() => endpoints.id, { onDelete: "cascade" }),
-  data: jsonb("data").$type<{ [key: string]: any }>().notNull(),
+    .references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
 });
