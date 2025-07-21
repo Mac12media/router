@@ -1,6 +1,5 @@
 import SignOut from "./signout";
 import Link from "next/link";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +12,7 @@ import {
 import { auth } from "@/lib/auth";
 import { Button } from "../ui/button";
 import { ArrowUp } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 interface AccountWidgetProps {
   plan?: "free" | "rookie" | "mvp" | "elite";
@@ -22,7 +22,6 @@ export default async function AccountWidget({ plan }: AccountWidgetProps) {
   const session = await auth();
   if (!session) return;
 
-  // Show "Upgrade Plan" for free and rookie users
   const showUpgrade = plan === "free" || plan === "rookie";
 
   return (
@@ -46,6 +45,19 @@ export default async function AccountWidget({ plan }: AccountWidgetProps) {
         <DropdownMenuLabel className="text-xs">
           {session.user?.email}
         </DropdownMenuLabel>
+
+        <DropdownMenuItem asChild>
+          <Link
+            href="/upgrade"
+            className="w-full flex justify-between items-center text-xs text-muted-foreground hover:text-foreground"
+          >
+            <span>Current Plan:</span>
+            <Badge variant={plan === "free" ? "outline" : "default"}>
+              {plan}
+            </Badge>
+          </Link>
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
 
         {showUpgrade && (

@@ -128,7 +128,6 @@ switch (plan) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(parsedData.data),
         signal: webhookController.signal,
       });
       const webhookResponse = await Promise.race([
@@ -267,7 +266,6 @@ switch (plan) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(parsedData.data),
         signal: webhookController.signal,
       });
       const webhookResponse = await Promise.race([

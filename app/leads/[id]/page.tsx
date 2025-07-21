@@ -37,7 +37,6 @@ const { id } = await params;
     return notFound();
   }
 
-  const dataEntries = Object.entries(data.data as any);
 
   return (
     <>
@@ -52,12 +51,7 @@ const { id } = await params;
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dataEntries.map(([key, value], index) => (
-              <TableRow key={index}>
-                <TableCell>{key}</TableCell>
-                <TableCell>{value as React.ReactNode}</TableCell>
-              </TableRow>
-            ))}
+           
           </TableBody>
         </Table>
       </PageWrapper>

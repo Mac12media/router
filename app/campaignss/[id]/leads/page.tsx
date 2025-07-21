@@ -56,11 +56,7 @@ const { id } = await params;
             {leads.length > 0 ? (
               leads.map((lead, rowIndex) => (
                 <TableRow key={rowIndex}>
-                  {schema.map((column) => (
-                    <TableCell key={column.key}>
-                      {lead.data[column.key]}
-                    </TableCell>
-                  ))}
+                  
                 </TableRow>
               ))
             ) : (

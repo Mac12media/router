@@ -13,6 +13,8 @@ import { Progress } from "@/components/ui/progress";
 import { CircleAlert, ArrowUp } from "lucide-react";
 import { Badge } from "../ui/badge";
 
+// Usage.tsx
+
 export const Usage = ({
   totalUsage,
   used,
@@ -43,6 +45,8 @@ export const Usage = ({
         <CardTitle>Usage Overview</CardTitle>
         <CardDescription>Monitor your usage.</CardDescription>
       </CardHeader>
+
+      {/* Leads usage */}
       <CardContent className="space-y-6 flex-grow">
         <div className="grid gap-3 p-3 border rounded-sm bg-muted/25">
           <div className="flex justify-between items-center">
@@ -71,7 +75,9 @@ export const Usage = ({
           </div>
         </div>
       </CardContent>
-       <CardContent className="space-y-6 flex-grow">
+
+      {/* Emails usage */}
+      <CardContent className="space-y-6 flex-grow">
         <div className="grid gap-3 p-3 border rounded-sm bg-muted/25">
           <div className="flex justify-between items-center">
             <p>
@@ -99,16 +105,15 @@ export const Usage = ({
           </div>
         </div>
       </CardContent>
-      {(plan === "free" || plan === "lite") && (
-        <CardFooter className="mt-auto">
-          <UpgradePlan />
-        </CardFooter>
-      )}
+
+      <CardFooter className="mt-auto">
+        <UpgradePlan plan={plan} />
+      </CardFooter>
     </Card>
   );
 };
 
-const UpgradePlan = () => {
+const UpgradePlan = ({ plan }: { plan: string }) => {
   return (
     <Link
       href="/upgrade"
@@ -116,12 +121,12 @@ const UpgradePlan = () => {
       rel="noopener noreferrer"
       className="p-4 hover:pl-5 hover:pr-3 transition-all h-full w-full border grid gap-1 border-yellow-500 rounded-sm bg-yellow-500/15 hover:bg-yellow-500/25"
     >
-      <span className="flex items-center gap-1">
-        Upgrade Plan
+      <span className="flex items-center gap-2">
+        <Badge>{plan}</Badge>
         <ArrowUp className="h-4 w-4" />
       </span>
       <span className="text-muted-foreground text-xs">
-        Upgrade your plan to capture more leads
+        You’re on the <strong>{plan}</strong> plan. Upgrade to unlock more features.
       </span>
     </Link>
   );

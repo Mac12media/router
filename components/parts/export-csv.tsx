@@ -19,9 +19,7 @@ export default function ExportCSV({ id, leads, schema }: ExportCSVProps) {
     try {
       const transformedLeads = leads.map((lead) => {
         const transformedLead: { [key: string]: any } = {};
-        schema.forEach((col) => {
-          transformedLead[col.key] = lead.data[col.key];
-        });
+        
         return transformedLead;
       });
 
