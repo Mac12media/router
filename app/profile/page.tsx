@@ -257,7 +257,7 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
             {[
               ['Height', 'height'],
               ['Weight', 'weight'],
-              ['Test Score', 'test_score'],
+              ['ACT/SAT', 'test_score'],
               ['High School', 'high_school'],
               ['City', 'city'],
               ['X Username', 'x_username'],

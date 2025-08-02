@@ -19,7 +19,7 @@ const requiredFields: { key: string; label: string }[] = [
   { key: "city", label: "City" },
   { key: "video", label: "Highlight Video" },
   { key: "bio", label: "Bio" },
-  { key: "test_score", label: "Test Score" },
+  { key: "test_score", label: "ACT/SAT" },
 ];
 
 type UserProfile = Record<string, string | null | undefined>;
