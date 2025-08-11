@@ -27,7 +27,7 @@ const CoachNotes: React.FC<CoachNotesProps> = ({ notes }) => {
           C
         </div>
         <div>
-          <p className="text-xl font-semibold text-gray-800">Coach Al</p>
+          <p className="text-xl font-semibold text-gray-800">Coach</p>
         </div>
       </div>
       <p className="text-lg text-gray-700">{notes}</p>
