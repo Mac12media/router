@@ -19,6 +19,9 @@ const events = [
 // Get current date in America/Chicago timezone
 const getChicagoDate = () => {
   const now = new Date();
+  // Increment the date by 1 day
+  now.setDate(now.getDate() + 1);
+
   const chicagoTime = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Chicago",
     year: "numeric",
@@ -30,12 +33,13 @@ const getChicagoDate = () => {
   return new Date(`${year}-${month}-${day}T00:00:00-06:00`);
 };
 
+
 const generateCalendarGrid = (year: number, month: number) => {
-// Handle edge case: on some locations/devices, first day is considered the 30th of the previous month
-const isEdgeCase = year === 2025 && month === 5; // June is month 5 (0-based index)
-const firstDay = isEdgeCase
-  ? new Date(Date.UTC(year, month - 1, 30)) // May 30, 2025
-  : new Date(Date.UTC(year, month, 1));
+  // Handle edge case: on some locations/devices, first day is considered the 30th of the previous month
+  const isEdgeCase = year === 2025 && month === 5; // June is month 5 (0-based index)
+  const firstDay = isEdgeCase
+    ? new Date(Date.UTC(year, month - 1, 30)) // May 30, 2025
+    : new Date(Date.UTC(year, month, 1));
   const lastDay = new Date(Date.UTC(year, month + 1, 0));
 
   const daysInMonth = lastDay.getUTCDate();
@@ -51,12 +55,17 @@ const firstDay = isEdgeCase
       calendarGrid.push(null);
     } else {
       const date = new Date(Date.UTC(year, month, dayNum));
+      
+      // Subtract 1 day from each date
+      date.setDate(date.getDate() + 1);
+
       calendarGrid.push(date.toISOString().split("T")[0]);
     }
   }
 
   return calendarGrid;
 };
+
 
 export const RecruitingCalendar = ({ user }: { user?: UserProfile }) => {
   if (!user) {

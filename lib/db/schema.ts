@@ -50,6 +50,10 @@ export const users = pgTable("user", {
   state: text("state"),
   x_username: text("x_username"),
   ig_username: text("ig_username"),
+  coachNote: text("coachNote"),
+    expo_score: text("expo_score"),
+ACD_score: text("ACD_score"),
+ATH_score: text("ATH_score"),
 
   plan: planEnum("plan").notNull().default("free"),
   stripeCustomerId: text("stripeCustomerId"),

@@ -159,15 +159,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     {/* EXPO+ SCORES */}
     <div className=" rounded-xl p-6 flex flex-col  items-center text-center ">
       <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-4">EXPO+ Scores</h2>
-      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">0</p>
+      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">{user.expo_score ?? 0}</p>
       <div className="w-full border-t border-gray-600 my-4"></div>
       <div className="flex justify-around w-full text-[#FF7200] text-lg font-semibold">
         <div>
-          <p className="text-xl">0</p>
+          <p className="text-xl">{user.ACD_score ?? 0}</p>
           <p className="text-sm text-gray-300 mt-1">ACD</p>
         </div>
         <div>
-          <p className="text-xl">0</p>
+          <p className="text-xl">{user.ATH_score ?? 0}</p>
           <p className="text-sm text-gray-300 mt-1">ATH</p>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           <div className="flex justify-self-center
  gap-4">
             <CircleChart label="GPA" value={0} max={4.0} />
-            <CircleChart label="ACT" value={0} max={36} />
+<CircleChart label="ACT" value={Number(user.test_score) || 0} max={36} />
           </div>
         </div>
 

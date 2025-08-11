@@ -84,4 +84,5 @@ export const updateUserProfileSchema = z.object({
   state: z.string().optional(),
   x_username: z.string().optional(),
   ig_username: z.string().optional(),
+
 });

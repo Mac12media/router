@@ -158,6 +158,11 @@ export const getUserFull = authenticatedAction.action(
         state: users.state,
         x_username: users.x_username,
         ig_username: users.ig_username,
+        coachNote: users.coachNote,
+                expo_score: users.expo_score,
+                ACD_score: users.ACD_score,
+                ATH_score: users.ATH_score
+
       })
       .from(users)
       .where(eq(users.id, userId));
@@ -233,6 +238,9 @@ export async function getPublicUserById(formData: FormData | { id: string }) {
       state: users.state,
       x_username: users.x_username,
       ig_username: users.ig_username,
+        expo_score: users.expo_score,
+                ACD_score: users.ACD_score,
+                ATH_score: users.ATH_score
     })
     .from(users)
     .where(eq(users.id, parsed.id));

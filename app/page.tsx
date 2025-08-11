@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
 import { Header } from "@/components/parts/header";
 import { Chart } from "@/components/dashboard/chart";
@@ -16,6 +15,25 @@ import { PlayerProfile } from "@/components/parts/playerprofile";
 import { RecruitingTasks } from "@/components/parts/tasks";
 import placeholder from "@/public/userplaceholder.png";
 import { RecruitingCalendar } from "@/components/parts/calender";
+interface CoachNotesProps {
+  notes: string;
+}
+
+const CoachNotes: React.FC<CoachNotesProps> = ({ notes }) => {
+  return (
+    <div className="mt-6 p-6 bg-white shadow-sm rounded-lg border-l-4 border-[#FF7200]">
+      <div className="flex items-center space-x-4 mb-4">
+        <div className="w-10 h-10 rounded-full bg-gray-500 text-white flex items-center justify-center text-lg font-semibold">
+          C
+        </div>
+        <div>
+          <p className="text-xl font-semibold text-gray-800">Coach Al</p>
+        </div>
+      </div>
+      <p className="text-lg text-gray-700">{notes}</p>
+    </div>
+  );
+};
 
 const pageData = {
   name: "Dashboard",
@@ -63,30 +81,29 @@ export default async function Page() {
 
   // get the lead limit for the user's plan
   let leadLimit: number;
-switch (usageData?.plan) {
-  case "free":
-    leadLimit = 100;
-    break;
-  case "rookie":
-    leadLimit = 1000;
-    break;
-  case "mvp":
-    leadLimit = 10000;
-    break;
-  case "elite":
-    leadLimit = 50000;
-    break;
-  default:
-    leadLimit = 100; // Fallback to free tier limit
-}
+  switch (usageData?.plan) {
+    case "free":
+      leadLimit = 100;
+      break;
+    case "rookie":
+      leadLimit = 1000;
+      break;
+    case "mvp":
+      leadLimit = 10000;
+      break;
+    case "elite":
+      leadLimit = 50000;
+      break;
+    default:
+      leadLimit = 100; // Fallback to free tier limit
+  }
 
 
   return (
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
-        
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-4 sm:gap-x-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-4 sm:gap-x-4">
           {/* Player Profile */}
           <PlayerProfile
             id={user?.id ?? ""}
@@ -95,27 +112,28 @@ switch (usageData?.plan) {
             position={user?.position ?? ""}
             height={user?.height ?? ""}
             weight={user?.weight ?? ""}
-imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : placeholder.src}
+            imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : placeholder.src}
           />
-          
-          <Link href="/campaigns" className=" sm:col-span-1 lg:col-span-2 transition-shadow">
-          <Chart
-            chartData={chartData}
-            className={`${
-              usageData.plan === "elite" ? "col-span-3" : "col-span-2"
-            } sm:col-span-1 lg:col-span-2 hover:shadow-md`}
-          />
+
+          <Link href="/campaigns" className="sm:col-span-1 lg:col-span-2 transition-shadow">
+            <Chart
+              chartData={chartData}
+              className={`${
+                usageData.plan === "elite" ? "col-span-3" : "col-span-2"
+              } sm:col-span-1 lg:col-span-2 hover:shadow-md`}
+            />
           </Link>
 
           {/* Recruiting Tasks */}
+          <RecruitingCalendar user={user} />
 
-                        <RecruitingCalendar user={user} />
-            
         </div>
+{user?.coachNote && <CoachNotes notes={user.coachNote} />}
 
+        {/* Coach Notes Section below Recruiting Calendar */}
+        
         <div className="mt-8">
-                                  <RecruitingTasks user={user} />
-
+          <RecruitingTasks user={user} />
         </div>
       </PageWrapper>
     </>
