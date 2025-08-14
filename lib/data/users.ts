@@ -159,7 +159,10 @@ export const getUserFull = authenticatedAction.action(
         x_username: users.x_username,
         ig_username: users.ig_username,
         coachNote: users.coachNote,
+                        gpa: users.gpa,
+
                 expo_score: users.expo_score,
+                
                 ACD_score: users.ACD_score,
                 ATH_score: users.ATH_score
 
@@ -188,6 +191,8 @@ export const getUserFullById = authenticatedAction
                 image: users.image,
 
         test_score: users.test_score,
+                gpa: users.gpa,
+
         height: users.height,
         weight: users.weight,
         position: users.position,
@@ -228,6 +233,8 @@ export async function getPublicUserById(formData: FormData | { id: string }) {
       bio: users.bio,
       image: users.image,
       test_score: users.test_score,
+                      gpa: users.gpa,
+
       height: users.height,
       weight: users.weight,
       position: users.position,
@@ -265,6 +272,8 @@ export const updateUserProfile = authenticatedAction
         grad_year: parsedInput.grad_year,
         bio: parsedInput.bio,
         test_score: parsedInput.test_score,
+                gpa: parsedInput.gpa,
+
         height: parsedInput.height,
                         image: parsedInput.image,
 

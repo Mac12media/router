@@ -186,7 +186,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
  mb-2">Academics</h3>
           <div className="flex justify-self-center
  gap-4">
-            <CircleChart label="GPA" value={0} max={4.0} />
+            <CircleChart label="GPA" value={Number(user.gpa) || 0} max={4.0} />
 <CircleChart label="ACT" value={Number(user.test_score) || 0} max={36} />
           </div>
         </div>

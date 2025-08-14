@@ -118,6 +118,7 @@ const [uploading, setUploading] = useState(false);
         high_school: form.high_school,
         city: form.city,
         state: form.state,
+        gpa: form.gpa,
         x_username: form.x_username,
         ig_username: form.ig_username,
       });
@@ -258,10 +259,12 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
               ['Height', 'height'],
               ['Weight', 'weight'],
               ['ACT/SAT', 'test_score'],
+                            ['GPA', 'gpa'],
               ['High School', 'high_school'],
               ['City', 'city'],
               ['X Username', 'x_username'],
               ['Instagram', 'ig_username'],
+
             ].map(([label, key]) => (
               <ProfileField key={key} label={label} name={key} value={form[key]} editable={isEditing} onChange={handleChange} />
             ))}

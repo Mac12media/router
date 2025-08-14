@@ -96,6 +96,9 @@ export default async function Page() {
             position={user?.position ?? ""}
             height={user?.height ?? ""}
             weight={user?.weight ?? ""}
+            ACD_score={user?.ACD_score ?? ""}
+                        ATH_score={user?.ATH_score ?? ""}
+
             imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : placeholder.src}
           />
 

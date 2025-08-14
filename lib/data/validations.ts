@@ -72,6 +72,8 @@ export const updateUserProfileSchema = z.object({
   grad_year: z.string().optional(),
   bio: z.string().optional(), // if you added it manually
   test_score: z.string().optional(),
+    gpa: z.string().optional(),
+
   height: z.string().optional(),
     image: z.string().optional(),
 

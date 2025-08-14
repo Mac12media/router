@@ -24,9 +24,7 @@ const favoritePrograms = [
   },
 ];
 
-// Example scores for academic and athletic performance
-const academicScore = 0; // Example academic score
-const athleticScore = 0; // Example athletic score
+
 
 export const PlayerProfile = ({
   name,
@@ -36,6 +34,8 @@ export const PlayerProfile = ({
   height,
   weight,
   imageUrl,
+  ACD_score,
+  ATH_score,
 }: {
   name: string;
   id: string;
@@ -44,6 +44,8 @@ export const PlayerProfile = ({
   height: string;
   weight: string;
   imageUrl: string;
+  ACD_score: string;
+  ATH_score: string;
 }) => {
   return (
     <div className="space-y-6">
@@ -104,7 +106,7 @@ export const PlayerProfile = ({
                 >
                 <span className="text-sm text-muted-foreground">Academic</span>
  
-                <span className="font-semibold text-lg text-[#FF7200]">{academicScore}</span>
+                <span className="font-semibold text-lg text-[#FF7200]">{ACD_score}</span>
 
                 </Link>
                 <Link
@@ -115,7 +117,7 @@ export const PlayerProfile = ({
                 >
                                   <span className="text-sm text-center text-muted-foreground">Athletic</span>
 
-                                    <span className="font-semibold text-lg text-[#FF7200]">{athleticScore}</span>
+                                    <span className="font-semibold text-lg text-[#FF7200]">{ATH_score}</span>
 
                 </Link>
 
