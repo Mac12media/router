@@ -15,30 +15,8 @@ import { PlayerProfile } from "@/components/parts/playerprofile";
 import { RecruitingTasks } from "@/components/parts/tasks";
 import placeholder from "@/public/userplaceholder.png";
 import { RecruitingCalendar } from "@/components/parts/calender";
+import { CoachNotes } from "@/components/parts/coachnotes";
 
-
-interface CoachNotesProps {
-  notes: string;
-}
-
-const CoachNotes: React.FC<CoachNotesProps> = ({ notes }) => {
-  return (
-    <div className="mt-6 p-6 bg-white dark:bg-card dark:text-gray-200 shadow-lg rounded-lg border-l-4 border-[#FF7200] dark:border-[#FF7200]">
-      <div className="flex items-center space-x-4 mb-4">
-        {/* Avatar */}
-        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#FF7200] to-[#FF2D00] text-white flex items-center justify-center text-xl font-semibold">
-          C
-        </div>
-        {/* Coach's Name */}
-        <div>
-          <p className="text-xl font-semibold text-gray-800 dark:text-gray-200">Coach</p>
-        </div>
-      </div>
-      {/* Notes */}
-      <p className="text-lg text-gray-700 dark:text-gray-300">{notes}</p>
-    </div>
-  );
-};
 
 
 const pageData = {
