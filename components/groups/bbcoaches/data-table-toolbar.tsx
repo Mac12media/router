@@ -20,18 +20,18 @@ const divisionTypeFilter = [
     icon: CircleCheck,
   },
   {
-    value: "NCAA Division II",
+    value: "NCAA D2",
     label: "Division II",
     icon: CircleX,
   },
 
    {
-    value: "NCAA Division III",
+    value: "D3",
     label: "Division III",
     icon: CircleX,
   },
     {
-    value: "JUCO",
+    value: "Junior College",
     label: "Junior College",
     icon: CircleX,
   },
@@ -64,9 +64,9 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 
         <Input
           placeholder="Search by coach..."
-          value={(table.getColumn("head_coach")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("m_head_coach")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("head_coach")?.setFilterValue(event.target.value)
+            table.getColumn("m_head_coach")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />

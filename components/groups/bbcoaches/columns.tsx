@@ -11,7 +11,7 @@ import MatchCircleChart from "@/components/parts/matchcirclechart";
 
 
 
-export const columns: ColumnDef<CoachRow>[] = [
+export const columns: ColumnDef<BBCoachRow>[] = [
 
   
   {
@@ -33,24 +33,24 @@ const college = row.getValue("school") as string;
   },
 },
 {
-    accessorKey: "head_coach",
+    accessorKey: "m_head_coach",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Head Coach" />
+      <DataTableColumnHeader column={column} title="Boys Head Coach" />
     ),
     cell: ({ row }) => {
     const logoUrl = row.original.image;
-const name = row.getValue("head_coach") as string;
+const name = row.getValue("m_head_coach") as string;
     return ( <Button
   variant="outline"
   className="bg-[#FF7200] text-white"
   size="sm"
   onClick={() => {
-    toast.success(row.original.head_coach);
-        router.push(`/football-programs/${row.original.id}`);
+    toast.success(row.original.m_head_coach);
+        router.push(`/basketball-programs/${row.original.id}`);
 
   }}
 >
-  <Link href={`/football-programs/${row.original.id}`} passHref>
+  <Link href={`/basketball-programs/${row.original.id}`} passHref>
     {name}
   </Link>
 </Button> );
@@ -64,8 +64,6 @@ const name = row.getValue("head_coach") as string;
     cell: ({ row }) => (
       <Badge variant="outline">{row.getValue("division")}</Badge>
     ),
-      filterFn: "includesString", // 👈 makes "D1" match "NCAA D1"
-
   },
 {
   accessorKey: "email",

@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 
 import placeholder from "@/public/userplaceholder.png";
 import { createLead } from "@/lib/data/leads";
+import { ContactButton } from "@/components/parts/contact";
 
 const COLORS = ["#FF7200", "#e5e5e5"];
 
@@ -67,9 +68,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
   {/* Contact Me Button */}
   <div className="w-full mt-6 flex justify-center">
-    <button className="bg-black text-white text-sm font-semibold px-6 py-2 rounded-full shadow-md hover:bg-gray-900 transition">
-      Contact Me
-    </button>
+    <ContactButton email={user.city ?? ""} />
   </div>
 </Card>
 

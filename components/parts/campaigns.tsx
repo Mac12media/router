@@ -127,7 +127,6 @@ const payload = {
       weight: useCustomInfo ? customWeight.trim() : profileData.weight,
     } as const;
 
-        console.log("Attempting campaign submit with payload:", payload);
 
     const result = formSchema.safeParse(payload);
 

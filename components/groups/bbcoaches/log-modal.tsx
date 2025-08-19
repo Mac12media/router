@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-type Coach = {
+type BBCoach = {
   id: string;
   name: string;
   college: string;
@@ -25,7 +25,7 @@ type Coach = {
   phone: string;
 };
 
-export default function CoachModal({ coach }: { coach: Coach }) {
+export default function CoachModal({ coach }: { coach: BBCoach }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -47,7 +47,7 @@ export default function CoachModal({ coach }: { coach: Coach }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <Button variant="link" asChild>
-            <Link href={`/football-programs/${coach.id}`}>View Profile</Link>
+            <Link href={`/basketball-programs/${coach.id}`}>View Profile</Link>
           </Button>
           <AlertDialogCancel>Close</AlertDialogCancel>
         </AlertDialogFooter>

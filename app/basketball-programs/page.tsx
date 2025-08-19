@@ -1,14 +1,14 @@
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
 import { Header } from "@/components/parts/header";
-import { DataTable } from "@/components/groups/coaches/data-table"; // Make sure this exists
-import { columns } from "@/components/groups/coaches/columns"; // Define columns for coach data
+import { DataTable } from "@/components/groups/bbcoaches/data-table"; // Make sure this exists
+import { columns } from "@/components/groups/bbcoaches/columns"; // Define columns for coach data
 import { PageWrapper } from "@/components/parts/page-wrapper";
-import { getCoaches } from "@/lib/data/coaches";
+import { getBBCoaches } from "@/lib/data/coaches";
 
 const pageData = {
-  name: "Football Coaches",
-  title: "Football Coaches",
-  description: "All college football coaches",
+  name: "Basketball Programs",
+  title: "Basketball Programs",
+  description: "All college basketball coaches",
 };
 
 // Sample data for college coaches
@@ -48,7 +48,7 @@ const sampleCoachesData = [
 export default async function Page() {
 
     // fetch logs
-    const coaches = await getCoaches();
+    const coaches = await getBBCoaches();
 
 
   const { data: coachesdata, serverError: logsServerError } = coaches || {};

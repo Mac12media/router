@@ -1,11 +1,14 @@
 import AccountWidget from "../auth/widget";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { ModeToggle } from "@/components/parts/mode-toggle";
 import { getUsageForUser } from "@/lib/data/users";
 import { LogInIcon, LucideProps, RocketIcon } from "lucide-react";
 
 import { useTheme } from "next-themes";
+
+import FootballIcon from "@/public/football.png";
+import BasketballIcon from "@/public/basketball.png";
 
 import LogoDark from "@/public/expologo1logo.png";
 import LogoLight from "@/public/expologo2logo.png";
@@ -30,9 +33,18 @@ import Logo from "./logo";
 const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
 
 // Navigation links
-const links = [
+const links1 = [
   { href: "/", text: "Dashboard", icon: BarChart },
-  { href: "/coaches", text: "College Programs", icon: GraduationCapIcon },
+
+ // { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
+ // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
+  //{ href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
+ // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
+];
+
+const links2 = [
+ 
+
  // { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
  // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
   { href: "/campaigns", text: "Campaigns", icon: RocketIcon },
@@ -43,7 +55,6 @@ const links = [
 const guestLinks = [
       { href: "/login", text: "Login", icon: LogInIcon },
 
-    { href: "/coaches", text: "College Programs", icon: GraduationCapIcon },
 
 ];
 const otherLinks = [
@@ -58,7 +69,8 @@ export default async function Nav() {
 
  const hasValidId = Boolean(id);
 
-  const navigationLinks = hasValidId ? links : guestLinks;
+  const navigationLinks1 = hasValidId ? links1 : guestLinks;
+  const navigationLinks2 = hasValidId ? links2 : guestLinks;
 
   return (
     <nav className="p-4 flex flex-col gap-4 justify-between h-screen">
@@ -73,8 +85,21 @@ export default async function Nav() {
       <div className="border bg-muted/50 rounded-lg flex flex-col justify-between p-6 h-full">
         <div className="flex flex-col gap-8">
           <div className="grid gap-2">
-            {navigationLinks.map((link) => (
-              <NavLink key={link.href} icon={link.icon} href={link.href}>
+            {navigationLinks1.map((link) => (
+              <NavLink key={link.href} className="max-inline-size" icon={link.icon} href={link.href}>
+                {link.text}
+              </NavLink>
+            ))}
+          
+{/* Insert SportLinks here in the same order */}
+<SportLink href="/football-programs" image={FootballIcon}>
+  Football Programs
+</SportLink>
+<SportLink href="/basketball-programs" image={BasketballIcon}>
+  Basketball Programs
+</SportLink>
+  {navigationLinks2.map((link) => (
+              <NavLink key={link.href} className="max-inline-size" icon={link.icon} href={link.href}>
                 {link.text}
               </NavLink>
             ))}
@@ -109,6 +134,52 @@ export default async function Nav() {
     </nav>
   );
 }
+
+interface SportLinkProps {
+  href: string;
+  children: React.ReactNode;
+  image: StaticImageData; // from next/image imports
+  className?: string;
+  locked?: boolean;
+}
+
+const SportLink = ({
+  href,
+  children,
+  image,
+  className,
+  locked = false,
+}: SportLinkProps) => {
+  if (locked) {
+    return (
+      <div
+        className={`flex items-center gap-2 p-2 max-inline-size rounded-md -ml-2 text-muted-foreground cursor-not-allowed opacity-60 ${className}`}
+        title="Coming Soon"
+      >
+        <Image src={image} alt="" width={20} height={20} />
+        <span>{children}</span>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      className={`flex items-center gap-2 group p-2 max-inline-size rounded-md -ml-2 transition-all hover:bg-muted ${className}`}
+      href={href}
+      style={{ inlineSize: "max-content" }}
+    >
+      <Image
+  src={image}
+  alt={`${children} icon`}
+  width={20}
+  height={20}
+  className="opacity-70 max-w-[20px] group-hover:opacity-100 transition-all"
+  style={{ inlineSize: "max-content" }} // ensures inline sizing is respected
+/>
+{children}
+    </Link>
+  );
+};
 
 // NavLink component
 interface NavLinkProps {

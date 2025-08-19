@@ -115,6 +115,38 @@ type CoachRow = {
 
 };
 
+type BBCoachRow = {
+  id: number;
+  school: string | null;
+  image: string | null;
+  location: string | null;
+  division: string | null;
+  conference: string | null;
+  gpa: string | null;
+  act_sat: string | null;
+
+  // Men’s program
+  m_head_coach: string | null;
+  m_bio: string | null;
+  m_email: string | null;
+  m_phone: string | null;
+  m_twitter: string | null;
+  m_full_staff: string | null;
+  m_website: string | null;
+  m_camp: string | null;
+
+  // Women’s program
+  w_head_coach: string | null;
+  w_bio: string | null;
+  w_email: string | null;
+  w_phone: string | null;
+  w_twitter: string | null;
+  w_full_staff: string | null;
+  w_website: string | null;
+  w_camps: string | null;
+};
+
+
 type CampaignRow = {
   id: string;
   userId: string;

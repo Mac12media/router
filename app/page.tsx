@@ -129,9 +129,14 @@ export default async function Page() {
 
 const navLinks = [
   {
-    name: "College Programs",
+    name: "Football Programs",
     description: "Find coaches and programs",
-    href: "/coaches",
+    href: "/football-programs",
+  },
+    {
+    name: "Basketball Programs",
+    description: "Find coaches and programs",
+    href: "/basketball-programs",
   },
   {
     name: "Track",

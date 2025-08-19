@@ -7,6 +7,8 @@ import {
   pgEnum,
   boolean,
   jsonb,
+  numeric,
+  varchar,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { init } from "@paralleldrive/cuid2";
@@ -271,4 +273,38 @@ export const programs = pgTable("programs", {
     .notNull(),
   expo_score: text("expo_score")  // Added expo_score field
     .notNull(),
+});
+
+
+export const bbprograms = pgTable("basketball_programs", {
+    id: integer("id")
+    .$defaultFn(() => 1)  
+    .notNull()
+    .primaryKey(),
+
+  image: text("image"),
+  school: varchar("school", { length: 255 }),
+  location: varchar("location", { length: 255 }),
+  division: varchar("division", { length: 50 }),
+  conference: varchar("conference", { length: 100 }),
+  gpa: numeric("gpa", { precision: 3, scale: 2 }),
+  act_sat: varchar("act_sat", { length: 50 }),
+
+  m_coach: varchar("m_coach", { length: 255 }),
+  m_email: varchar("m_email", { length: 255 }),
+  m_phone: varchar("m_phone", { length: 50 }),
+  m_bio: text("m_bio"),
+  m_twitter: varchar("m_twitter", { length: 100 }),
+  m_full_staff: text("m_full_staff"),
+  m_website: varchar("m_website", { length: 255 }),
+  m_camp: text("m_camp"),
+
+  w_coach: varchar("w_coach", { length: 255 }),
+  w_bio: text("w_bio"),
+  w_email: varchar("w_email", { length: 255 }),
+  w_twitter: varchar("w_twitter", { length: 100 }),
+  w_phone: varchar("w_phone", { length: 50 }),
+  w_full_staff: text("w_full_staff"),
+  w_website: varchar("w_website", { length: 255 }),
+  w_camps: text("w_camps"),
 });

@@ -1,6 +1,6 @@
 "use server";
 
-import { logs, endpoints, programs } from "../db/schema";
+import { logs, endpoints, programs, bbprograms } from "../db/schema";
 import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
@@ -66,6 +66,7 @@ const data: CoachRow[] = coachData.map((coach) => ({
 }));
 
 
+
     // Log the data to the console
 
     // Return the formatted data
@@ -73,6 +74,50 @@ const data: CoachRow[] = coachData.map((coach) => ({
   }
 );
 
+export const getBBCoaches = authenticatedAction.action(
+  async ({ ctx: { userId } }) => {
+    // Fetch the coach data from the database
+    const coachData = await db
+      .select()
+      .from(bbprograms)
+      .orderBy((bbprograms.id));
+
+   const data: BBCoachRow[] = coachData.map((coach) => ({
+  id: coach.id,
+  school: coach.school,
+  image: coach.image,
+  location: coach.location,
+  division: coach.division,
+  conference: coach.conference,
+  gpa: coach.gpa,
+  act_sat: coach.act_sat,
+
+  m_head_coach: coach.m_coach,
+  m_bio: coach.m_bio,
+  m_email: coach.m_email,
+  m_phone: coach.m_phone,
+  m_twitter: coach.m_twitter,
+  m_full_staff: coach.m_full_staff,
+  m_website: coach.m_website,
+  m_camp: coach.m_camp,
+
+  w_head_coach: coach.w_coach,
+  w_bio: coach.w_bio,
+  w_email: coach.w_email,
+  w_phone: coach.w_phone,
+  w_twitter: coach.w_twitter,
+  w_full_staff: coach.w_full_staff,
+  w_website: coach.w_website,
+  w_camps: coach.w_camps,
+}));
+
+
+
+
+    // Return the formatted data
+    return data;
+  }
+);
 
 
 export const getCoach = authenticatedAction
@@ -85,6 +130,16 @@ export const getCoach = authenticatedAction
     return data;
   });
 
+
+  export const getBBCoach = authenticatedAction
+  .schema(z.object({ coachid: z.number() }))
+  .action(async ({ parsedInput: { coachid }, ctx: { userId } }) => {
+    const [data] = await db
+      .select()
+      .from(bbprograms)
+      .where(eq(bbprograms.id, coachid));
+    return data;
+  });
 
 
 /**
