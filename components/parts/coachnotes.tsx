@@ -92,7 +92,7 @@ export const CoachNotes: React.FC<CoachNotesProps> = ({ notes }) => {
                   Coach A
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Recruiting Cordinator
+                  Recruiting Coordinator
                 </p>
                    
 
