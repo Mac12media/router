@@ -36,7 +36,7 @@ const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
 const links1 = [
   { href: "/", text: "Dashboard", icon: BarChart },
 
- // { href: "/campaigns", text: "My Campaigns", icon: Layers, locked: true },
+  { href: "/football-programs", text: "College Programs", icon: GraduationCapIcon},
  // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
   //{ href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
  // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
@@ -92,12 +92,7 @@ export default async function Nav() {
             ))}
           
 {/* Insert SportLinks here in the same order */}
-<SportLink href="/football-programs" image={FootballIcon}>
-  Football Programs
-</SportLink>
-<SportLink href="/basketball-programs" image={BasketballIcon}>
-  Basketball Programs
-</SportLink>
+
   {navigationLinks2.map((link) => (
               <NavLink key={link.href} className="max-inline-size" icon={link.icon} href={link.href}>
                 {link.text}

@@ -29,6 +29,8 @@ export async function POST(req: Request) {
       hashedPassword,
     });
 
+    
+
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
     console.error("Registration error:", error);
