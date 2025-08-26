@@ -25,7 +25,7 @@ export const planEnum = pgEnum("plan", [
 ]);
 
 
-export const users = pgTable("user", {
+export const users = pgTable("users", {
   id: text("id")
     .primaryKey()
     .notNull()
