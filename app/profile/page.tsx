@@ -42,6 +42,12 @@ const positionsBySport: Record<string, string[]> = {
 
 };
 
+const GRAD_OPTIONS = [
+  ...Array.from({ length: 8 }, (_, i) => (2025 + i).toString()),
+  "Transfer",
+];
+
+
 const usStates = [
   'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT',
   'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
@@ -52,7 +58,6 @@ const usStates = [
   'SC', 'SD', 'TN', 'TX', 'UT', 'VT',
   'VA', 'WA', 'WV', 'WI', 'WY',
 ];
-
 
 function sanitizeNulls(obj: any) {
   const cleaned: any = {};
@@ -253,6 +258,12 @@ const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
               <ProfileSelect label="Position" name="position" value={form.position} onChange={handleChange} options={positionsBySport[form.sport] || []} />
             ) : (
               <ProfileField label="Position" name="position" value={form.position} editable={false} onChange={handleChange} />
+            )}
+
+             {isEditing ? (
+              <ProfileSelect label="Class" name="grad_year" value={form.grad_year} onChange={handleChange} options={GRAD_OPTIONS} />
+            ) : (
+              <ProfileField label="Class" name="grad_year" value={form.grad_year} editable={false} onChange={handleChange} />
             )}
 
             {[
