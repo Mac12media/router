@@ -10,7 +10,7 @@ const pageData = {
   title: "Upgrade",
   description: "Upgrade your plan to capture more leads",
 };
-
+ 
 export default async function Page() {
   const usage = await getUsageForUser();
   const { data: usageData, serverError: usageServerError } = usage || {};
