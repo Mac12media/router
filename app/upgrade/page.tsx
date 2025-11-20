@@ -3,6 +3,7 @@ import { Header } from "@/components/parts/header";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { PlanTiles } from "./plan-tiles";
 import { getUsageForUser } from "@/lib/data/users";
+import { UpgradeCountdownBanner } from "./countdown";
 
 const pageData = {
   name: "Upgrade",
@@ -18,6 +19,7 @@ export default async function Page() {
     <>
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
+        <UpgradeCountdownBanner />
         <PlanTiles usage={usageData} />
       </PageWrapper>
     </>
