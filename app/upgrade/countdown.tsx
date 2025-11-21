@@ -52,7 +52,7 @@ export function UpgradeCountdownBanner() {
       <h2 className="mt-3 text-xl font-bold md:text-2xl">
         🚨 BLACK FRIDAY SALE IS LIVE — SAVE 65% OFF! 🚀
       </h2>
-      <p className="mt-1 text-sm md:text-base">
+      <p className="mt-1 text-sm text-black md:text-base">
         Take advantage of our biggest sale of the year!
       </p>
     </div>
