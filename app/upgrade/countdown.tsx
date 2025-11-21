@@ -42,36 +42,37 @@ export function UpgradeCountdownBanner() {
   }, []);
 
   return (
-    <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 p-5 text-white shadow-lg">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-            <span className="h-2 w-2 rounded-full bg-white" />
-            Ends December 1st
-          </div>
-          <h2 className="mt-3 text-xl font-bold md:text-2xl">
-            FINAL EVALUATION PERIOD IS HERE
-          </h2>
-          <p className="mt-1 text-sm md:text-base">
-            The Evaluation Period Ends in December — Reach EVERY Program!
-          </p>
-        </div>
-
-        <div className="mt-3 flex flex-col items-start justify-center rounded-xl bg-black/15 px-4 py-3 text-sm md:mt-0 md:items-end">
-          {expired ? (
-            <span className="font-semibold">The evaluation period has ended.</span>
-          ) : (
-            <>
-              <span className="text-xs uppercase tracking-wide text-orange-100">
-                Time remaining
-              </span>
-              <span className="mt-1 text-lg font-semibold tabular-nums">
-                {timeLeft || "Calculating..."}
-              </span>
-            </>
-          )}
-        </div>
+   <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 p-5 text-white shadow-lg">
+  <div className="flex flex-col items-center justify-center text-center gap-3 md:flex-row md:items-center md:justify-center">
+    <div>
+      <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+        <span className="h-2 w-2 rounded-full bg-white" />
+        Ends December 1st
       </div>
+      <h2 className="mt-3 text-xl font-bold md:text-2xl">
+        🚨 BLACK FRIDAY SALE IS LIVE — SAVE 65% OFF! 🚀
+      </h2>
+      <p className="mt-1 text-sm md:text-base">
+        Take advantage of our biggest sale of the year!
+      </p>
     </div>
+
+    <div className="mt-3 flex flex-col items-center justify-center rounded-xl bg-black/15 px-4 py-3 text-sm md:mt-0 md:items-center">
+      {expired ? (
+        <span className="font-semibold">The evaluation period has ended.</span>
+      ) : (
+        <>
+          <span className="text-xs uppercase tracking-wide text-orange-100">
+            Time remaining
+          </span>
+          <span className="mt-1 text-lg font-semibold tabular-nums">
+            {timeLeft || "Calculating..."}
+          </span>
+        </>
+      )}
+    </div>
+  </div>
+</div>
+
   );
 }
