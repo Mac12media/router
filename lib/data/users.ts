@@ -124,7 +124,7 @@ export const getUser = authenticatedAction.action(
       .select({ leadCount: users.leadCount, height: users.height, 
         weight: users.weight,
         campaigncount: users.campaigncount,
-        position: users.position, grad_year: users.grad_year, id: users.id, name: users.name, last_name: users.last_name, plan: users.plan })
+        position: users.position, grad_year: users.grad_year, id: users.id, name: users.name, last_name: users.last_name, email: users.email, plan: users.plan })
       .from(users)
       .where(eq(users.id, userId));
 
@@ -234,6 +234,7 @@ export async function getPublicUserById(formData: FormData | { id: string }) {
       image: users.image,
       test_score: users.test_score,
                       gpa: users.gpa,
+                      email: users.email,
 
       height: users.height,
       weight: users.weight,

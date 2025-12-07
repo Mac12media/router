@@ -68,7 +68,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
   {/* Contact Me Button */}
   <div className="w-full mt-6 flex justify-center">
-    <ContactButton email={user.city ?? ""} />
+    <ContactButton email={user.email ?? ""} />
   </div>
 </Card>
 
