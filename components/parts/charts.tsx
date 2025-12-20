@@ -17,7 +17,7 @@ export default function CircleChart({ label, value, max }: { label: string; valu
 
   return (
     <div className="flex flex-col items-center space-y-2">
-      <div className="w-28 h-28">
+      <div className="w-20 h-20">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -33,7 +33,7 @@ export default function CircleChart({ label, value, max }: { label: string; valu
               <Label
                 value={value}
                 position="center"
-                fontSize={18}
+                fontSize={14}
                 fontWeight="bold"
               />
             </Pie>

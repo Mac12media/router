@@ -154,58 +154,87 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </div>
           <div className="grid grid-cols-1 md:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full bg-black rounded-2xl shadow-lg col-span-2 mt-6 p-6 ">
-    {/* EXPO+ SCORES */}
-    <div className=" rounded-xl p-6 flex flex-col  items-center text-center ">
-      <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-4">EXPO+ Scores</h2>
-      <p className="text-6xl font-extrabold text-[#FF7200] mb-2">{user.expo_score ?? 0}</p>
-      <div className="w-full border-t border-gray-600 my-4"></div>
-      <div className="flex justify-around w-full text-[#FF7200] text-lg font-semibold">
+<Card className="w-full bg-black rounded-2xl shadow-lg col-span-2 mt-6 p-8">
+  {/* EXPO+ SCORES */}
+  <div className="rounded-xl flex flex-col items-center text-center p-6">
+    <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-2">
+      EXPO+ Scores
+    </h2>
+
+    <p className="text-4xl font-extrabold text-[#FF7200] mb-2">
+      {user.expo_score ?? 0}
+    </p>
+
+    <div className="w-full border-t border-gray-700 my-6" />
+
+    <div className="flex justify-around w-full text-[#FF7200] text-lg font-semibold">
+      <div className="px-2">
+        <p className="text-xl">{user.ACD_score ?? 0}</p>
+        <p className="text-sm text-gray-400 mt-1">ACD</p>
+      </div>
+      <div className="px-2">
+        <p className="text-xl">{user.ATH_score ?? 0}</p>
+        <p className="text-sm text-gray-400 mt-1">ATH</p>
+      </div>
+    </div>
+  </div>
+
+  {/* METRICS */}
+  <div className="mt-2 p-6">
+    <h3 className="text-[#FF7200] text-sm font-bold uppercase mb-6 text-center">
+      EXPO+ Metrics
+    </h3>
+
+    {/* Academics */}
+    <div className="mb-8">
+      <h4 className="uppercase text-xs text-gray-400 mb-3 text-center">
+        Academics
+      </h4>
+      <div className="flex justify-center gap-6">
+        <CircleChart label="GPA" value={Number(user.gpa) || 0} max={4.0} />
+        <CircleChart label="ACT" value={Number(user.test_score) || 0} max={36} />
+      </div>
+    </div>
+
+    {/* Athletic */}
+    <div>
+      <h4 className="uppercase text-xs text-gray-400 mb-3 text-center">
+        Athletic
+      </h4>
+      <div className="grid grid-cols-2 gap-6 text-center">
         <div>
-          <p className="text-xl">{user.ACD_score ?? 0}</p>
-          <p className="text-sm text-gray-300 mt-1">ACD</p>
+          <p className="font-bold text-[#FF7200] text-lg">
+            {user.height || "N/A"}
+          </p>
+          <p className="text-xs text-gray-400">Height</p>
         </div>
         <div>
-          <p className="text-xl">{user.ATH_score ?? 0}</p>
-          <p className="text-sm text-gray-300 mt-1">ATH</p>
+          <p className="font-bold text-[#FF7200] text-lg">
+            {user.weight ? `${user.weight} lbs` : "N/A"}
+          </p>
+          <p className="text-xs text-gray-400">Weight</p>
         </div>
       </div>
     </div>
-    </Card>
+  </div>
+</Card>
+
 <Card className="w-full col-span-6 rounded-2xl  bg-black shadow-2xl mt-6 p-6 ">
     {/* EXPO+ METRICS */}
     <div className=" rounded-xl p-6 ">
-      <h2 className="text-[#FF7200] text-lg font-bold uppercase justify-self-center mb-6">EXPO+ Metrics</h2>
+       <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-6">
+    Player Bio
+  </h2>
 
-      <div className="sm:grid grid-cols-2 flex-col sm:flex-row justify-around
- gap-6 sm:gap-12">
-        {/* Academics */}
-        <div>
-          <h3 className="uppercase text-sm text-gray-400 justify-self-center
- mb-2">Academics</h3>
-          <div className="flex justify-self-center
- gap-4">
-            <CircleChart label="GPA" value={Number(user.gpa) || 0} max={4.0} />
-<CircleChart label="ACT" value={Number(user.test_score) || 0} max={36} />
-          </div>
-        </div>
-
-        {/* Athletic */}
-        <div>
-          <h3 className="uppercase text-sm text-gray-400  justify-self-center
- mb-2">Athletic</h3>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div>
-              <p className="font-bold text-[#FF7200]">{user.height || "N/A"}</p>
-              <p className="text-xs text-gray-400">Height</p>
-            </div>
-            <div>
-              <p className="font-bold text-[#FF7200]">{user.weight ? `${user.weight} lbs` : "N/A"}</p>
-              <p className="text-xs text-gray-400">Weight</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-line max-w-4xl">
+    {user.bio?.trim() ? (
+      user.bio
+    ) : (
+      <span className="italic text-gray-500">
+        No bio provided yet.
+      </span>
+    )}
+  </div>
 
       {/* Evaluation Box */}
       <div className="mt-6 bg-gray-800 rounded-lg p-4 text-sm text-gray-300">
