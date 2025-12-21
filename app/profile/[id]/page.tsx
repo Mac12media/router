@@ -41,7 +41,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       <PageWrapper>
 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full bg-[#FF7200] rounded-2xl content-center col-span-2 shadow-xl text-white p-6 sm:p-8">
+<Card className="w-full bg-[#FF7200] rounded-2xl content-center col-span-2 shadow-xl text-white p-6 sm:p-8 mb-6 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 p-5 text-white shadow-lg">
   <div className="w-full flex flex-col lg:flex-col items-center lg:items-start lg:justify-start gap-6">
     {/* Profile Image */}
     <img
@@ -51,7 +51,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           : placeholder.src
       }
       alt={`${user.name} profile`}
-      className="w-28 h-28 self-center lg:w-28 lg:h-28 rounded-full object-cover border-4 border-white shadow-lg"
+      className="w-32 h-32 self-center lg:w-32 lg:h-32 rounded-full object-cover border-4 border-white shadow-lg"
     />
 
     {/* Name, Class, Position */}
@@ -180,11 +180,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   </div>
 
   {/* METRICS */}
-  <div className="mt-2 p-6">
-    <h3 className="text-[#FF7200] text-sm font-bold uppercase mb-6 text-center">
-      EXPO+ Metrics
-    </h3>
-
+  <div className=" p-6">
+  
     {/* Academics */}
     <div className="mb-8">
       <h4 className="uppercase text-xs text-gray-400 mb-3 text-center">

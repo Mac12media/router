@@ -97,6 +97,7 @@ export const CoachNotes: React.FC<CoachNotesProps> = ({ notes }) => {
                    
 
               </div>
+              
                            </div>
 <div className="flex items-center justify-between space-x-4 mb-6 " >
 <button   onClick={() => window.location.href = "mailto:exporecruits1@gmail.com"}
