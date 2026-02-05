@@ -6,8 +6,11 @@ function getTargetDate() {
   const now = new Date();
   const currentYear = now.getFullYear();
 
-  // December 1st, midnight, current year
-  const target = new Date(currentYear, 11, 1, 0, 0, 0); // month is 0-based: 11 = December
+  // March 1st, midnight (next upcoming March 1)
+  let target = new Date(currentYear, 2, 1, 0, 0, 0); // month is 0-based: 2 = March
+  if (now.getTime() >= target.getTime()) {
+    target = new Date(currentYear + 1, 2, 1, 0, 0, 0);
+  }
 
   return target;
 }
@@ -42,37 +45,38 @@ export function UpgradeCountdownBanner() {
   }, []);
 
   return (
-   <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 p-5 text-white shadow-lg">
-  <div className="flex flex-col items-center justify-center text-center gap-3 md:flex-row md:items-center md:justify-center">
-    <div>
-      <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-        <span className="h-2 w-2 rounded-full bg-white" />
-        Ends December 1st
+    <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 p-5 text-white shadow-lg">
+      <div className="flex flex-col items-center justify-center gap-3 text-center md:flex-row md:items-center md:justify-center">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
+            <span className="h-2 w-2 rounded-full bg-white" />
+            Ends March 1st
+          </div>
+
+          <h2 className="mt-3 text-xl font-bold md:text-2xl">
+            🎉 AFTER SIGNING DAY PROMO — SAVE 65% OFF! 🚀
+          </h2>
+
+          <p className="mt-1 text-sm text-black md:text-base">
+            Take advantage of our limited-time offer!
+          </p>
+        </div>
+
+        <div className="mt-3 flex flex-col items-center justify-center rounded-xl bg-black/15 px-4 py-3 text-sm md:mt-0 md:items-center">
+          {expired ? (
+            <span className="font-semibold">This promo has ended.</span>
+          ) : (
+            <>
+              <span className="text-xs uppercase tracking-wide text-orange-100">
+                Time remaining
+              </span>
+              <span className="mt-1 text-lg font-semibold tabular-nums">
+                {timeLeft || "Calculating..."}
+              </span>
+            </>
+          )}
+        </div>
       </div>
-      <h2 className="mt-3 text-xl font-bold md:text-2xl">
-        🚨 BLACK FRIDAY SALE IS LIVE — SAVE 65% OFF! 🚀
-      </h2>
-      <p className="mt-1 text-sm text-black md:text-base">
-        Take advantage of our biggest sale of the year!
-      </p>
     </div>
-
-    <div className="mt-3 flex flex-col items-center justify-center rounded-xl bg-black/15 px-4 py-3 text-sm md:mt-0 md:items-center">
-      {expired ? (
-        <span className="font-semibold">The evaluation period has ended.</span>
-      ) : (
-        <>
-          <span className="text-xs uppercase tracking-wide text-orange-100">
-            Time remaining
-          </span>
-          <span className="mt-1 text-lg font-semibold tabular-nums">
-            {timeLeft || "Calculating..."}
-          </span>
-        </>
-      )}
-    </div>
-  </div>
-</div>
-
   );
 }
