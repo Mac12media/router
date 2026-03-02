@@ -30,6 +30,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   const user = await getPublicUserById({ id: id ?? DEFAULT_ID });
     const result = await getUser();
     const real = result?.data;
+  const isFlagFootball =
+    user?.sport === "girls_flag_football" ||
+    user?.sport?.toLowerCase().includes("flag");
+  const accentColor = isFlagFootball ? "#EC4899" : "#FF7200";
 
         const leadId = await createLead(id);
 
@@ -39,79 +43,104 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     <>
       <Breadcrumbs pageName="Player Profile" />
       <PageWrapper>
-<div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-8 gap-y-2 sm:gap-x-4">
+<div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-8 gap-y-4 sm:gap-x-4">
 
-<Card className="w-full bg-[#FF7200] rounded-2xl content-center col-span-2 shadow-xl text-white p-6 sm:p-8 mb-6 rounded-2xl bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 p-5 text-white shadow-lg">
-  <div className="w-full flex flex-col lg:flex-col items-center lg:items-start lg:justify-start gap-6">
+{(() => {
+  const isFlagFootball =
+    user.sport === "girls_flag_football" ||
+    user.sport?.toLowerCase().includes("flag");
+  const profileGradient = isFlagFootball
+    ? "linear-gradient(135deg, rgba(236,72,153,0.95), rgba(236,72,153,0.65))"
+    : "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.65))";
+  const nameClass = isFlagFootball ? "text-pink-100" : "text-white";
+  const metaClass = isFlagFootball ? "text-pink-100/80" : "text-white/80";
+  return (
+<Card className="relative w-full col-span-2 content-center p-5 sm:p-8 text-white" style={{ background: profileGradient }}>
+  <div className="w-full flex flex-col items-center gap-6">
     {/* Profile Image */}
-    <img
-      src={
-        user?.image && !user.image.includes('blob')
-          ? user.image
-          : placeholder.src
-      }
-      alt={`${user.name} profile`}
-      className="w-32 h-32 self-center lg:w-32 lg:h-32 rounded-full object-cover border-4 border-white shadow-lg"
-    />
+    <div className="relative">
+      <img
+        src={
+          user?.image && !user.image.includes('blob')
+            ? user.image
+            : placeholder.src
+        }
+        alt={`${user.name} profile`}
+        className="w-36 h-36 self-center lg:w-36 lg:h-36 rounded-full object-cover border-2 border-white/70 shadow-lg"
+      />
+    </div>
+    
 
     {/* Name, Class, Position */}
-    <div className="flex flex-col self-center items-center lg:items-start text-center text-center space-y-1">
-      <CardTitle className="text-2xl font-bold self-center tracking-tight">
+    <div className="flex flex-col items-center text-center space-y-2">
+      <CardTitle className={`text-2xl font-bold tracking-tight ${nameClass}`}>
         {user.name} {user.last_name}
       </CardTitle>
-      <div className="text-lg font-medium">
-        {user.grad_year} {user.position}
+      {user.plan && user.plan !== "free" && (
+        <span className="inline-flex items-center gap-1 rounded-full bg-black/85 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+          <img src="/sport-icons/verified.png" alt="" className="h-3 w-3" />
+          Expo Member
+        </span>
+      )}
+      <div className={`text-lg font-medium ${metaClass}`}>
+        {user.grad_year} | {user.position}
       </div>
     </div>
   </div>
 
 
   {/* Contact Me Button */}
+  <a
+    href={user.x_username ? `https://x.com/${user.x_username}` : "/"}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="absolute right-5 top-5 rounded-full p-2  hover:bg-white/30"
+  >
+    <img
+      src="https://www.mrl.ims.cam.ac.uk/sites/default/files/media/x-logo.png"
+      alt={`${user.name} profile`}
+      className="h-6 w-6 "
+    />
+  </a>
+
   <div className="w-full mt-6 flex justify-center">
     <ContactButton email={user.email ?? ""} />
+    
   </div>
+  
 </Card>
+  );
+})()}
 
 
         <Card className="col-span-3 shadow-lg overflow-hidden">
           {/* Header */}
-          <CardHeader className=" p-4 flex flex-col  gap-6 ">
+          <CardHeader className="p-4 flex flex-col gap-6 border-b border-white/10">
 
             <div className="flex justify-between gap-2">
 
             {real?.id === id && (
   <Link
     href="/profile"
-    className="px-4 py-2 border rounded  hover:bg-gray-300 text-sm"
+    className="px-4 py-2 border  rounded-full text-sm  hover:text-black hover:bg-black/10"
   >
     Edit Profile
   </Link>
   
 )}
-<a
-  href={user.x_username ? `https://x.com/${user.x_username}` : '/'}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="self-center"
->
-  <img
-    src="https://www.mrl.ims.cam.ac.uk/sites/default/files/media/x-logo.png"
-    alt={`${user.name} profile`}
-    className="w-10 dark:invert"
-  />
-</a>
+
             </div>
 
 
  
 
           </CardHeader>
-          <CardContent className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-1 p-4 rounded-b-xl">
+          <CardContent className="grid grid-cols-2 gap-4 p-4">
 
             <ProfileField label="Height" value={user.height ?? ""} />
             <ProfileField label="Weight" value={user.weight ?? ""} />
                                              </CardContent>
-           <CardContent className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-1 p-4 rounded-b-xl">
+           <CardContent className="grid grid-cols-2 gap-4 p-4">
 
             <ProfileField label="High School" value={user.high_school ?? ""} />
             <ProfileField label="City" value={user.city ?? ""} />
@@ -122,9 +151,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
 <div className="w-full flex flex-col col-span-3  gap-2 self-center
  items-center">
-  <div className="w-full aspect-[16/9] bg-muted rounded-lg flex items-center justify-center ">
+  <div className="w-full aspect-[16/9] rounded-2xl border border-white/10 bg-black/50 flex items-center justify-center">
     {user.video ? (
-      <HighlightVideo url={user.video} />
+      <HighlightVideo url={user.video} accentColor={accentColor} />
     ) : (
       <span className="text-muted-foreground text-sm italic">Video</span>
     )}
@@ -136,14 +165,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         href={user.video}
         target="_blank"
         rel="noopener noreferrer"
-        className="px-4 py-2 text-sm rounded-md border bg-muted hover:bg-gray-300 transition"
+        className="px-4 py-2 text-sm rounded-full border  hover:bg-white/20 transition"
       >
         Watch More
       </a>
     ) : (
       <button
         disabled
-        className="px-4 py-2 text-sm rounded-md border bg-muted text-muted-foreground"
+        className="px-4 py-2 text-sm rounded-full border  text-white/40"
       >
         Watch More
       </button>
@@ -154,20 +183,20 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </div>
           <div className="grid grid-cols-1 md:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full bg-black rounded-2xl shadow-lg col-span-2 mt-6 p-8">
+<Card className="w-full col-span-2 mt-6 p-8">
   {/* EXPO+ SCORES */}
   <div className="rounded-xl flex flex-col items-center text-center p-6">
-    <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-2">
+    <h2 className="text-lg font-bold uppercase mb-2" style={{ color: accentColor }}>
       EXPO+ Scores
     </h2>
 
-    <p className="text-4xl font-extrabold text-[#FF7200] mb-2">
+    <p className="text-4xl font-extrabold mb-2" style={{ color: accentColor }}>
       {user.expo_score ?? 0}
     </p>
 
     <div className="w-full border-t border-gray-700 my-6" />
 
-    <div className="flex justify-around w-full text-[#FF7200] text-lg font-semibold">
+    <div className="flex justify-around w-full text-lg font-semibold" style={{ color: accentColor }}>
       <div className="px-2">
         <p className="text-xl">{user.ACD_score ?? 0}</p>
         <p className="text-sm text-gray-400 mt-1">ACD</p>
@@ -188,8 +217,18 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         Academics
       </h4>
       <div className="flex justify-center gap-6">
-        <CircleChart label="GPA" value={Number(user.gpa) || 0} max={4.0} />
-        <CircleChart label="ACT" value={Number(user.test_score) || 0} max={36} />
+        <CircleChart
+          label="GPA"
+          value={Number(user.gpa) || 0}
+          max={4.0}
+          color={accentColor}
+        />
+        <CircleChart
+          label="ACT"
+          value={Number(user.test_score) || 0}
+          max={36}
+          color={accentColor}
+        />
       </div>
     </div>
 
@@ -200,13 +239,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       </h4>
       <div className="grid grid-cols-2 gap-6 text-center">
         <div>
-          <p className="font-bold text-[#FF7200] text-lg">
+          <p className="font-bold text-lg" style={{ color: accentColor }}>
             {user.height || "N/A"}
           </p>
           <p className="text-xs text-gray-400">Height</p>
         </div>
         <div>
-          <p className="font-bold text-[#FF7200] text-lg">
+          <p className="font-bold text-lg" style={{ color: accentColor }}>
             {user.weight ? `${user.weight} lbs` : "N/A"}
           </p>
           <p className="text-xs text-gray-400">Weight</p>
@@ -216,14 +255,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   </div>
 </Card>
 
-<Card className="w-full col-span-6 rounded-2xl  bg-black shadow-2xl mt-6 p-6 ">
+<Card className="w-full col-span-6 mt-6 p-6">
     {/* EXPO+ METRICS */}
     <div className=" rounded-xl p-6 ">
-       <h2 className="text-[#FF7200] text-lg font-bold uppercase mb-6">
+       <h2 className="text-lg font-bold uppercase mb-6" style={{ color: accentColor }}>
     Player Bio
   </h2>
 
-  <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-line max-w-4xl">
+  <div className="text-sm  leading-relaxed whitespace-pre-line max-w-4xl">
     {user.bio?.trim() ? (
       user.bio
     ) : (
@@ -272,7 +311,7 @@ function SocialField({ icon}: { icon: React.ReactNode; label: string; value?: st
   );
 }
 
-function HighlightVideo({ url }: { url?: string }) {
+function HighlightVideo({ url, accentColor }: { url?: string; accentColor: string }) {
   if (!url?.trim()) {
     return <p className="italic text-sm text-muted-foreground">No highlight video provided.</p>;
   }
@@ -316,7 +355,8 @@ function HighlightVideo({ url }: { url?: string }) {
   return (
     <a
       href={trimmed}
-      className="text-blue-600 hover:underline text-sm"
+      className="underline text-sm"
+      style={{ color: accentColor }}
       target="_blank"
       rel="noopener noreferrer"
     >

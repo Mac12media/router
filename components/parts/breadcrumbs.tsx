@@ -45,7 +45,7 @@ export const Breadcrumbs = ({
     pageName === "Football Programs" || pageName === "Basketball Programs";
 
   return (
-    <Breadcrumb className="h-[67.63px] bg-muted/50 rounded-lg border flex items-center justify-between p-6">
+    <Breadcrumb className="h-[67.63px] bg-muted/50 rounded-lg border flex sm:max-w-[calc(100vw-272px)] items-center justify-between p-6 px-3">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Home</BreadcrumbLink>

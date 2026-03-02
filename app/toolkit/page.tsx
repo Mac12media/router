@@ -60,12 +60,12 @@ export default function RecruitingToolkitCoursePage() {
 
       <main className="max-w-6xl mx-auto p-6 space-y-16">
         {/* Intro Section */}
-        <section className="bg-muted rounded-xl p-6 border shadow-sm">
-          <div className="flex items-center gap-3 mb-2 text-muted-foreground text-sm">
+        <section className="rounded-2xl border border-white/10 bg-black/60 p-6 shadow-lg backdrop-blur">
+          <div className="mb-2 flex items-center gap-3 text-sm text-white/60">
             <GraduationCap className="w-5 h-5" />
             <span>Self-paced video course</span>
           </div>
-          <p className="text-lg">
+          <p className="text-lg text-white/80">
             Get the guidance you need to take control of your recruiting journey—from research and outreach to scholarships and visits.
           </p>
         </section>
@@ -79,7 +79,7 @@ export default function RecruitingToolkitCoursePage() {
         <a
   key={i}
   href={module.videoUrl}
-  className="w-full sm:min-w-[60%] sm:max-w-[65%] snap-start shrink-0 rounded-xl overflow-hidden border shadow-lg transition hover:shadow-xl"
+  className="w-full sm:min-w-[60%] sm:max-w-[65%] snap-start shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black/60 shadow-lg transition hover:shadow-xl"
 >
 
           <img
@@ -87,9 +87,9 @@ export default function RecruitingToolkitCoursePage() {
             alt={module.title}
             className="w-full h-[280px] md:h-[360px] object-cover"
           />
-          <div className="p-4 bg-white dark:bg-muted">
-            <h3 className="text-xl font-semibold">{module.title}</h3>
-            <p className="text-sm text-muted-foreground mt-1">{module.description}</p>
+          <div className="p-4">
+            <h3 className="text-xl font-semibold text-white">{module.title}</h3>
+            <p className="mt-1 text-sm text-white/60">{module.description}</p>
           </div>
         </a>
       ))}
@@ -99,8 +99,8 @@ export default function RecruitingToolkitCoursePage() {
 
 
         {/* Resources + Divisions */}
-        <section className="grid md:grid-cols-2 gap-8">
-          <div className="bg-muted p-6 rounded-lg">
+        <section className="grid gap-8 md:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-black/60 p-6 shadow-lg backdrop-blur">
             <h2 className="text-xl font-semibold mb-4">📘 Helpful Recruiting Resources</h2>
             <ul className="space-y-4">
               {externalResources.map((res, i) => (
@@ -109,7 +109,7 @@ export default function RecruitingToolkitCoursePage() {
                     href={res.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[#FF7200] hover:underline"
+                    className="flex items-center gap-2 text-orange-400 hover:text-orange-300"
                   >
                     <ExternalLink className="w-4 h-4" />
                     {res.name}
@@ -119,9 +119,9 @@ export default function RecruitingToolkitCoursePage() {
             </ul>
           </div>
 
-          <div className="bg-muted p-6 rounded-lg">
+          <div className="rounded-2xl border border-white/10 bg-black/60 p-6 shadow-lg backdrop-blur">
             <h2 className="text-xl font-semibold mb-4">🏅 Understanding Athletic Divisions</h2>
-            <ul className="list-disc list-inside text-sm space-y-1 text-muted-foreground">
+            <ul className="list-inside list-disc space-y-1 text-sm text-white/60">
               <li><strong>D1:</strong> Top-tier, competitive, full scholarships possible.</li>
               <li><strong>D2:</strong> Good balance of athletics and academics.</li>
               <li><strong>D3:</strong> No athletic scholarships, but strong academics.</li>
@@ -132,16 +132,16 @@ export default function RecruitingToolkitCoursePage() {
         </section>
 
         {/* Checklist */}
-        <section className="bg-secondary rounded-lg p-6">
+        <section className="rounded-2xl border border-white/10 bg-black/60 p-6 shadow-lg backdrop-blur">
           <h2 className="text-2xl font-semibold mb-4">📋 Recruiting Checklist</h2>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-            <ul className="list-disc list-inside space-y-1">
+          <div className="grid gap-4 text-sm text-white/60 md:grid-cols-2">
+            <ul className="list-inside list-disc space-y-1">
               <li>Create an athletic resume with your stats</li>
               <li>Build a realistic list of target schools</li>
               <li>Start outreach to coaches</li>
               <li>Register for the NCAA/NAIA Eligibility Center</li>
             </ul>
-            <ul className="list-disc list-inside space-y-1">
+            <ul className="list-inside list-disc space-y-1">
               <li>Schedule official/unofficial visits</li>
               <li>Track communications and interest</li>
               <li>Apply for FAFSA and compare aid packages</li>
@@ -151,28 +151,28 @@ export default function RecruitingToolkitCoursePage() {
         </section>
 
         {/* CTA */}
-        <section className="bg-muted rounded-lg p-6 text-center">
+        <section className="rounded-2xl border border-white/10 bg-black/60 p-6 text-center shadow-lg backdrop-blur">
           <h3 className="text-xl font-semibold mb-2">Ready to Get Recruited?</h3>
           <a
             href="#"
-            className="inline-block bg-[#FF7200] text-white px-6 py-2 rounded font-medium hover:bg-[#FF7200] transition"
+            className="inline-block rounded-full bg-orange-500 px-6 py-2 font-medium text-black transition hover:bg-orange-400"
           >
             Start the Course
           </a>
         </section>
 
         {/* Instructor */}
-        <section className="bg-secondary rounded-lg p-6">
+        <section className="rounded-2xl border border-white/10 bg-black/60 p-6 shadow-lg backdrop-blur">
           <h3 className="text-xl font-semibold mb-4">Instructor</h3>
           <div className="flex items-center gap-4">
             <img
               src="https://static.wixstatic.com/media/e49d37_c9bd0a5f706f42a69b297163faca7bd1~mv2_d_2000_2000_s_2.png"
               alt="Coach Al"
-              className="h-16 w-16 rounded-full object-cover dark:invert"
+              className="h-16 w-16 rounded-full object-cover"
             />
             <div>
               <p className="font-medium">Coach Al</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/60">
                 Former Division I recruiting coordinator with over 15 years helping athletes get recruited.
               </p>
             </div>

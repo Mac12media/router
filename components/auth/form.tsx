@@ -57,12 +57,13 @@ export default function SignInForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-black/70 dark:text-white/80">Email</FormLabel>
               <FormControl>
                 <Input
                   inputMode="email"
                   autoComplete="email"
                   placeholder="email@example.com"
+                  className="border-black/10 bg-white text-black placeholder:text-black/40 dark:border-white/15 dark:bg-white/10 dark:text-white dark:placeholder:text-white/40"
                   {...field}
                   onChange={(e) => field.onChange(e.target.value.toLowerCase())}
                 />
@@ -78,12 +79,13 @@ export default function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-black/70 dark:text-white/80">Password</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   placeholder="••••••••"
                   autoComplete="current-password"
+                  className="border-black/10 bg-white text-black placeholder:text-black/40 dark:border-white/15 dark:bg-white/10 dark:text-white dark:placeholder:text-white/40"
                   {...field}
                 />
               </FormControl>
@@ -94,7 +96,7 @@ export default function SignInForm() {
 
         <Button
           type="submit"
-          className="w-full items-center"
+          className="w-full items-center bg-orange-500 hover:bg-orange-400"
           loading={form.formState.isSubmitting}
         >
           Sign In <Lock className="w-4 ml-2" />

@@ -27,6 +27,10 @@ export default function RootLayout({
       <body
         className={`${font.className} flex flex-col-reverse sm:grid sm:overflow-hidden sm:h-screen sm:w-screen sm:grid-cols-[256px,1fr]`}
       >
+        <div className="pointer-events-none fixed inset-0 z-0">
+          <div className="absolute inset-0  bg-cover bg-center opacity-60" />
+          <div className="absolute inset-0 bg-gradient-to-br dark:from-black/95 from-white/95 dark:via-black/85 via-white/85 to-orange-950/30" />
+        </div>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -35,9 +39,9 @@ export default function RootLayout({
         >
           <PostHogProvider>
             <Nav />
-            <main className="py-4 pr-2 pl-2 sm:pr-4 sm:pl-4 flex flex-col gap-4 min-h-screen">
-  {children}
-</main>
+            <main className="relative z-10 flex min-h-screen flex-col gap-4  py-4 ">
+              {children}
+            </main>
 
             <Toaster />
           </PostHogProvider>

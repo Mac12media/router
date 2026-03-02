@@ -237,6 +237,7 @@ export async function getPublicUserById(formData: FormData | { id: string }) {
                       email: users.email,
 
       height: users.height,
+      plan: users.plan,
       weight: users.weight,
       position: users.position,
       sport: users.sport,

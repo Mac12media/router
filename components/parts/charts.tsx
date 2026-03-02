@@ -9,11 +9,22 @@ import {
 
 const COLORS = ["#FF7200", "#000000"];
 
-export default function CircleChart({ label, value, max }: { label: string; value: number; max: number }) {
+export default function CircleChart({
+  label,
+  value,
+  max,
+  color,
+}: {
+  label: string;
+  value: number;
+  max: number;
+  color?: string;
+}) {
   const data = [
     { name: label, value },
     { name: "Remaining", value: Math.max(0, max - value) },
   ];
+  const colors = [color || COLORS[0], COLORS[1]];
 
   return (
     <div className="flex flex-col items-center space-y-2">
@@ -28,7 +39,7 @@ export default function CircleChart({ label, value, max }: { label: string; valu
               stroke="none"
             >
               {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
               ))}
               <Label
                 value={value}

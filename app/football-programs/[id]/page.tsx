@@ -199,7 +199,7 @@ export default async function CoachPage({
                   href={coach.camps}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block rounded-lg bg-black py-3 text-center font-medium text-white transition hover:opacity-90 dark:bg-white dark:text-black"
+                  className="inline-block rounded-lg bg-orange-500 py-3 text-center font-medium text-black transition hover:bg-orange-400"
                 >
                   Camps
                 </a>
@@ -210,12 +210,12 @@ export default async function CoachPage({
 
         {/* Plan lock overlay (unchanged) */}
         {!isPlanValid && (
-          <div className="relative left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-xl border-4 border-[#FF7200] bg-white p-24 text-center shadow-xl dark:bg-black">
+          <div className="relative left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-2xl border border-white/10 bg-black/70 p-24 text-center text-white shadow-xl backdrop-blur">
             <h2 className="mb-4 text-4xl font-bold">This content is locked</h2>
             <p className="mb-6 text-lg">Upgrade your plan to view this content.</p>
             <a
               href="/upgrade"
-              className="rounded-lg bg-primary py-3 px-8 text-xl text-white transition duration-300 hover:bg-primary-dark dark:text-black"
+              className="rounded-lg bg-orange-500 px-8 py-3 text-xl text-black transition duration-300 hover:bg-orange-400"
             >
               Upgrade Now
             </a>

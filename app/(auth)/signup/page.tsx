@@ -1,57 +1,58 @@
 import Image from "next/image";
-import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SignUpForm from "@/components/auth/sign-up";
+import LogoDark from "@/public/expologo2logo.png";
+import LogoLight from "@/public/expologo1logo.png";
 
 export default async function SignUpPage() {
   const session = await auth();
   if (session) redirect("/");
 
   return (
-    <section className="flex fixed top-0 right-0 left-0 h-screen w-screen overflow-hidden flex-col items-center justify-center bg-background/20 backdrop-blur-sm">
-      <div className="flex flex-col items-center gap-4 rounded-lg border p-6 shadow-sm md:p-12 mt-12 bg-muted">
-        <Image
-          className="mb-8 dark:invert"
-          src="/icon.svg"
-          alt="logo"
-          width={50}
-          height={72}
-        />
-        <p className="text-center text-xl">Create your Expo Recruits account</p>
-        <p className="text-center text-muted-foreground">
-          Sign up to get started.
-        </p>
-        <div className="flex flex-col items-center w-full gap-2">
-          <SignUpForm />
-        </div>
-        <p className="text-sm text-muted-foreground mt-4">
-          Already have an account?{" "}
-          <Link href="/login" className="underline underline-offset-4">
-            Log in
-          </Link>
-        </p>
-      </div>
+    <section className="flex fixed top-0 right-0 p-2 left-0 h-screen w-screen overflow-hidden flex-col items-center justify-center bg-background/20 backdrop-blur-sm">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url(/expo-bg.png)" }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/60 dark:from-black/80 dark:via-black/60 to-orange-900/40" />
+      <div className="relative z-10 flex min-h-screen w-full items-center justify-center px-4 py-12">
+        <div className="grid w-full max-w-5xl gap-8 md:grid-cols-[1.15fr_0.85fr]">
+          <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-black/10 md:p-10 dark:bg-black/75 dark:ring-white/20 dark:backdrop-blur">
+            <div className="mb-6">
+              <p className="text-xl font-bold uppercase  text-[#FF7200]">
+                Exposure Starts Here
+              </p>
+              <p className="mt-2 text-xs text-black/90 dark:text-white/85">
+                Gain exposure, manage your recruiting & earn a scholarship
+              </p>
+            </div>
 
-      <p className="mt-4 max-w-xs text-center text-sm text-muted-foreground md:mb-24">
-        By using router.so, you agree to our{" "}
-        <a
-          className="underline underline-offset-4"
-          target="_blank"
-          href="https://router.so/privacy"
-        >
-          Privacy Policy
-        </a>{" "}
-        and{" "}
-        <a
-          className="underline underline-offset-4"
-          target="_blank"
-          href="https://router.so/terms"
-        >
-          Terms of Service
-        </a>
-        .
-      </p>
+            <h2 className="text-lg font-bold text-black dark:text-white">Sign Up</h2>
+
+            <div className="mt-6 space-y-4">
+              <SignUpForm />
+            </div>
+          </div>
+
+          <div className="hidden items-center justify-center rounded-3xl bg-white p-10 ring-1 ring-black/5 md:flex dark:bg-black/60 dark:ring-white/10 dark:backdrop-blur">
+            <Image
+              src={LogoDark}
+              alt="logo"
+              width={240}
+              height={240}
+              className="dark:hidden"
+            />
+            <Image
+              src={LogoLight}
+              alt="logo"
+              width={240}
+              height={240}
+              className="hidden dark:block"
+            />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

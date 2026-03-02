@@ -73,7 +73,7 @@ export default async function Nav() {
   const navigationLinks2 = hasValidId ? links2 : guestLinks;
 
   return (
-    <nav className="p-4 flex flex-col gap-4 justify-between h-screen">
+    <nav className="relative z-10 flex h-screen flex-col justify-between gap-4 p-4">
       {/* Logo */}
       <Link
         href="/"
@@ -118,7 +118,7 @@ export default async function Nav() {
         {/* Footer */}
         <div className="flex flex-col gap-8">
           <AccountWidget plan={plan} />
-          <div className="flex justify-between items-center gap-2">
+          <div className="flex items-center justify-between gap-2">
             <ModeToggle />
             <p className="text-xs text-muted-foreground opacity-50">
               &copy; Expo Recruits, 2025
@@ -207,14 +207,14 @@ const NavLink = ({
 
   return (
     <Link
-      className={`flex items-center gap-2 group p-2 rounded-md -ml-2 transition-all hover:bg-muted ${className}`}
+      className={`flex items-center gap-2 group -ml-2 rounded-md p-2 transition-all hover:bg-white/10 ${className}`}
       href={href}
     >
       <Icon
-        className="text-muted-foreground group-hover:text-foreground transition-all"
+       className="text-muted-foreground group-hover:text-foreground transition-all"
         size={20}
       />
-      {children}
+     {children}
     </Link>
   );
 };

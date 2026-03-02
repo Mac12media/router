@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,11 +25,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-// Grad years 2025–2032 plus "transfer"
+import FootballIcon from "@/public/sport-icons/football-gray.png";
+import BasketballIcon from "@/public/sport-icons/basketball-gray.png";
+
+import FlagFootballICon from "@/public/sport-icons/football-pink.png";
+import GirlsBasketballIcon from "@/public/sport-icons/basketball-pink.png";
+
+
 const GRAD_OPTIONS = [
-  ...Array.from({ length: 8 }, (_, i) => (2025 + i).toString()),
+  ...Array.from({ length: 7 }, (_, i) => (2026 + i).toString()),
   "Transfer",
+];
+
+
+
+const SPORT_OPTIONS = [
+  { value: "football", label: "Football", icon: FootballIcon },
+  { value: "basketball_boys", label: "Basketball (Boys)", icon: BasketballIcon },
+  { value: "basketball_girls", label: "Basketball (Girls)", icon: GirlsBasketballIcon },
+  { value: "girls_flag_football", label: "Girls Flag Football", icon: FlagFootballICon },
 ];
 
 // --- Smart email typo checks
@@ -83,14 +102,14 @@ const formSchema = z.object({
     }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
   name: z.string().min(1, { message: "Name is required" }),
-  grad_year: z.enum([...(GRAD_OPTIONS as [string, ...string[]])], {
-    required_error: "Graduation year is required",
-  }),
+  sport: z.string().min(1, { message: "Sport is required" }),
+  grad_year: z.string().min(1, { message: "Class year is required" }),
 });
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get("callbackUrl") || "/";
+  const [step, setStep] = useState<"user" | "sport">("user");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -98,7 +117,8 @@ export default function SignUpForm() {
       email: "",
       password: "",
       name: "",
-      grad_year: GRAD_OPTIONS[0],
+      sport: "",
+      grad_year: "",
     },
   });
 
@@ -130,88 +150,172 @@ export default function SignUpForm() {
     }
   };
 
+  const handleContinue = async () => {
+    const ok = await form.trigger(["name", "email", "password"]);
+    if (ok) setStep("sport");
+  };
+
+  const handleBack = () => setStep("user");
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
-        {/* Name */}
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your full name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+        {step === "user" ? (
+          <>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/60">
+                User Details
+              </p>
+              <p className="text-sm text-black/60 dark:text-white/70">Tell us about yourself.</p>
+            </div>
 
-        {/* Graduation Year OR Transfer */}
-        <FormField
-          control={form.control}
-          name="grad_year"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Graduation Year</FormLabel>
-              <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select year or transfer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {GRAD_OPTIONS.map((y) => (
-                      <SelectItem key={y} value={y}>
-                        {y}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black/70 dark:text-white/80">Full Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Your full name"
+                      className="border-black/10 bg-white text-black placeholder:text-black/40 dark:border-white/15 dark:bg-white/10 dark:text-white dark:placeholder:text-white/40"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Email (validated, lowercase) */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="email@example.com"
-                  {...field}
-                  onChange={(e) => field.onChange(e.target.value.trim().toLowerCase())}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black/70 dark:text-white/80">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="email@example.com"
+                      className="border-black/10 bg-white text-black placeholder:text-black/40 dark:border-white/15 dark:bg-white/10 dark:text-white dark:placeholder:text-white/40"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.trim().toLowerCase())
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        {/* Password */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black/70 dark:text-white/80">Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="••••••••"
+                      className="border-black/10 bg-white text-black placeholder:text-black/40 dark:border-white/15 dark:bg-white/10 dark:text-white dark:placeholder:text-white/40"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <Button type="submit" className="w-full" loading={form.formState.isSubmitting}>
-          Sign Up
-        </Button>
+            <Button type="button" className="w-full bg-[#FF7200] hover:opacity-90" onClick={handleContinue}>
+              Continue
+            </Button>
+          </>
+        ) : (
+          <>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50 dark:text-white/60">
+                Sport Details
+              </p>
+              <p className="text-sm text-black/60 dark:text-white/70">Select your sport and class.</p>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="sport"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black/70 dark:text-white/80">Sport</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      className="grid gap-3 md:grid-cols-2"
+                    >
+                      {SPORT_OPTIONS.map((option) => (
+                        <label
+                          key={option.value}
+                          className={cn(
+                            "flex cursor-pointer items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 transition hover:border-[#FF7200] dark:border-white/10 dark:bg-white/5 dark:hover:border-[#FF7200]",
+                            field.value === option.value &&
+                              "border-[#FF7200] bg-orange-500/10 dark:bg-orange-500/10"
+                          )}
+                        >
+                          <RadioGroupItem value={option.value} className="sr-only" />
+                          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-black/5 dark:bg-white/10">
+                            <Image
+                              src={option.icon}
+                              alt=""
+                              width={400}
+              height={400}
+                            />
+                          </span>
+                          <span className="text-sm text-black dark:text-white">{option.label}</span>
+                        </label>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="grad_year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black/70 dark:text-white/80">Class</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="border-black/10 bg-white text-black dark:border-white/15 dark:bg-white/10 dark:text-white">
+                        <SelectValue placeholder="Select class year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {GRAD_OPTIONS.map((y) => (
+                          <SelectItem key={y} value={y}>
+                            {y}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex flex-col gap-3">
+              <Button type="submit" className="w-full bg-[#FF7200] hover:opacity-90" loading={form.formState.isSubmitting}>
+                Create a FREE Profile
+              </Button>
+              <Button type="button" variant="ghost" className="text-black/60 hover:text-black dark:text-white/70 dark:hover:text-white" onClick={handleBack}>
+                Back
+              </Button>
+            </div>
+          </>
+        )}
       </form>
     </Form>
   );

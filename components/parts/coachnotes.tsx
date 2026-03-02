@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ClipboardList } from "lucide-react"; // shadcn/ui icon
-import { Button } from "react-day-picker";
 
 interface CoachNotesProps {
   notes: string;
@@ -46,11 +45,11 @@ export const CoachNotes: React.FC<CoachNotesProps> = ({ notes }) => {
       {/* Preview Card */}
       <div
         onClick={() => setIsOpen(true)}
-        className="mt-6 p-6 bg-white dark:bg-card dark:text-gray-200 shadow-lg rounded-lg border-l-4 border-[#FF7200] dark:border-[#FF7200] cursor-pointer hover:shadow-xl hover:scale-[1.01] transition-transform duration-200"
+        className="mt-6 cursor-pointer bg-white dark:bg-card rounded-2xl border border-white/10 dark:text-gray-200 p-6 shadow-lg  duration-200 hover:scale-[1.01] hover:shadow-xl"
       >
         <div className="flex items-center space-x-3 mb-4">
           {/* Clipboard icon */}
-          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-[#FF7200] to-[#FF2D00] text-white">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-orange-600 text-black">
             <ClipboardList className="w-6 h-6" />
           </div>
           <p className="text-xl font-semibold text-gray-800 dark:text-gray-100">

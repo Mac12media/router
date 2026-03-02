@@ -97,9 +97,9 @@ export default async function Page() {
             height={user?.height ?? ""}
             weight={user?.weight ?? ""}
             ACD_score={user?.ACD_score ?? ""}
-                        ATH_score={user?.ATH_score ?? ""}
-
+            ATH_score={user?.ATH_score ?? ""}
             imageUrl={user?.image && !user.image.includes('blob') ? user.image.trim() : placeholder.src}
+            plan={usageData?.plan}
           />
 
           <Link href="/campaigns" className="sm:col-span-1 lg:col-span-2 transition-shadow">

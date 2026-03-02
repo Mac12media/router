@@ -36,6 +36,7 @@ export const PlayerProfile = ({
   imageUrl,
   ACD_score,
   ATH_score,
+  plan,
 }: {
   name: string;
   id: string;
@@ -46,7 +47,9 @@ export const PlayerProfile = ({
   imageUrl: string;
   ACD_score: string;
   ATH_score: string;
+  plan?: string | null;
 }) => {
+  const showExpoMember = plan && plan !== "free";
   return (
     <div className="space-y-6">
       {/* Profile Card */}
@@ -68,8 +71,11 @@ export const PlayerProfile = ({
 
                   />
                 <div>
-                  <p className="font-semibold text-white text-base">{name}</p>
-                                  <div className="flex gap-2 flex-row">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-white text-base">{name}</p>
+                    
+                  </div>
+                  <div className="flex gap-2 flex-row">
 
                   <p className="text-sm text-white text-muted-foreground">
                     {gradClass}
@@ -77,9 +83,11 @@ export const PlayerProfile = ({
                   <p className="text-sm text-white  text-muted-foreground">{position}</p>
 </div>
                 </div>
+                
               </div>
+              
 
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white mt-2 text-center text-sm">
+              <div className="grid grid-cols-2 gap-4  text-center text-sm">
                 <div>
                   <p className="font-semibold text-white ">{height}</p>
                   <p className="text-muted-foreground text-white ">Height</p>
@@ -89,6 +97,16 @@ export const PlayerProfile = ({
                   <p className="text-muted-foreground text-white ">Weight</p>
                 </div>
               </div>
+              {showExpoMember && (
+                <span className="inline-flex items-center w-fit gap-1 px-2 self-center rounded-full bg-black/95 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                  <img
+                    src="/sport-icons/verified.png"
+                    alt=""
+                    className="h-3 w-3"
+                  />
+                  Expo Member
+                </span>
+              )}
             </div>
 
             {/* EXPO Score Section */}

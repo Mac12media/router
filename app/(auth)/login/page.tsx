@@ -4,74 +4,80 @@ import { useState } from "react";
 import Image from "next/image";
 import MagicLinkForm from "@/components/auth/form";
 import SignUpForm from "@/components/auth/sign-up";
-import { useTheme } from "next-themes";
-
-import LogoDark from "@/public/expologo1logo.png";
-import LogoLight from "@/public/expologo2logo.png";
-import Logo from "@/components/parts/logo";
+import LogoDark from "@/public/expologo2logo.png";
+import LogoLight from "@/public/expologo1logo.png";
 
 export default function AuthPage() {
   const [mode, setMode] = useState<"login" | "signup">("signup");
 
   return (
-    <section className="flex fixed top-0 right-0 p-2 left-0 h-screen w-screen overflow-hidden flex-col items-center justify-center bg-background/20 backdrop-blur-sm">
-      <div className="flex w-full max-w-4xl rounded-lg shadow-md overflow-hidden border bg-white dark:bg-muted dark:bordermuted">
-        {/* Left Panel */}
-        <div className="flex flex-col justify-center flex-1 px-8 py-12">
-          <div className="flex items-center gap-2 mb-6">
-            {/* Use the appropriate logo based on theme */}
-             <Logo />
+<section className="flex fixed top-0 right-0 p-2 left-0 h-screen w-screen overflow-hidden flex-col items-center justify-center bg-background/20 backdrop-blur-sm">
+            <div className="absolute inset-0 hidden dark:block bg-[url('/expo-bg.png')] bg-cover bg-center opacity-80" />
+      <div className="absolute inset-0 hidden dark:block bg-gradient-to-br from-black/80 via-black/60 to-orange-900/40" />
+      <div className="relative z-10 flex min-h-screen w-full items-center justify-center px-4 py-12">
+        <div className="grid w-full max-w-5xl gap-8 md:grid-cols-[1.15fr_0.85fr]">
+          <div className="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-black/10 md:p-10 dark:bg-black/75 dark:ring-white/20 dark:backdrop-blur">
+            <div className="mb-6">
+              <p className="text-xl font-bold uppercase  text-[#FF7200]">
+                Exposure Starts Here
+              </p>
+              <p className="mt-2 text-xs text-black/90 dark:text-white/85">
+                Gain exposure, manage your recruiting & earn a scholarship
+              </p>
+            </div>
+
+            <h2 className="text-lg font-bold text-black dark:text-white">
+              {mode === "signup" ? "Sign Up" : "Log In"}
+            </h2>
+
+            <div className="mt-6 space-y-4">
+              {mode === "signup" ? <SignUpForm /> : <MagicLinkForm />}
+            </div>
+
+            <p className="mt-5 text-sm text-black/85 dark:text-white/85">
+              {mode === "signup" ? (
+                <>
+                  Already have an account?{" "}
+                  <button
+                    className="font-semibold text-[#FF7200] hover:opacity-90"
+                    onClick={() => setMode("login")}
+                  >
+                    Log in
+                  </button>
+                </>
+              ) : (
+                <>
+                  Don&apos;t have an account?{" "}
+                  <button
+                    className="font-semibold text-[#FF7200] hover:opacity-90"
+                    onClick={() => setMode("signup")}
+                  >
+                    Sign up
+                  </button>
+                </>
+              )}
+            </p>
           </div>
 
-          <h2 className="text-xl font-semibold mb-1 text-zinc-900 dark:text-zinc-100">
-            {mode === "signup" ? "Sign up to EXPO Recruits" : "Welcome back"}
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            {mode === "signup"
-              ? "Manage your recruiting campaigns and EXPO+ score"
-              : "Login to access your account."}
-          </p>
-
-          <div className="space-y-4">
-            {mode === "signup" ? <SignUpForm /> : <MagicLinkForm />}
+          <div className="hidden items-center justify-center rounded-3xl bg-white p-10 ring-1 ring-black/5 md:flex dark:bg-black/60 dark:ring-white/10 dark:backdrop-blur">
+            <Image
+        src={LogoDark}
+        alt="logo"
+        width={240}
+        height={240}
+        className="dark:hidden" // Hidden in dark mode
+      />
+      {/* Dark logo (shown only in dark mode) */}
+      <Image
+        src={LogoLight}
+        alt="logo"
+        width={240}
+        height={240}
+        className="hidden dark:block" // Shown only in dark mode
+      />
           </div>
-
-          <p className="text-sm text-muted-foreground mt-4">
-            {mode === "signup" ? (
-              <>
-                Already have an account?{" "}
-                <button
-                  className="underline underline-offset-4 text-primary hover:text-orange-600 dark:hover:text-orange-400"
-                  onClick={() => setMode("login")}
-                >
-                  Log in
-                </button>
-              </>
-            ) : (
-              <>
-                Don&apos;t have an account?{" "}
-                <button
-                  className="underline underline-offset-4 text-primary hover:text-orange-600 dark:hover:text-orange-400"
-                  onClick={() => setMode("signup")}
-                >
-                  Sign up
-                </button>
-              </>
-            )}
-          </p>
-        </div>
-
-        {/* Right Panel - Google Login */}
-        <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-muted dark:bg-muted border-l dark:border-zinc-700 p-8">
-          <h3 className="text-lg font-semibold mb-4 text-zinc-900 dark:text-zinc-100">Log in</h3>
-          <button className="flex items-center gap-3 px-4 py-2 border rounded-md hover:bg-muted-foreground/10 dark:border-zinc-600 dark:hover:bg-zinc-700 transition">
-            <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
-            <span className="text-zinc-800 dark:text-white">Continue with Google</span>
-          </button>
         </div>
       </div>
-
-      {/* Optional footer or policies could go here */}
     </section>
   );
 }
