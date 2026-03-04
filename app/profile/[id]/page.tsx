@@ -83,7 +83,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </span>
       )}
       <div className={`text-lg font-medium ${metaClass}`}>
-        {user.grad_year} | {user.position}
+        {user.grad_year} • {user.position}
       </div>
     </div>
   </div>
@@ -99,7 +99,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     <img
       src="https://www.mrl.ims.cam.ac.uk/sites/default/files/media/x-logo.png"
       alt={`${user.name} profile`}
-      className="h-6 w-6 "
+      className="h-6"
     />
   </a>
 
