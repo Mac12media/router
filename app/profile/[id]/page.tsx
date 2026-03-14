@@ -77,11 +77,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         {user.name} {user.last_name}
       </CardTitle>
       {user.plan && user.plan !== "free" && (
-        <span
-          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
-          style={{ background: "linear-gradient(135deg, rgba(17,24,39,0.9), rgba(17,24,39,0.6))" }}
-        >
-          <img src="/sport-icons/verified.png" alt="" className="h-3 w-3" />
+        <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
+          <img src="/sport-icons/verified.png" alt="" className="h-5 w-5" />
           Expo Member
         </span>
       )}
@@ -205,30 +202,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </div>
           <div className="grid grid-cols-1 md:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full col-span-6 mt-6 p-6">
-    {/* EXPO+ METRICS */}
-    <div className=" rounded-xl p-6 ">
-       <h2 className="text-lg font-bold uppercase mb-6" style={{ color: accentColor }}>
-    Player Bio
-  </h2>
-
-  <div className="text-sm  leading-relaxed whitespace-pre-line max-w-4xl">
-    {user.bio?.trim() ? (
-      user.bio
-    ) : (
-      <span className="italic text-gray-500">
-        No bio provided yet.
-      </span>
-    )}
-  </div>
-
-      {/* Evaluation Box */}
-      <div className="mt-6 bg-gray-300/60 dark:bg-gray-600/60 rounded-lg p-4 text-sm text-gray-700 dark:text-gray-200">
-<p><span className="font-bold text-gray-900 dark:text-white">Coach&rsquo;s Evaluation:</span></p>
-      </div>
-    </div>
-</Card>
-<Card className="w-full col-span-2 mt-6 p-0 overflow-hidden">
+<Card className="w-full col-span-2 mt-6 p-0 overflow-hidden order-2 md:order-1">
   {/* EXPO+ SCORES */}
   <div
     className="text-white text-center py-4 text-xl font-extrabold tracking-wide"
@@ -238,7 +212,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   </div>
   <div className="h-1 bg-gray-300/60 dark:bg-gray-600/60" />
   <div className="rounded-xl flex flex-col items-center text-center p-6">
-    <div className="w-full flex items-center justify-between" style={{ color: accentColor }}>
+    <div className="w-full flex items-center justify-around" style={{ color: accentColor }}>
       <div className="flex flex-col items-center gap-2">
         <div className="h-10 w-10 rounded-full border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: accentColor }}>
           {user.ACD_score ?? 0}
@@ -303,11 +277,21 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     )}
 
     {(user.forty_time != null || user.l_drill != null || user.vertical != null) && (
-      <div className="mt-5 flex items-center justify-center gap-2 text-sm text-gray-700 dark:text-gray-200">
+      <div className="mt-5 flex items-center justify-center gap-2 text-sm text-gray-700 dark:text-gray-200 text-center">
         <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
           ✓
         </span>
-        Verified at The EXPO Combine
+        <span className="inline-flex items-center gap-1 whitespace-nowrap">
+          Verified at The
+          <a
+            href="https://exporecruits.com/combine"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-[#FF7200] dark:[#FF7200]"
+          >
+            EXPO Combine
+          </a>
+        </span>
       </div>
     )}
   </div>
@@ -335,6 +319,29 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       </div>
     </div>
   </div>
+</Card>
+<Card className="w-full col-span-6 mt-6 p-6 order-1 md:order-2">
+    {/* EXPO+ METRICS */}
+    <div className=" rounded-xl p-6 ">
+       <h2 className="text-lg font-bold uppercase mb-6" style={{ color: accentColor }}>
+    Player Bio
+  </h2>
+
+  <div className="text-sm  leading-relaxed whitespace-pre-line max-w-4xl">
+    {user.bio?.trim() ? (
+      user.bio
+    ) : (
+      <span className="italic text-gray-500">
+        No bio provided yet.
+      </span>
+    )}
+  </div>
+
+      {/* Evaluation Box */}
+      <div className="mt-6 bg-gray-300/60 dark:bg-gray-600/60 rounded-lg p-4 text-sm text-gray-700 dark:text-gray-200">
+<p><span className="font-bold text-gray-900 dark:text-white">Coach&rsquo;s Evaluation:</span></p>
+      </div>
+    </div>
 </Card>
   </div>
 
