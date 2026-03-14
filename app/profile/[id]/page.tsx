@@ -50,8 +50,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     user.sport === "girls_flag_football" ||
     user.sport?.toLowerCase().includes("flag");
   const profileGradient = isFlagFootball
-    ? "linear-gradient(135deg, rgba(236,72,153,0.95), rgba(236,72,153,0.65))"
-    : "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.65))";
+    ? "linear-gradient(135deg, rgba(236,72,153,0.95), rgba(236,72,153,0.75))"
+    : "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))";
   const nameClass = isFlagFootball ? "text-pink-100" : "text-white";
   const metaClass = isFlagFootball ? "text-pink-100/80" : "text-white/80";
   return (
@@ -77,7 +77,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         {user.name} {user.last_name}
       </CardTitle>
       {user.plan && user.plan !== "free" && (
-        <span className="inline-flex items-center gap-1 rounded-full bg-black/85 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+        <span
+          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+          style={{ background: "linear-gradient(135deg, rgba(17,24,39,0.9), rgba(17,24,39,0.6))" }}
+        >
           <img src="/sport-icons/verified.png" alt="" className="h-3 w-3" />
           Expo Member
         </span>
@@ -146,6 +149,25 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             <ProfileField label="City" value={user.city ?? ""} />
             <ProfileField label="State" value={user.state ?? ""} />
                                              </CardContent>
+          <CardContent className="p-4 pt-2 [--expo-divider:rgba(209,213,219,0.6)] dark:[--expo-divider:rgba(75,85,99,0.6)]">
+            <h4 className="uppercase text-xs text-gray-400 mb-3 text-center">
+              Academics
+            </h4>
+            <div className="flex justify-center gap-6">
+              <CircleChart
+                label="GPA"
+                value={Number(user.gpa) || 0}
+                max={4.0}
+                color={accentColor}
+              />
+              <CircleChart
+                label="ACT"
+                value={Number(user.test_score) || 0}
+                max={36}
+                color={accentColor}
+              />
+            </div>
+          </CardContent>
 
         </Card>
 
@@ -183,55 +205,73 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </div>
           <div className="grid grid-cols-1 md:grid-cols-8 gap-y-2 sm:gap-x-4">
 
-<Card className="w-full col-span-2 mt-6 p-8">
-  {/* EXPO+ SCORES */}
-  <div className="rounded-xl flex flex-col items-center text-center p-6">
-    <h2 className="text-lg font-bold uppercase mb-2" style={{ color: accentColor }}>
-      EXPO+ Scores
-    </h2>
+<Card className="w-full col-span-6 mt-6 p-6">
+    {/* EXPO+ METRICS */}
+    <div className=" rounded-xl p-6 ">
+       <h2 className="text-lg font-bold uppercase mb-6" style={{ color: accentColor }}>
+    Player Bio
+  </h2>
 
-    <p className="text-4xl font-extrabold mb-2" style={{ color: accentColor }}>
-      {user.expo_score ?? 0}
-    </p>
+  <div className="text-sm  leading-relaxed whitespace-pre-line max-w-4xl">
+    {user.bio?.trim() ? (
+      user.bio
+    ) : (
+      <span className="italic text-gray-500">
+        No bio provided yet.
+      </span>
+    )}
+  </div>
 
-    <div className="w-full border-t border-gray-700 my-6" />
-
-    <div className="flex justify-around w-full text-lg font-semibold" style={{ color: accentColor }}>
-      <div className="px-2">
-        <p className="text-xl">{user.ACD_score ?? 0}</p>
-        <p className="text-sm text-gray-400 mt-1">ACD</p>
-      </div>
-      <div className="px-2">
-        <p className="text-xl">{user.ATH_score ?? 0}</p>
-        <p className="text-sm text-gray-400 mt-1">ATH</p>
+      {/* Evaluation Box */}
+      <div className="mt-6 bg-gray-300/60 dark:bg-gray-600/60 rounded-lg p-4 text-sm text-gray-700 dark:text-gray-200">
+<p><span className="font-bold text-gray-900 dark:text-white">Coach&rsquo;s Evaluation:</span></p>
       </div>
     </div>
+</Card>
+<Card className="w-full col-span-2 mt-6 p-0 overflow-hidden">
+  {/* EXPO+ SCORES */}
+  <div
+    className="text-white text-center py-4 text-xl font-extrabold tracking-wide"
+    style={{ background: "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))" }}
+  >
+    EXPO
+  </div>
+  <div className="h-1 bg-gray-300/60 dark:bg-gray-600/60" />
+  <div className="rounded-xl flex flex-col items-center text-center p-6">
+    <div className="w-full flex items-center justify-between" style={{ color: accentColor }}>
+      <div className="flex flex-col items-center gap-2">
+        <div className="h-10 w-10 rounded-full border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: accentColor }}>
+          {user.ACD_score ?? 0}
+        </div>
+        <span className="text-sm font-semibold">ACD</span>
+      </div>
+
+      <div className="relative flex items-center justify-center">
+        <div
+          className="h-24 w-24 rounded-full border-[10px] flex items-center justify-center bg-transparent shadow-md"
+          style={{ borderColor: accentColor }}
+        >
+          <span className="text-3xl font-extrabold" style={{ color: accentColor }}>
+            {user.expo_score ?? 0}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center gap-2">
+        <div className="h-10 w-10 rounded-full border-2 flex items-center justify-center text-sm font-bold" style={{ borderColor: accentColor }}>
+          {user.ATH_score ?? 0}
+        </div>
+        <span className="text-sm font-semibold">ATH</span>
+      </div>
+    </div>
+
+    <div className="w-full border-t border-gray-300/60 dark:border-gray-600/60 my-6" />
+
+    
   </div>
 
   {/* METRICS */}
-  <div className=" p-6">
-  
-    {/* Academics */}
-    <div className="mb-8">
-      <h4 className="uppercase text-xs text-gray-400 mb-3 text-center">
-        Academics
-      </h4>
-      <div className="flex justify-center gap-6">
-        <CircleChart
-          label="GPA"
-          value={Number(user.gpa) || 0}
-          max={4.0}
-          color={accentColor}
-        />
-        <CircleChart
-          label="ACT"
-          value={Number(user.test_score) || 0}
-          max={36}
-          color={accentColor}
-        />
-      </div>
-    </div>
-
+  <div className="p-6 pt-0">
     {/* Athletic */}
     <div>
       <h4 className="uppercase text-xs text-gray-400 mb-3 text-center">
@@ -253,30 +293,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       </div>
     </div>
   </div>
-</Card>
-
-<Card className="w-full col-span-6 mt-6 p-6">
-    {/* EXPO+ METRICS */}
-    <div className=" rounded-xl p-6 ">
-       <h2 className="text-lg font-bold uppercase mb-6" style={{ color: accentColor }}>
-    Player Bio
-  </h2>
-
-  <div className="text-sm  leading-relaxed whitespace-pre-line max-w-4xl">
-    {user.bio?.trim() ? (
-      user.bio
-    ) : (
-      <span className="italic text-gray-500">
-        No bio provided yet.
-      </span>
-    )}
-  </div>
-
-      {/* Evaluation Box */}
-      <div className="mt-6 bg-gray-800 rounded-lg p-4 text-sm text-gray-300">
-<p><span className="font-bold text-white">Coach&rsquo;s Evaluation:</span></p>
-      </div>
-    </div>
 </Card>
   </div>
 

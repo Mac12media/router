@@ -7,7 +7,7 @@ import {
   Label,
 } from "recharts";
 
-const COLORS = ["#FF7200", "#000000"];
+const COLORS = ["#FF7200", "var(--expo-divider, #D1D5DB)"];
 
 export default function CircleChart({
   label,
