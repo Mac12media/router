@@ -54,7 +54,7 @@ export function UpgradeCountdownBanner() {
           </div>
 
           <h2 className="mt-3 text-xl font-bold md:text-2xl">
-            🎉 RECRUITING MADDNESS — SAVE 60% OFF! 🚀
+            🎉 RECRUITING MADNESS — SAVE 60% OFF! 🚀
           </h2>
 
           <p className="mt-1 text-sm text-black md:text-base">
