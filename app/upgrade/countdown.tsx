@@ -7,7 +7,7 @@ function getTargetDate() {
   const currentYear = now.getFullYear();
 
   // March 1st, midnight (next upcoming March 1)
-  let target = new Date(currentYear, 2, 1, 0, 0, 0); // month is 0-based: 2 = March
+  let target = new Date(currentYear, 3, 1, 0, 0, 0); // month is 0-based: 2 = March
   if (now.getTime() >= target.getTime()) {
     target = new Date(currentYear + 1, 2, 1, 0, 0, 0);
   }
@@ -50,11 +50,11 @@ export function UpgradeCountdownBanner() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
             <span className="h-2 w-2 rounded-full bg-white" />
-            Ends March 1st
+            Ends April 1st
           </div>
 
           <h2 className="mt-3 text-xl font-bold md:text-2xl">
-            🎉 AFTER SIGNING DAY PROMO — SAVE 65% OFF! 🚀
+            🎉 RECRUITING MADDNESS — SAVE 60% OFF! 🚀
           </h2>
 
           <p className="mt-1 text-sm text-black md:text-base">

@@ -98,14 +98,10 @@ export const PlayerProfile = ({
                 </div>
               </div>
               {showExpoMember && (
-                <span className="inline-flex items-center w-fit gap-1 px-2 self-center rounded-full bg-black/95 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-                  <img
-                    src="/sport-icons/verified.png"
-                    alt=""
-                    className="h-3 w-3"
-                  />
-                  Expo Member
-                </span>
+               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
+          <img src="/sport-icons/verified.png" alt="" className="h-5 w-5" />
+          Expo Member
+        </span>
               )}
             </div>
 
