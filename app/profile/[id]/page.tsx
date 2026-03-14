@@ -234,7 +234,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     className="text-white text-center py-4 text-xl font-extrabold tracking-wide"
     style={{ background: "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))" }}
   >
-    EXPO
+    EXPO SCORES
   </div>
   <div className="h-1 bg-gray-300/60 dark:bg-gray-600/60" />
   <div className="rounded-xl flex flex-col items-center text-center p-6">
