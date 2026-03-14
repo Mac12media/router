@@ -58,6 +58,9 @@ export const users = pgTable("users", {
     expo_score: text("expo_score"),
 ACD_score: text("ACD_score"),
 ATH_score: text("ATH_score"),
+  forty_time: numeric("forty_time"),
+  l_drill: numeric("l_drill"),
+  vertical: numeric("vertical"),
 
   plan: planEnum("plan").notNull().default("free"),
   stripeCustomerId: text("stripeCustomerId"),

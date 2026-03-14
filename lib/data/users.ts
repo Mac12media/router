@@ -249,7 +249,10 @@ export async function getPublicUserById(formData: FormData | { id: string }) {
       ig_username: users.ig_username,
         expo_score: users.expo_score,
                 ACD_score: users.ACD_score,
-                ATH_score: users.ATH_score
+                ATH_score: users.ATH_score,
+      forty_time: users.forty_time,
+      l_drill: users.l_drill,
+      vertical: users.vertical,
     })
     .from(users)
     .where(eq(users.id, parsed.id));

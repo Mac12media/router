@@ -267,7 +267,49 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
     <div className="w-full border-t border-gray-300/60 dark:border-gray-600/60 my-6" />
 
-    
+    {(user.forty_time != null || user.l_drill != null || user.vertical != null) && (
+      <div className="w-full space-y-3 text-left">
+        {user.forty_time != null && (
+          <div className="flex items-stretch overflow-hidden rounded-xl border border-gray-300/60 dark:border-gray-600/60">
+            <div className="flex-1 px-4 py-3 font-semibold tracking-wide text-gray-900 dark:text-white bg-gray-300/60 dark:bg-gray-600/60">
+              40 TIME
+            </div>
+            <div className="min-w-[92px] px-4 py-3 font-bold text-right text-gray-900 dark:text-white">
+              {user.forty_time}s
+            </div>
+          </div>
+        )}
+        {user.l_drill != null && (
+          <div className="flex items-stretch overflow-hidden rounded-xl border border-gray-300/60 dark:border-gray-600/60">
+            <div className="flex-1 px-4 py-3 font-semibold tracking-wide text-gray-900 dark:text-white bg-gray-300/60 dark:bg-gray-600/60">
+              L DRILL
+            </div>
+            <div className="min-w-[92px] px-4 py-3 font-bold text-right text-gray-900 dark:text-white">
+              {user.l_drill}s
+            </div>
+          </div>
+        )}
+        {user.vertical != null && (
+          <div className="flex items-stretch overflow-hidden rounded-xl border border-gray-300/60 dark:border-gray-600/60">
+            <div className="flex-1 px-4 py-3 font-semibold tracking-wide text-gray-900 dark:text-white bg-gray-300/60 dark:bg-gray-600/60">
+              VERTICAL
+            </div>
+            <div className="min-w-[92px] px-4 py-3 font-bold text-right text-gray-900 dark:text-white">
+              {user.vertical}""
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+
+    {(user.forty_time != null || user.l_drill != null || user.vertical != null) && (
+      <div className="mt-5 flex items-center justify-center gap-2 text-sm text-gray-700 dark:text-gray-200">
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+          ✓
+        </span>
+        Verified at The EXPO Combine
+      </div>
+    )}
   </div>
 
   {/* METRICS */}
