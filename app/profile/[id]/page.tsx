@@ -295,7 +295,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
               VERTICAL
             </div>
             <div className="min-w-[92px] px-4 py-3 font-bold text-right text-gray-900 dark:text-white">
-              {user.vertical}""
+              {user.vertical}&quot;
             </div>
           </div>
         )}
