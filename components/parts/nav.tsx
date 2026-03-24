@@ -2,7 +2,8 @@ import AccountWidget from "../auth/widget";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import { ModeToggle } from "@/components/parts/mode-toggle";
-import { getUsageForUser } from "@/lib/data/users";
+import { getUsageForUser, getUserFull } from "@/lib/data/users";
+import { supabase } from "@/lib/supabase";
 import { LogInIcon, LucideProps, RocketIcon } from "lucide-react";
 
 import { useTheme } from "next-themes";
@@ -37,6 +38,7 @@ const links1 = [
   { href: "/", text: "Dashboard", icon: BarChart },
 
   { href: "/football-programs", text: "College Programs", icon: GraduationCapIcon},
+  { href: "/posts", text: "Posts", icon: Book },
  // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
   //{ href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
  // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
@@ -62,12 +64,49 @@ const otherLinks = [
 
 ];
 
+function normalizeSport(value?: string | null) {
+  const normalized = (value ?? "").trim().toLowerCase();
+
+  switch (normalized) {
+    case "football":
+      return "Football";
+    case "basketball_boys":
+    case "basketball boys":
+      return "Basketball Boys";
+    case "basketball_girls":
+    case "basketball girls":
+      return "Basketball Girls";
+    case "girls_flag_football":
+    case "girls flag football":
+    case "flag football":
+      return "Flag Football";
+    default:
+      return value?.trim() || "";
+  }
+}
+
 export default async function Nav() {
   const usage = await getUsageForUser();
   const plan = usage?.data?.plan;
   const id = usage?.data?.id
+  const hasValidId = Boolean(id);
+  const userResult = hasValidValue(id) ? await getUserFull() : null;
+  const userSport = normalizeSport(userResult?.data?.sport);
 
- const hasValidId = Boolean(id);
+  let latestSportPost:
+    | { id: string; title: string | null; sport: string | null }
+    | null = null;
+  if (userSport) {
+    const { data } = await supabase
+      .from("posts")
+      .select("id,title,sport")
+      .eq("status", "Published")
+      .order("updated_at", { ascending: false })
+      .limit(12);
+
+    latestSportPost =
+      data?.find((post) => normalizeSport(post.sport) === userSport) ?? null;
+  }
 
   const navigationLinks1 = hasValidId ? links1 : guestLinks;
   const navigationLinks2 = hasValidId ? links2 : guestLinks;
@@ -86,7 +125,13 @@ export default async function Nav() {
         <div className="flex flex-col gap-8">
           <div className="grid gap-2">
             {navigationLinks1.map((link) => (
-              <NavLink key={link.href} className="max-inline-size" icon={link.icon} href={link.href}>
+              <NavLink
+                key={link.href}
+                className="max-inline-size"
+                icon={link.icon}
+                href={link.href}
+                badge={link.href === "/posts" && latestSportPost ? "+1" : undefined}
+              >
                 {link.text}
               </NavLink>
             ))}
@@ -183,6 +228,11 @@ interface NavLinkProps {
   icon: React.ComponentType<LucideProps>;
   className?: string;
   locked?: boolean;
+  badge?: string;
+}
+
+function hasValidValue<T>(value: T | null | undefined): value is T {
+  return value !== null && value !== undefined && value !== "";
 }
 
 const NavLink = ({
@@ -191,6 +241,7 @@ const NavLink = ({
   icon: Icon,
   className,
   locked = false,
+  badge,
 }: NavLinkProps) => {
   if (locked) {
     return (
@@ -207,14 +258,21 @@ const NavLink = ({
 
   return (
     <Link
-      className={`flex items-center gap-2 group -ml-2 rounded-md p-2 transition-all hover:bg-white/10 ${className}`}
+      className={`flex items-center justify-between gap-2 group -ml-2 rounded-md p-2 transition-all hover:bg-white/10 ${className}`}
       href={href}
     >
-      <Icon
-       className="text-muted-foreground group-hover:text-foreground transition-all"
-        size={20}
-      />
-     {children}
+      <span className="flex items-center gap-2">
+        <Icon
+         className="text-muted-foreground group-hover:text-foreground transition-all"
+          size={20}
+        />
+       {children}
+      </span>
+      {badge ? (
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-500 px-1.5 text-[10px] font-semibold leading-none text-white shadow-sm">
+          {badge}
+        </span>
+      ) : null}
     </Link>
   );
 };
