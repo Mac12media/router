@@ -131,8 +131,8 @@ export default async function PostDetailPage({ params }: PageProps) {
                   {post.title}
                 </h1>
                 {!isLocked ? (
-                  <p className="mt-3 max-w-2xl text-sm leading-6 text-white/82 sm:text-base">
-                    {postSummary}
+                  <p className="">
+                    
                   </p>
                 ) : null}
                 {isLocked ? (
@@ -171,11 +171,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                         <p className="mt-1 text-xs text-muted-foreground">
                           Updated {formatDate(post.updatedAt)}
                         </p>
-                        {showMatch ? (
-                          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-500">
-                            Match for your sport
-                          </p>
-                        ) : null}
+                        
                       </div>
                     </div>
 
@@ -245,14 +241,14 @@ export default async function PostDetailPage({ params }: PageProps) {
                       href={post.programUrl}
                       className="inline-flex min-w-[170px] items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600"
                     >
-                      Program Profile
+                      Visit
                     </Link>
 
                     <Link
                       href={post.programUrl}
                       className="inline-flex items-center gap-2 text-sm font-medium text-orange-500 transition hover:translate-x-0.5"
                     >
-                      Visit program link
+                      Visit link
                       <MoveUpRight className="h-4 w-4" />
                     </Link>
                   </div>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MoveUpRight, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
+import { PostsSportSelect } from "@/components/parts/posts-sport-select";
 import { PostLikeButton } from "@/components/parts/post-like-button";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { PostShareMenu } from "@/components/parts/post-share-menu";
@@ -12,6 +13,13 @@ import { getPosts, normalizeSport, summary } from "@/lib/posts";
 const pageData = {
   name: "Posts",
 };
+
+const POST_SPORT_OPTIONS = [
+  "Football",
+  "Basketball Boys",
+  "Basketball Girls",
+  "Flag Football",
+] as const;
 
 export const metadata: Metadata = {
   title: "College Openings | EXPO",
@@ -53,13 +61,21 @@ function formatDate(value: string) {
   });
 }
 
-export default async function PostsPage() {
+type PostsPageProps = {
+  searchParams?: Promise<{
+    sport?: string;
+  }>;
+};
+
+export default async function PostsPage({ searchParams }: PostsPageProps) {
   const [usage, userResult] = await Promise.all([getUsageForUser(), getUserFull()]);
   const plan = usage?.data?.plan;
   const isLocked = plan === "free";
   const userId = userResult?.data?.id;
   const posts = await getPosts(userId);
   const userSport = normalizeSport(userResult?.data?.sport);
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const requestedSport = normalizeSport(resolvedSearchParams?.sport);
 
   const prioritizedPosts = userSport
     ? [...posts].sort((a, b) => {
@@ -69,14 +85,25 @@ export default async function PostsPage() {
       })
     : posts;
 
-  const matchingPosts = userSport
-    ? prioritizedPosts.filter((post) => normalizeSport(post.sport) === userSport)
-    : prioritizedPosts;
+  const selectedSport = requestedSport
+    ? POST_SPORT_OPTIONS.includes(requestedSport as (typeof POST_SPORT_OPTIONS)[number])
+      ? requestedSport
+      : userSport &&
+          POST_SPORT_OPTIONS.includes(userSport as (typeof POST_SPORT_OPTIONS)[number])
+        ? userSport
+        : POST_SPORT_OPTIONS[0]
+    : userSport &&
+        POST_SPORT_OPTIONS.includes(userSport as (typeof POST_SPORT_OPTIONS)[number])
+      ? userSport
+      : POST_SPORT_OPTIONS[0];
 
-  const visiblePosts = userSport ? matchingPosts : posts;
-  const heroSport = userSport || normalizeSport(visiblePosts[0]?.sport) || "College Sports";
+  const visiblePosts = prioritizedPosts.filter(
+    (post) => normalizeSport(post.sport) === selectedSport
+  );
+
+  const heroSport = selectedSport;
   const heroTitle = "College Openings";
-  const recentLabel = userSport ? `Recent ${heroSport} Post` : "Recent Post";
+  const recentLabel = `Recent ${heroSport} Post`;
 
   return (
     <>
@@ -93,9 +120,7 @@ export default async function PostsPage() {
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.56)_0%,rgba(0,0,0,0.78)_100%)]" />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white">
-              <span className="mb-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.24em] backdrop-blur sm:mb-4 sm:px-4 sm:py-1.5 sm:text-[10px] sm:tracking-[0.28em]">
-                {heroSport}
-              </span>
+              <PostsSportSelect sports={[...POST_SPORT_OPTIONS]} value={heroSport} />
               <h1 className="max-w-2xl text-2xl font-black uppercase leading-none tracking-[-0.03em] sm:text-4xl lg:text-5xl">
                 {heroTitle}
               </h1>
@@ -147,10 +172,7 @@ export default async function PostsPage() {
                   </div>
 
                   <div className="mt-4 flex items-center justify-between border-t border-zinc-200 pt-4 text-[10px] font-semibold uppercase tracking-[0.18em] dark:border-zinc-800">
-                    <span className="text-orange-500">New Openings</span>
-                    <span className="text-muted-foreground">
-                      {normalizeSport(post.sport) === heroSport ? "Match" : post.status}
-                    </span>
+                   
                   </div>
 
                   <div className="relative mt-4">
