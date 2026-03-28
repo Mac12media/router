@@ -73,7 +73,7 @@ export default async function PostsPage() {
     ? prioritizedPosts.filter((post) => normalizeSport(post.sport) === userSport)
     : prioritizedPosts;
 
-  const visiblePosts = matchingPosts.length > 0 ? prioritizedPosts : posts;
+  const visiblePosts = userSport ? matchingPosts : posts;
   const heroSport = userSport || normalizeSport(visiblePosts[0]?.sport) || "College Sports";
   const heroTitle = "College Openings";
   const recentLabel = userSport ? `Recent ${heroSport} Post` : "Recent Post";
@@ -160,15 +160,21 @@ export default async function PostsPage() {
                       }`}
                     >
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-zinc-200 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-                        {post.sport}
-                      </span>
-                      <span className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                        {post.division}
-                      </span>
-                      <span className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                        {post.position}
-                      </span>
+                      {post.sport ? (
+                        <span className="rounded-full bg-zinc-200 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+                          {post.sport}
+                        </span>
+                      ) : null}
+                      {post.division ? (
+                        <span className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                          {post.division}
+                        </span>
+                      ) : null}
+                      {post.position ? (
+                        <span className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                          {post.position}
+                        </span>
+                      ) : null}
                     </div>
 
                     <Link href={postHref} className="relative z-10 block">
@@ -199,7 +205,7 @@ export default async function PostsPage() {
                       href={isLocked ? "/upgrade" : post.programUrl}
                       className="inline-flex min-w-[150px] items-center justify-center rounded-xl bg-orange-500 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-orange-600"
                     >
-                      {isLocked ? "Upgrade" : "Program Profile"}
+                      {isLocked ? "Upgrade" : "Visit"}
                     </Link>
 
                     {isLocked ? (
@@ -218,8 +224,7 @@ export default async function PostsPage() {
                     )}
                   </div>
 
-                  <div className="relative z-10 mt-4 flex items-center justify-between text-[11px] text-muted-foreground">
-                    <span className="truncate">{post.programUrl}</span>
+                  <div className="relative z-10 mt-4 flex justify-end text-[11px] text-muted-foreground">
                     <Link
                       href={postHref}
                       className="inline-flex items-center gap-1 font-medium text-orange-500 transition group-hover:translate-x-0.5"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { MoveLeft, MoveUpRight, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
 import { PostLikeButton } from "@/components/parts/post-like-button";
@@ -69,13 +69,13 @@ export async function generateMetadata({
 export default async function PostDetailPage({ params }: PageProps) {
   const { id } = await params;
   const [usage, userResult] = await Promise.all([getUsageForUser(), getUserFull()]);
-  const plan = usage?.data?.plan;
-
-  if (plan === "free") {
-    redirect("/upgrade");
-  }
-
   const userId = userResult?.data?.id;
+  const plan = usage?.data?.plan;
+  const isAnonymous = !userId;
+  const isFreePlan = Boolean(userId) && plan === "free";
+  const isLocked = isAnonymous || isFreePlan;
+  const lockedCtaHref = isAnonymous ? "/login" : "/upgrade";
+  const lockedCtaLabel = isAnonymous ? "Login to Unlock" : "Upgrade to Unlock";
   const userSport = normalizeSport(userResult?.data?.sport);
   const post = await getPostById(id, userId);
 
@@ -130,114 +130,154 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <h1 className="mt-4 max-w-3xl text-2xl font-black tracking-[-0.04em] sm:text-4xl lg:text-5xl">
                   {post.title}
                 </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/82 sm:text-base">
-                  {postSummary}
-                </p>
+                {!isLocked ? (
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-white/82 sm:text-base">
+                    {postSummary}
+                  </p>
+                ) : null}
+                {isLocked ? (
+                  <div className="mt-4 inline-flex items-center gap-3 rounded-full border border-orange-300/50 bg-black/30 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
+                    <Link
+                      href={lockedCtaHref}
+                      className="rounded-full bg-orange-500 px-3 py-1 text-[10px] font-bold text-white transition hover:bg-orange-400"
+                    >
+                      {lockedCtaLabel}
+                    </Link>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
 
           <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
             <article className="rounded-[1.75rem] border border-zinc-200/90 bg-white/95 p-5 shadow-[0_18px_45px_-32px_rgba(0,0,0,0.35)] dark:border-zinc-800 dark:bg-zinc-950/95 sm:p-6">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orange-500 text-[10px] font-black uppercase text-white shadow-sm">
-                    Expo
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <h2 className="text-base font-semibold text-zinc-950 dark:text-white">
-                        {post.author}
-                      </h2>
-                      <ShieldCheck className="h-4 w-4 fill-zinc-900 text-zinc-900 dark:fill-white dark:text-white" />
+              <div className="relative">
+                <div
+                  className={isLocked ? "pointer-events-none select-none blur-[7px]" : ""}
+                  aria-hidden={isLocked}
+                >
+                  <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex items-start gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orange-500 text-[10px] font-black uppercase text-white shadow-sm">
+                        Expo
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <h2 className="text-base font-semibold text-zinc-950 dark:text-white">
+                            {post.author}
+                          </h2>
+                          <ShieldCheck className="h-4 w-4 fill-zinc-900 text-zinc-900 dark:fill-white dark:text-white" />
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          Updated {formatDate(post.updatedAt)}
+                        </p>
+                        {showMatch ? (
+                          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-500">
+                            Match for your sport
+                          </p>
+                        ) : null}
+                      </div>
                     </div>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Updated {formatDate(post.updatedAt)}
-                    </p>
-                    {showMatch ? (
-                      <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-500">
-                        Match for your sport
+
+                    <div className="flex items-center gap-3">
+                      <PostShareMenu title={post.title} url={postHref} />
+                      <PostLikeButton
+                        postId={post.id}
+                        initialLiked={post.likedByUser}
+                        initialLikes={post.likes}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        Sport
                       </p>
-                    ) : null}
+                      <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-white">
+                        {post.sport}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        Division
+                      </p>
+                      <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-white">
+                        {post.division || "Open"}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        Position
+                      </p>
+                      <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-white">
+                        {post.position || "Open"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {post.programDetails ? (
+                    <div className="mt-6 rounded-[1.4rem] border border-zinc-200/80 bg-zinc-50/80 px-5 py-5 dark:border-zinc-800 dark:bg-zinc-900/50">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-500">
+                        Program Details
+                      </p>
+                      <p className="mt-3 text-sm leading-7 text-zinc-700 dark:text-zinc-300">
+                        {post.programDetails}
+                      </p>
+                    </div>
+                  ) : null}
+
+                  {(post.content || post.excerpt) && (
+                    <div className="mt-6">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        Post
+                      </p>
+                      <div className="mt-3 rounded-[1.4rem] border border-zinc-200/80 bg-white px-5 py-5 dark:border-zinc-800 dark:bg-zinc-950">
+                        <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-700 dark:text-zinc-300">
+                          {post.content || post.excerpt}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <Link
+                      href={post.programUrl}
+                      className="inline-flex min-w-[170px] items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600"
+                    >
+                      Program Profile
+                    </Link>
+
+                    <Link
+                      href={post.programUrl}
+                      className="inline-flex items-center gap-2 text-sm font-medium text-orange-500 transition hover:translate-x-0.5"
+                    >
+                      Visit program link
+                      <MoveUpRight className="h-4 w-4" />
+                    </Link>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <PostShareMenu title={post.title} url={postHref} />
-                  <PostLikeButton
-                    postId={post.id}
-                    initialLiked={post.likedByUser}
-                    initialLikes={post.likes}
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    Sport
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-white">
-                    {post.sport}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    Division
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-white">
-                    {post.division || "Open"}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    Position
-                  </p>
-                  <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-white">
-                    {post.position || "Open"}
-                  </p>
-                </div>
-              </div>
-
-              {post.programDetails ? (
-                <div className="mt-6 rounded-[1.4rem] border border-zinc-200/80 bg-zinc-50/80 px-5 py-5 dark:border-zinc-800 dark:bg-zinc-900/50">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-500">
-                    Program Details
-                  </p>
-                  <p className="mt-3 text-sm leading-7 text-zinc-700 dark:text-zinc-300">
-                    {post.programDetails}
-                  </p>
-                </div>
-              ) : null}
-
-              {(post.content || post.excerpt) && (
-                <div className="mt-6">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    Post
-                  </p>
-                  <div className="mt-3 rounded-[1.4rem] border border-zinc-200/80 bg-white px-5 py-5 dark:border-zinc-800 dark:bg-zinc-950">
-                    <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-700 dark:text-zinc-300">
-                      {post.content || post.excerpt}
-                    </p>
+                {isLocked ? (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="mx-auto max-w-sm rounded-[1.5rem] border border-zinc-200/80 bg-white/92 p-6 text-center shadow-xl backdrop-blur dark:border-zinc-700 dark:bg-zinc-950/90">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-500">
+                        Member Preview
+                      </p>
+                      <h2 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-zinc-950 dark:text-white">
+                        Unlock the full post
+                      </h2>
+                      <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+                        Upgrade to reveal the summary, program details, the full write-up, and direct links.
+                      </p>
+                      <Link
+                        href="/upgrade"
+                        className="mt-5 inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
+                      >
+                        Upgrade Now
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <Link
-                  href={post.programUrl}
-                  className="inline-flex min-w-[170px] items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600"
-                >
-                  Program Profile
-                </Link>
-
-                <Link
-                  href={post.programUrl}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-orange-500 transition hover:translate-x-0.5"
-                >
-                  Visit program link
-                  <MoveUpRight className="h-4 w-4" />
-                </Link>
+                ) : null}
               </div>
             </article>
           </div>

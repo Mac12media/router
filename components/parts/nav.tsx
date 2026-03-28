@@ -20,6 +20,7 @@ import {
   TargetIcon,
   CheckCircle2Icon,
   BookCheck,
+  Users,
   HeartIcon,
   Layers,
   LifeBuoy,
@@ -38,7 +39,7 @@ const links1 = [
   { href: "/", text: "Dashboard", icon: BarChart },
 
   { href: "/football-programs", text: "College Programs", icon: GraduationCapIcon},
-  { href: "/posts", text: "Posts", icon: Book },
+  { href: "/posts", text: "Members", icon: Users },
  // { href: "/leads", text: "Favorites", icon: HeartIcon, locked: true },
   //{ href: "/toolkit", text: "Recruiting Toolkit", icon: BookCheck },
  // { href: "/chat", text: "Coach Al", icon: MessageCircleIcon },
