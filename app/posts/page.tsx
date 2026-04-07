@@ -205,7 +205,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                       </h3>
                     </Link>
 
-                    <p className="mt-3 text-xs leading-6 text-zinc-700 dark:text-zinc-300 sm:text-sm">
+                    <p className="mt-3 whitespace-pre-wrap break-words text-xs leading-6 text-zinc-700 dark:text-zinc-300 sm:text-sm">
                       {summary(post)}
                     </p>
                     </div>

@@ -10,6 +10,7 @@ import { PostShareMenu } from "@/components/parts/post-share-menu";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import {
   formatDate,
+  getPostSportImage,
   getPostById,
   normalizeSport,
   summary,
@@ -34,7 +35,7 @@ export async function generateMetadata({
   const description = summary(post);
   const title = `${post.title} | College Openings | EXPO`;
   const url = `/posts/${post.id}`;
-  const imageUrl = `/posts/${post.id}/opengraph-image`;
+  const imageUrl = getPostSportImage(post.sport);
 
   return {
     title,
@@ -50,9 +51,7 @@ export async function generateMetadata({
       images: [
         {
           url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: post.title,
+          alt: `${normalizeSport(post.sport) || "College"} openings`,
         },
       ],
       type: "article",
@@ -86,7 +85,6 @@ export default async function PostDetailPage({ params }: PageProps) {
   const postHref = `/posts/${post.id}`;
   const postSummary = summary(post);
   const showMatch = userSport && normalizeSport(post.sport) === userSport;
-
   return (
     <>
       <Breadcrumbs pageName={post.title} />
@@ -217,7 +215,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-500">
                         Program Details
                       </p>
-                      <p className="mt-3 text-sm leading-7 text-zinc-700 dark:text-zinc-300">
+                      <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700 dark:text-zinc-300">
                         {post.programDetails}
                       </p>
                     </div>
@@ -229,7 +227,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                         Post
                       </p>
                       <div className="mt-3 rounded-[1.4rem] border border-zinc-200/80 bg-white px-5 py-5 dark:border-zinc-800 dark:bg-zinc-950">
-                        <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-700 dark:text-zinc-300">
+                        <p className="whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700 dark:text-zinc-300">
                           {post.content || post.excerpt}
                         </p>
                       </div>

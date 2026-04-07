@@ -49,6 +49,20 @@ export function normalizeSport(value?: string | null) {
   }
 }
 
+export function getPostSportImage(value?: string | null) {
+  const sport = normalizeSport(value).toLowerCase();
+
+  if (sport.includes("basketball")) {
+    return "/basketballbanner.png";
+  }
+
+  if (sport.includes("football")) {
+    return "/footballbanner.png";
+  }
+
+  return "/footballbanner.png";
+}
+
 export function summary(post: Post) {
   return (
     post.programDetails ||
