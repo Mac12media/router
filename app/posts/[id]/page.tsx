@@ -77,8 +77,6 @@ export default async function PostDetailPage({ params }: PageProps) {
   const isAnonymous = !userId;
   const isFreePlan = Boolean(userId) && plan === "free";
   const isLocked = isAnonymous || isFreePlan;
-  const lockedCtaHref = isAnonymous ? "/login" : "/upgrade";
-  const lockedCtaLabel = isAnonymous ? "Login to Unlock" : "Upgrade to Unlock";
   const userSport = normalizeSport(userResult?.data?.sport);
   const post = await getPostById(id, userId);
 
@@ -136,21 +134,6 @@ export default async function PostDetailPage({ params }: PageProps) {
                 <h1 className="mt-4 max-w-3xl text-xl font-black tracking-[-0.04em] sm:text-3xl lg:text-4xl">
                   {post.title}
                 </h1>
-                {!isLocked ? (
-                  <p className="">
-                    
-                  </p>
-                ) : null}
-                {isLocked ? (
-                  <div className="mt-4 inline-flex items-center gap-3 rounded-full border border-orange-300/50 bg-black/30 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
-                    <Link
-                      href={lockedCtaHref}
-                      className="rounded-full bg-orange-500 px-3 py-1 text-[10px] font-bold text-white transition hover:bg-orange-400"
-                    >
-                      {lockedCtaLabel}
-                    </Link>
-                  </div>
-                ) : null}
               </div>
             </div>
           </div>
@@ -263,7 +246,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                   </div>
                 </div>
                 {isLocked ? (
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute inset-0 flex items-start justify-center px-4 pt-4 sm:items-center sm:px-0 sm:pt-0">
                     <div className="mx-auto max-w-sm rounded-[1.5rem] border border-zinc-200/80 bg-white/92 p-6 text-center shadow-xl backdrop-blur dark:border-zinc-700 dark:bg-zinc-950/90">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-500">
                         Member Preview
