@@ -88,3 +88,14 @@ export const updateUserProfileSchema = z.object({
   ig_username: z.string().optional(),
 
 });
+
+export const submitPostProfileSchema = z.object({
+  fullName: z.string().min(2, "Full name is required"),
+  email: z.string().email("A valid email is required"),
+  position: z.string().max(120).optional().or(z.literal("")),
+  classYear: z.string().max(50).optional().or(z.literal("")),
+  height: z.string().max(50).optional().or(z.literal("")),
+  weight: z.string().max(50).optional().or(z.literal("")),
+  videoUrl: z.string().url("Film link must be a valid URL").optional().or(z.literal("")),
+  message: z.string().max(2000).optional().or(z.literal("")),
+});

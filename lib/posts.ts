@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { getSubmittedPostIdsForUser } from "@/lib/data/post-submissions";
 
 export type PostStatus = "Draft" | "Published";
 
@@ -15,6 +16,7 @@ export type Post = {
   programUrl: string;
   likes: number;
   likedByUser: boolean;
+  hasSubmittedProfile: boolean;
   status: PostStatus;
   createdAt: string;
   updatedAt: string;
@@ -63,6 +65,10 @@ export function getPostSportImage(value?: string | null) {
   return "/footballbanner.png";
 }
 
+export function getPostSportFade(value?: string | null) {
+  return "bg-[linear-gradient(135deg,rgba(249,115,22,0.38)_0%,rgba(249,115,22,0.22)_24%,rgba(234,88,12,0.14)_44%,rgba(0,0,0,0.58)_72%,rgba(0,0,0,0.84)_100%)]";
+}
+
 export function summary(post: Post) {
   return (
     post.programDetails ||
@@ -91,7 +97,8 @@ function mapPost(
   },
   userId: string | undefined,
   likedPostIds: Set<string>,
-  likeCountByPost: Map<string, number>
+  likeCountByPost: Map<string, number>,
+  submittedPostIds: Set<string>
 ): Post {
   const postId = String(post.id);
 
@@ -108,6 +115,7 @@ function mapPost(
     programUrl: post.program_url ?? "/football-programs",
     likes: likeCountByPost.get(postId) ?? Number(post.likes ?? 0),
     likedByUser: Boolean(userId) && likedPostIds.has(postId),
+    hasSubmittedProfile: submittedPostIds.has(postId),
     status: (post.status as PostStatus) ?? "Draft",
     createdAt: post.created_at ?? new Date().toISOString(),
     updatedAt: post.updated_at ?? post.created_at ?? new Date().toISOString(),
@@ -160,9 +168,13 @@ export async function getPosts(userId?: string): Promise<Post[]> {
     likesError ? null : likeRows,
     userId
   );
+  const submittedPostIds = await getSubmittedPostIdsForUser(
+    userId,
+    data.map((post) => String(post.id))
+  );
 
   return data.map((post) =>
-    mapPost(post, userId, likedPostIds, likeCountByPost)
+    mapPost(post, userId, likedPostIds, likeCountByPost, submittedPostIds)
   );
 }
 
@@ -185,6 +197,26 @@ export async function getPostById(id: string, userId?: string) {
     likesError ? null : likeRows,
     userId
   );
+  const submittedPostIds = await getSubmittedPostIdsForUser(userId, [id]);
 
-  return mapPost(post, userId, likedPostIds, likeCountByPost);
+  return mapPost(post, userId, likedPostIds, likeCountByPost, submittedPostIds);
+}
+
+export function extractTweetUrls(...values: Array<string | null | undefined>) {
+  const matches = new Set<string>();
+  const tweetPattern =
+    /https?:\/\/(?:www\.)?(?:twitter\.com|x\.com)\/[A-Za-z0-9_]+\/status\/\d+(?:\?[^\s]+)?/gi;
+
+  for (const value of values) {
+    if (!value) continue;
+
+    const urls = value.match(tweetPattern);
+    if (!urls?.length) continue;
+
+    for (const url of urls) {
+      matches.add(url.replace(/^https?:\/\/x\.com/i, "https://twitter.com"));
+    }
+  }
+
+  return [...matches];
 }

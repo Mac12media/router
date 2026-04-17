@@ -26,7 +26,7 @@ export function PostShareMenu({
     return url;
   }
 
-  const shareMessage = `Check out this opening on Expo Recruits: ${title}`;
+  const shareMessage = title;
 
   async function nativeShare() {
     if (!navigator.share) return;

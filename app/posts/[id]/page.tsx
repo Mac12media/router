@@ -4,12 +4,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MoveLeft, MoveUpRight, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
-import { PostLikeButton } from "@/components/parts/post-like-button";
+import { PostProfileSubmitButton } from "@/components/parts/post-profile-submit-button";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { PostShareMenu } from "@/components/parts/post-share-menu";
+import { PostTweetEmbeds } from "@/components/parts/post-tweet-embeds";
+import { getPostSubmissionForUser } from "@/lib/data/post-submissions";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import {
+  extractTweetUrls,
   formatDate,
+  getPostSportFade,
   getPostSportImage,
   getPostById,
   normalizeSport,
@@ -85,6 +89,9 @@ export default async function PostDetailPage({ params }: PageProps) {
   const postHref = `/posts/${post.id}`;
   const postSummary = summary(post);
   const showMatch = userSport && normalizeSport(post.sport) === userSport;
+  const heroFadeClass = getPostSportFade(post.sport);
+  const existingSubmission = await getPostSubmissionForUser(post.id, userId);
+  const tweetUrls = extractTweetUrls(post.programDetails, post.content, post.excerpt);
   return (
     <>
       <Breadcrumbs pageName={post.title} />
@@ -92,13 +99,14 @@ export default async function PostDetailPage({ params }: PageProps) {
         <section className="overflow-hidden rounded-[2rem] border border-white/40 bg-white/85 shadow-[0_30px_80px_-45px_rgba(0,0,0,0.45)] backdrop-blur dark:border-white/10 dark:bg-zinc-950/75">
           <div className="relative h-[180px] sm:h-[260px] lg:h-[320px]">
             <Image
-              src="/college-football-openings-banner.avif"
+              src="/expo_banner.png"
               alt={post.title}
               fill
               priority
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.56)_0%,rgba(0,0,0,0.82)_100%)]" />
+            <div className={`absolute inset-0 ${heroFadeClass}`} />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.36)_0%,rgba(0,0,0,0.8)_100%)]" />
             <div className="absolute inset-0 flex items-end">
               <div className="w-full px-5 py-6 text-white sm:px-8 sm:py-8">
                 <Link
@@ -125,7 +133,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                   ) : null}
                 </div>
 
-                <h1 className="mt-4 max-w-3xl text-2xl font-black tracking-[-0.04em] sm:text-4xl lg:text-5xl">
+                <h1 className="mt-4 max-w-3xl text-xl font-black tracking-[-0.04em] sm:text-3xl lg:text-4xl">
                   {post.title}
                 </h1>
                 {!isLocked ? (
@@ -175,11 +183,12 @@ export default async function PostDetailPage({ params }: PageProps) {
 
                     <div className="flex items-center gap-3">
                       <PostShareMenu title={post.title} url={postHref} />
-                      <PostLikeButton
-                        postId={post.id}
-                        initialLiked={post.likedByUser}
-                        initialLikes={post.likes}
-                      />
+                      <Link
+                        href={post.programUrl}
+                        className="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
+                      >
+                        Visit
+                      </Link>
                     </div>
                   </div>
 
@@ -234,17 +243,19 @@ export default async function PostDetailPage({ params }: PageProps) {
                     </div>
                   )}
 
+                  <PostTweetEmbeds urls={tweetUrls} />
+
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <Link
-                      href={post.programUrl}
-                      className="inline-flex min-w-[170px] items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600"
-                    >
-                      Visit
-                    </Link>
+                    <PostProfileSubmitButton
+                      postId={post.id}
+                      postTitle={post.title}
+                      profile={userResult?.data}
+                      existingSubmission={existingSubmission}
+                    />
 
                     <Link
                       href={post.programUrl}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-orange-500 transition hover:translate-x-0.5"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700 transition hover:translate-x-0.5 dark:text-zinc-300"
                     >
                       Visit link
                       <MoveUpRight className="h-4 w-4" />

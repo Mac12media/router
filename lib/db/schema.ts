@@ -9,6 +9,7 @@ import {
   jsonb,
   numeric,
   varchar,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { init } from "@paralleldrive/cuid2";
@@ -311,3 +312,43 @@ export const bbprograms = pgTable("basketball_programs", {
   w_website: varchar("w_website", { length: 255 }),
   w_camps: text("w_camps"),
 });
+
+export const postSubmittedProfiles = pgTable(
+  "post_submitted_profiles",
+  {
+    id: text("id")
+      .$defaultFn(() => createId())
+      .notNull()
+      .primaryKey(),
+    postId: text("post_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    fullName: text("full_name").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    sport: text("sport"),
+    position: text("position"),
+    classYear: text("class_year"),
+    height: text("height"),
+    weight: text("weight"),
+    highSchool: text("high_school"),
+    city: text("city"),
+    state: text("state"),
+    gpa: text("gpa"),
+    testScore: text("test_score"),
+    videoUrl: text("video_url"),
+    xUsername: text("x_username"),
+    instagramUsername: text("instagram_username"),
+    bio: text("bio"),
+    message: text("message"),
+    createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => ({
+    userPostUnique: uniqueIndex("post_submitted_profiles_user_post_idx").on(
+      table.userId,
+      table.postId
+    ),
+  })
+);

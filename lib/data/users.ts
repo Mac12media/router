@@ -143,6 +143,7 @@ export const getUserFull = authenticatedAction.action(
         name: users.name,
         id: users.id,
         last_name: users.last_name,
+        email: users.email,
         grad_year: users.grad_year,
         bio: users.bio,
                         image: users.image,
