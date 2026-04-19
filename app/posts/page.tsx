@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { MoveUpRight, ShieldCheck } from "lucide-react";
+import { Eye, MoveUpRight, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
+import { PostSummaryToggle } from "@/components/parts/post-summary-toggle";
+import { PostViewCounter } from "@/components/parts/post-view-counter";
 import { PostsSportSelect } from "@/components/parts/posts-sport-select";
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { PostShareMenu } from "@/components/parts/post-share-menu";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
-import { getPostSportFade, getPosts, normalizeSport, summary } from "@/lib/posts";
+import {
+  extractTweetUrls,
+  getPostSportFade,
+  getPosts,
+  normalizePosition,
+  normalizeSport,
+  stripTweetUrls,
+  summary,
+} from "@/lib/posts";
 
 const pageData = {
   name: "Posts",
@@ -73,6 +83,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
   const userId = userResult?.data?.id;
   const posts = await getPosts(userId);
   const userSport = normalizeSport(userResult?.data?.sport);
+  const userPosition = normalizePosition(userResult?.data?.position);
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const requestedSport = normalizeSport(resolvedSearchParams?.sport);
 
@@ -96,14 +107,23 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       ? userSport
       : POST_SPORT_OPTIONS[0];
 
-  const visiblePosts = prioritizedPosts.filter(
+  const postsForSport = prioritizedPosts.filter(
     (post) => normalizeSport(post.sport) === selectedSport
   );
+  const visiblePosts = postsForSport.filter((post) => {
+    const postPosition = normalizePosition(post.position);
+    if (!userPosition) return true;
+    return postPosition === "All" || postPosition === userPosition;
+  });
 
   const heroSport = selectedSport;
   const heroTitle = "College Openings";
   const recentLabel = `Recent ${heroSport} Post`;
   const heroFadeClass = getPostSportFade(heroSport);
+  const heroOverlayStyle = {
+    backgroundImage:
+      "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(249,115,22,0.16)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
+  } as const;
 
   return (
     <>
@@ -119,7 +139,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
               className="object-cover"
             />
             <div className={`absolute inset-0 ${heroFadeClass}`} />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.36)_0%,rgba(0,0,0,0.8)_100%)]" />
+            <div className="absolute inset-0" style={heroOverlayStyle} />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white">
               <PostsSportSelect sports={[...POST_SPORT_OPTIONS]} value={heroSport} />
               <h1 className="max-w-2xl text-2xl font-black uppercase leading-none tracking-[-0.03em] sm:text-4xl lg:text-5xl">
@@ -139,11 +159,14 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
             <div className="space-y-6">
               {visiblePosts.map((post) => {
                 const postHref = isLocked ? "/upgrade" : `/posts/${post.id}`;
+                const postSummary = summary(post);
+                const summaryTweetUrls = extractTweetUrls(postSummary);
+                const summaryText = stripTweetUrls(postSummary);
 
                 return (
                   <article
                     key={post.id}
-                    className="group relative rounded-[1.6rem] border border-zinc-200/90 bg-white/95 p-4 shadow-[0_18px_45px_-32px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-0.5 hover:shadow-[0_24px_55px_-30px_rgba(0,0,0,0.38)] dark:border-zinc-800 dark:bg-zinc-950/95"
+                    className="group relative rounded-[1.6rem] border border-zinc-200/90 bg-white/95 p-4 shadow-[0_18px_45px_-32px_rgba(0,0,0,0.35)] transition-all hover:-translate-y-0.5 hover:shadow-[0_24px_55px_-30px_rgba(0,0,0,0.38)] sm:p-5 dark:border-zinc-800 dark:bg-zinc-950/95"
                   >
                   <Link
                     href={postHref}
@@ -169,7 +192,14 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                       </div>
                     </div>
 
-                    <PostShareMenu title={post.title} url={postHref} />
+                    <div className="flex items-center gap-2 self-start">
+                      <PostViewCounter
+                        postId={post.id}
+                        initialViews={post.views}
+                        className="inline-flex w-fit items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-2 text-[10px] font-medium uppercase text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300"
+                      />
+                      <PostShareMenu title={post.title} url={postHref} />
+                    </div>
                   </div>
 
                   <div className="mt-4 flex items-center justify-between border-t border-zinc-200 pt-4 text-[10px] font-semibold uppercase tracking-[0.18em] dark:border-zinc-800">
@@ -188,7 +218,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                         </h3>
                       </Link>
 
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
                         {post.sport ? (
                           <span className="rounded-full bg-zinc-200 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
                             {post.sport}
@@ -212,13 +242,15 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                         isLocked ? "pointer-events-none select-none blur-[5px]" : ""
                       }`}
                     >
-                      <p className="whitespace-pre-wrap break-words text-xs leading-6 text-zinc-700 dark:text-zinc-300 sm:text-sm">
-                        {summary(post)}
-                      </p>
+                      <PostSummaryToggle
+                        text={summaryText}
+                        href={postHref}
+                        tweetUrls={summaryTweetUrls}
+                      />
                     </div>
 
                     {isLocked ? (
-                      <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="absolute inset-0 flex items-center justify-center px-3">
                         <Link
                           href="/upgrade"
                           className="rounded-full bg-black px-4 py-2 text-[11px] font-semibold uppercase  text-white shadow-lg transition hover:bg-zinc-900 dark:bg-orange-500 dark:text-black dark:hover:bg-orange-400"
@@ -229,44 +261,37 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                     ) : null}
                   </div>
 
-                  <div className="relative z-10 mt-4 flex items-center justify-between gap-4">
-                    {isLocked ? (
+                  <div className="relative z-10 mt-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                      {isLocked ? (
+                        <Link
+                          href="/upgrade"
+                          className="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-orange-600 sm:min-w-[150px] sm:w-auto"
+                        >
+                          Upgrade
+                        </Link>
+                      ) : (
+                        <Link
+                          href={postHref}
+                          className={`inline-flex w-full items-center justify-center rounded-xl px-5 py-2.5 text-xs font-semibold transition sm:min-w-[150px] sm:w-auto ${
+                            post.hasSubmittedProfile
+                              ? "bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                              : "bg-orange-500 text-white hover:bg-orange-600"
+                          }`}
+                        >
+                          {post.hasSubmittedProfile ? "Profile Submitted" : "Submit Profile"}
+                        </Link>
+                      )}
                       <Link
-                        href="/upgrade"
-                        className="inline-flex min-w-[150px] items-center justify-center rounded-xl bg-orange-500 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-orange-600"
+                        href={isLocked ? "/upgrade" : post.programUrl}
+                        className="inline-flex w-full items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-xs font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 sm:min-w-[150px] sm:w-auto dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
                       >
-                        Upgrade
+                        {isLocked ? "Members Only" : "Visit Program"}
                       </Link>
-                    ) : (
-                      <Link
-                        href={postHref}
-                        className={`inline-flex min-w-[150px] items-center justify-center rounded-xl px-5 py-2.5 text-xs font-semibold transition ${
-                          post.hasSubmittedProfile
-                            ? "bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
-                            : "bg-orange-500 text-white hover:bg-orange-600"
-                        }`}
-                      >
-                        {post.hasSubmittedProfile ? "Profile Submitted" : "Submit Profile"}
-                      </Link>
-                    )}
-
-                    <Link
-                      href={isLocked ? "/upgrade" : post.programUrl}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-2 text-[10px] font-medium uppercase text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
-                    >
-                      {isLocked ? "Members Only" : "Visit"}
-                    </Link>
+                    </div>
                   </div>
 
-                  <div className="relative z-10 mt-4 flex justify-end text-[11px] text-muted-foreground">
-                    <Link
-                      href={postHref}
-                      className="inline-flex items-center gap-1 font-medium text-orange-500 transition group-hover:translate-x-0.5"
-                    >
-                      View Post
-                      <MoveUpRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
+                  
                   </article>
                 );
               })}

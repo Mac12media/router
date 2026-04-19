@@ -50,8 +50,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     user.sport === "girls_flag_football" ||
     user.sport?.toLowerCase().includes("flag");
   const profileGradient = isFlagFootball
-    ? "linear-gradient(135deg, rgba(236,72,153,0.95), rgba(236,72,153,0.75))"
-    : "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))";
+    ? "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(244,114,182,0.98) 0%, rgba(236,72,153,0.92) 46%, rgba(190,24,93,0.84) 100%)"
+    : "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(255,153,92,0.98) 0%, rgba(255,114,0,0.92) 46%, rgba(194,65,12,0.84) 100%)";
   const nameClass = isFlagFootball ? "text-pink-100" : "text-white";
   const metaClass = isFlagFootball ? "text-pink-100/80" : "text-white/80";
   return (

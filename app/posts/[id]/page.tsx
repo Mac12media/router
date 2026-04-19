@@ -8,6 +8,7 @@ import { PostProfileSubmitButton } from "@/components/parts/post-profile-submit-
 import { PageWrapper } from "@/components/parts/page-wrapper";
 import { PostShareMenu } from "@/components/parts/post-share-menu";
 import { PostTweetEmbeds } from "@/components/parts/post-tweet-embeds";
+import { PostViewCounter } from "@/components/parts/post-view-counter";
 import { getPostSubmissionForUser } from "@/lib/data/post-submissions";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import {
@@ -17,6 +18,7 @@ import {
   getPostSportImage,
   getPostById,
   normalizeSport,
+  stripTweetUrls,
   summary,
 } from "@/lib/posts";
 
@@ -89,7 +91,14 @@ export default async function PostDetailPage({ params }: PageProps) {
   const showMatch = userSport && normalizeSport(post.sport) === userSport;
   const heroFadeClass = getPostSportFade(post.sport);
   const existingSubmission = await getPostSubmissionForUser(post.id, userId);
-  const tweetUrls = extractTweetUrls(post.programDetails, post.content, post.excerpt);
+  const programDetailsTweetUrls = extractTweetUrls(post.programDetails);
+  const postBodyTweetUrls = extractTweetUrls(post.content || post.excerpt);
+  const cleanProgramDetails = stripTweetUrls(post.programDetails);
+  const cleanPostBody = stripTweetUrls(post.content || post.excerpt);
+  const heroOverlayStyle = {
+    backgroundImage:
+      "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(249,115,22,0.16)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
+  } as const;
   return (
     <>
       <Breadcrumbs pageName={post.title} />
@@ -104,7 +113,7 @@ export default async function PostDetailPage({ params }: PageProps) {
               className="object-cover"
             />
             <div className={`absolute inset-0 ${heroFadeClass}`} />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_34%),linear-gradient(180deg,rgba(0,0,0,0.36)_0%,rgba(0,0,0,0.8)_100%)]" />
+            <div className="absolute inset-0" style={heroOverlayStyle} />
             <div className="absolute inset-0 flex items-end">
               <div className="w-full px-5 py-6 text-white sm:px-8 sm:py-8">
                 <Link
@@ -139,13 +148,13 @@ export default async function PostDetailPage({ params }: PageProps) {
           </div>
 
           <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
-            <article className="rounded-[1.75rem] border border-zinc-200/90 bg-white/95 p-5 shadow-[0_18px_45px_-32px_rgba(0,0,0,0.35)] dark:border-zinc-800 dark:bg-zinc-950/95 sm:p-6">
+            <article className="rounded-[1.75rem] border border-zinc-200/90 bg-white/95 p-4 shadow-[0_18px_45px_-32px_rgba(0,0,0,0.35)] dark:border-zinc-800 dark:bg-zinc-950/95 sm:p-6">
               <div className="relative">
                 <div
                   className={isLocked ? "pointer-events-none select-none blur-[7px]" : ""}
                   aria-hidden={isLocked}
                 >
-                  <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-start gap-3">
                       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orange-500 text-[10px] font-black uppercase text-white shadow-sm">
                         Expo
@@ -164,18 +173,19 @@ export default async function PostDetailPage({ params }: PageProps) {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 self-end sm:self-auto">
                       <PostShareMenu title={post.title} url={postHref} />
-                      <Link
-                        href={post.programUrl}
-                        className="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
-                      >
-                        Visit
-                      </Link>
+                      <PostViewCounter
+                        postId={post.id}
+                        initialViews={post.views}
+                        incrementOnMount
+                                              className="inline-flex w-fit items-center gap-1.5 self-start rounded-full border border-zinc-200 bg-white px-3 py-2 text-[10px] font-medium uppercase text-zinc-700 sm:self-auto dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300"
+
+                      />
                     </div>
                   </div>
 
-                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                  <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-3">
                     <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/60">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                         Sport
@@ -202,47 +212,63 @@ export default async function PostDetailPage({ params }: PageProps) {
                     </div>
                   </div>
 
-                  {post.programDetails ? (
-                    <div className="mt-6 rounded-[1.4rem] border border-zinc-200/80 bg-zinc-50/80 px-5 py-5 dark:border-zinc-800 dark:bg-zinc-900/50">
+                  {(cleanProgramDetails || programDetailsTweetUrls.length > 0) ? (
+                    <div className="mt-6 border-t border-zinc-200/80 pt-5 dark:border-zinc-800 sm:rounded-[1.4rem] sm:border sm:bg-zinc-50/80 sm:px-5 sm:py-5 dark:sm:bg-zinc-900/50">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-500">
                         Program Details
                       </p>
-                      <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700 dark:text-zinc-300">
-                        {post.programDetails}
-                      </p>
+                      {cleanProgramDetails ? (
+                        <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700 dark:text-zinc-300">
+                          {cleanProgramDetails}
+                        </p>
+                      ) : null}
+                      {programDetailsTweetUrls.length ? (
+                        <PostTweetEmbeds
+                          urls={programDetailsTweetUrls}
+                          className={cleanProgramDetails ? "mt-4" : "mt-3"}
+                        />
+                      ) : null}
                     </div>
                   ) : null}
 
-                  {(post.content || post.excerpt) && (
+                  {(cleanPostBody || postBodyTweetUrls.length > 0) && (
                     <div className="mt-6">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                         Post
                       </p>
-                      <div className="mt-3 rounded-[1.4rem] border border-zinc-200/80 bg-white px-5 py-5 dark:border-zinc-800 dark:bg-zinc-950">
-                        <p className="whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700 dark:text-zinc-300">
-                          {post.content || post.excerpt}
-                        </p>
+                      <div className="mt-3 border-t border-zinc-200/80 pt-4 dark:border-zinc-800 sm:rounded-[1.4rem] sm:border sm:bg-white sm:px-5 sm:py-5 dark:sm:border-zinc-800 dark:sm:bg-zinc-950">
+                        {cleanPostBody ? (
+                          <p className="whitespace-pre-wrap break-words text-sm leading-7 text-zinc-700 dark:text-zinc-300">
+                            {cleanPostBody}
+                          </p>
+                        ) : null}
+                        {postBodyTweetUrls.length ? (
+                          <PostTweetEmbeds
+                            urls={postBodyTweetUrls}
+                            className={cleanPostBody ? "mt-4" : ""}
+                          />
+                        ) : null}
                       </div>
                     </div>
                   )}
 
-                  <PostTweetEmbeds urls={tweetUrls} />
-
                   <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <PostProfileSubmitButton
-                      postId={post.id}
-                      postTitle={post.title}
-                      profile={userResult?.data}
-                      existingSubmission={existingSubmission}
-                    />
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      <PostProfileSubmitButton
+                        postId={post.id}
+                        postTitle={post.title}
+                        profile={userResult?.data}
+                        existingSubmission={existingSubmission}
+                      />
 
-                    <Link
-                      href={post.programUrl}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700 transition hover:translate-x-0.5 dark:text-zinc-300"
-                    >
-                      Visit link
-                      <MoveUpRight className="h-4 w-4" />
-                    </Link>
+                      <Link
+                        href={post.programUrl}
+                        className="inline-flex w-full items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-3 text-sm font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 sm:min-w-[170px] sm:w-auto dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-zinc-700 dark:hover:bg-zinc-900"
+                      >
+                        Visit Program
+                      </Link>
+                    </div>
+
                   </div>
                 </div>
                 {isLocked ? (

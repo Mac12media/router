@@ -14,6 +14,7 @@ export type Post = {
   position: string;
   programDetails: string;
   programUrl: string;
+  views: number;
   likes: number;
   likedByUser: boolean;
   hasSubmittedProfile: boolean;
@@ -49,6 +50,21 @@ export function normalizeSport(value?: string | null) {
     default:
       return value?.trim() || "";
   }
+}
+
+export function normalizePosition(value?: string | null) {
+  const normalized = (value ?? "").trim().toLowerCase();
+
+  if (!normalized) return "";
+  if (
+    normalized === "all positions" ||
+    normalized === "all_position" ||
+    normalized === "all"
+  ) {
+    return "All";
+  }
+
+  return value?.trim() || "";
 }
 
 export function getPostSportImage(value?: string | null) {
@@ -113,6 +129,7 @@ function mapPost(
     position: post.position ?? "Open",
     programDetails: post.program_details ?? "",
     programUrl: post.program_url ?? "/football-programs",
+    views: Number(post.likes ?? 0),
     likes: likeCountByPost.get(postId) ?? Number(post.likes ?? 0),
     likedByUser: Boolean(userId) && likedPostIds.has(postId),
     hasSubmittedProfile: submittedPostIds.has(postId),
@@ -219,4 +236,16 @@ export function extractTweetUrls(...values: Array<string | null | undefined>) {
   }
 
   return [...matches];
+}
+
+export function stripTweetUrls(value?: string | null) {
+  if (!value) return "";
+
+  return value
+    .replace(
+      /https?:\/\/(?:www\.)?(?:twitter\.com|x\.com)\/[A-Za-z0-9_]+\/status\/\d+(?:\?[^\s]+)?/gi,
+      ""
+    )
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
