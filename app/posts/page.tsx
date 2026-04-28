@@ -11,7 +11,9 @@ import { PostShareMenu } from "@/components/parts/post-share-menu";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import {
   extractTweetUrls,
+  getPostSportAccentTheme,
   getPostSportFade,
+  getPostSportOverlayStyle,
   getPosts,
   normalizePosition,
   normalizeSport,
@@ -120,10 +122,14 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
   const heroTitle = "College Openings";
   const recentLabel = `Recent ${heroSport} Post`;
   const heroFadeClass = getPostSportFade(heroSport);
-  const heroOverlayStyle = {
-    backgroundImage:
-      "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(249,115,22,0.16)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
-  } as const;
+  const heroOverlayStyle = getPostSportOverlayStyle(heroSport);
+  const accentTheme = getPostSportAccentTheme(heroSport);
+  const selectItemAccentClass =
+    heroSport === "Flag Football"
+      ? "data-[state=checked]:bg-pink-500/20 data-[state=checked]:text-white focus:bg-pink-500/20 focus:text-white"
+      : heroSport === "Football"
+        ? "data-[state=checked]:bg-emerald-500/20 data-[state=checked]:text-white focus:bg-emerald-500/20 focus:text-white"
+        : "data-[state=checked]:bg-orange-500/20 data-[state=checked]:text-white focus:bg-orange-500/20 focus:text-white";
 
   return (
     <>
@@ -141,7 +147,11 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
             <div className={`absolute inset-0 ${heroFadeClass}`} />
             <div className="absolute inset-0" style={heroOverlayStyle} />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white">
-              <PostsSportSelect sports={[...POST_SPORT_OPTIONS]} value={heroSport} />
+              <PostsSportSelect
+                sports={[...POST_SPORT_OPTIONS]}
+                value={heroSport}
+                itemAccentClass={selectItemAccentClass}
+              />
               <h1 className="max-w-2xl text-2xl font-black uppercase leading-none tracking-[-0.03em] sm:text-4xl lg:text-5xl">
                 {heroTitle}
               </h1>
@@ -150,7 +160,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
 
           <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
             <div className="mb-5 flex items-center gap-3">
-              <span className="h-5 w-1 rounded-full bg-orange-500" />
+              <span className={`h-5 w-1 rounded-full ${accentTheme.solidBg}`} />
               <p className="text-sm font-semibold tracking-[-0.01em] text-zinc-900 dark:text-white">
                 {recentLabel}
               </p>
@@ -176,7 +186,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
 
                   <div className="relative z-10 flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-[9px] font-black uppercase text-white shadow-sm">
+                      <div className={`flex h-9 w-9 items-center justify-center rounded-full text-[9px] font-black uppercase text-white shadow-sm ${accentTheme.solidBg}`}>
                         Expo
                       </div>
                       <div>
@@ -213,7 +223,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                       }`}
                     >
                       <Link href={postHref} className="relative z-10 block">
-                        <h3 className="text-base font-semibold tracking-[-0.02em] text-zinc-950 transition-colors group-hover:text-orange-500 dark:text-white sm:text-lg">
+                        <h3 className={`text-base font-semibold tracking-[-0.02em] text-zinc-950 transition-colors dark:text-white sm:text-lg ${accentTheme.groupHoverText}`}>
                           {post.title}
                         </h3>
                       </Link>
@@ -246,6 +256,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                         text={summaryText}
                         href={postHref}
                         tweetUrls={summaryTweetUrls}
+                        accentTextClass={accentTheme.text}
+                        accentHoverTextClass={accentTheme.groupHoverText.replace("group-hover:", "hover:")}
                       />
                     </div>
 
@@ -253,7 +265,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                       <div className="absolute inset-0 flex items-center justify-center px-3">
                         <Link
                           href="/upgrade"
-                          className="rounded-full bg-black px-4 py-2 text-[11px] font-semibold uppercase  text-white shadow-lg transition hover:bg-zinc-900 dark:bg-orange-500 dark:text-black dark:hover:bg-orange-400"
+                          className={`rounded-full bg-black px-4 py-2 text-[11px] font-semibold uppercase text-white shadow-lg transition hover:bg-zinc-900 ${accentTheme.darkSolidBg} ${accentTheme.darkSolidText} ${accentTheme.darkSolidBgHover}`}
                         >
                           Upgrade to Unlock
                         </Link>
@@ -266,7 +278,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                       {isLocked ? (
                         <Link
                           href="/upgrade"
-                          className="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-orange-600 sm:min-w-[150px] sm:w-auto"
+                          className={`inline-flex w-full items-center justify-center rounded-xl px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition sm:min-w-[150px] sm:w-auto ${accentTheme.solidBg} ${accentTheme.solidBgHover}`}
                         >
                           Upgrade
                         </Link>
@@ -276,7 +288,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                           className={`inline-flex w-full items-center justify-center rounded-xl px-5 py-2.5 text-xs font-semibold transition sm:min-w-[150px] sm:w-auto ${
                             post.hasSubmittedProfile
                               ? "bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
-                              : "bg-orange-500 text-white hover:bg-orange-600"
+                              : `${accentTheme.solidBg} text-white ${accentTheme.solidBgHover}`
                           }`}
                         >
                           {post.hasSubmittedProfile ? "Profile Submitted" : "Submit Profile"}

@@ -82,7 +82,90 @@ export function getPostSportImage(value?: string | null) {
 }
 
 export function getPostSportFade(value?: string | null) {
+  const normalized = (value ?? "").trim().toLowerCase();
+
+  if (
+    normalized === "girls_flag_football" ||
+    normalized === "girls flag football" ||
+    normalized === "flag football"
+  ) {
+    return "bg-[linear-gradient(135deg,rgba(236,72,153,0.42)_0%,rgba(244,114,182,0.24)_24%,rgba(190,24,93,0.16)_44%,rgba(0,0,0,0.58)_72%,rgba(0,0,0,0.84)_100%)]";
+  }
+
+  if (normalized === "football") {
+    return "bg-[linear-gradient(135deg,rgba(21,128,61,0.46)_0%,rgba(22,101,52,0.28)_24%,rgba(20,83,45,0.2)_44%,rgba(0,0,0,0.58)_72%,rgba(0,0,0,0.84)_100%)]";
+  }
+
   return "bg-[linear-gradient(135deg,rgba(249,115,22,0.38)_0%,rgba(249,115,22,0.22)_24%,rgba(234,88,12,0.14)_44%,rgba(0,0,0,0.58)_72%,rgba(0,0,0,0.84)_100%)]";
+}
+
+export function getPostSportOverlayStyle(value?: string | null) {
+  const normalized = (value ?? "").trim().toLowerCase();
+
+  if (
+    normalized === "girls_flag_football" ||
+    normalized === "girls flag football" ||
+    normalized === "flag football"
+  ) {
+    return {
+      backgroundImage:
+        "linear-gradient(135deg, rgba(236,72,153,0.05), rgba(244,114,182,0.16)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
+    } as const;
+  }
+
+  if (normalized === "football") {
+    return {
+      backgroundImage:
+        "linear-gradient(135deg, rgba(21,128,61,0.08), rgba(20,83,45,0.2)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
+    } as const;
+  }
+
+  return {
+    backgroundImage:
+      "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(249,115,22,0.16)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
+  } as const;
+}
+
+export function getPostSportAccentTheme(value?: string | null) {
+  const normalized = (value ?? "").trim().toLowerCase();
+
+  if (
+    normalized === "girls_flag_football" ||
+    normalized === "girls flag football" ||
+    normalized === "flag football"
+  ) {
+    return {
+      solidBg: "bg-pink-500",
+      solidBgHover: "hover:bg-pink-600",
+      solidBgDarkHover: "dark:hover:bg-pink-400",
+      text: "text-pink-500",
+      groupHoverText: "group-hover:text-pink-500",
+      darkSolidBg: "dark:bg-pink-500",
+      darkSolidText: "dark:text-white",
+    } as const;
+  }
+
+  if (normalized === "football") {
+    return {
+      solidBg: "bg-green-700",
+      solidBgHover: "hover:bg-green-800",
+      solidBgDarkHover: "dark:hover:bg-green-600",
+      text: "text-green-700",
+      groupHoverText: "group-hover:text-green-700",
+      darkSolidBg: "dark:bg-green-700",
+      darkSolidText: "dark:text-white",
+    } as const;
+  }
+
+  return {
+    solidBg: "bg-orange-500",
+    solidBgHover: "hover:bg-orange-600",
+    solidBgDarkHover: "dark:hover:bg-orange-400",
+    text: "text-orange-500",
+    groupHoverText: "group-hover:text-orange-500",
+    darkSolidBg: "dark:bg-orange-500",
+    darkSolidText: "dark:text-white",
+  } as const;
 }
 
 export function summary(post: Post) {

@@ -94,6 +94,7 @@ export default async function Page() {
             name={user?.name ?? ""}
             gradClass={user?.grad_year ?? ""}
             position={user?.position ?? ""}
+            sport={user?.sport ?? ""}
             height={user?.height ?? ""}
             weight={user?.weight ?? ""}
             ACD_score={user?.ACD_score ?? ""}

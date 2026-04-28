@@ -12,11 +12,13 @@ import {
 type PostsSportSelectProps = {
   sports: string[];
   value: string;
+  itemAccentClass?: string;
 };
 
 export function PostsSportSelect({
   sports,
   value,
+  itemAccentClass = "data-[state=checked]:bg-orange-500/20 data-[state=checked]:text-white focus:bg-orange-500/20 focus:text-white",
 }: PostsSportSelectProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -37,7 +39,7 @@ export function PostsSportSelect({
       </SelectTrigger>
       <SelectContent>
         {sports.map((sport) => (
-          <SelectItem key={sport} value={sport}>
+          <SelectItem key={sport} value={sport} className={itemAccentClass}>
             {sport}
           </SelectItem>
         ))}

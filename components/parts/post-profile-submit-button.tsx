@@ -55,6 +55,11 @@ type PostProfileSubmitButtonProps = {
   postTitle: string;
   profile?: ProfileLike | null;
   existingSubmission?: SubmissionLike | null;
+  accentTheme?: {
+    solidBg: string;
+    solidBgHover: string;
+    text: string;
+  };
 };
 
 type FormState = {
@@ -144,12 +149,12 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   const displayValue = formatDisplayValue(label, value);
 
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-zinc-200/80 py-3 last:border-b-0 dark:border-white/10">
+    <div className="grid gap-1 border-b border-zinc-200/80 py-3 last:border-b-0 sm:grid-cols-[140px,minmax(0,1fr)] sm:items-center sm:gap-4 dark:border-white/10">
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-500">
         {label}
       </p>
       <p
-        className={`text-sm font-medium text-right ${
+        className={`text-sm font-medium sm:text-right sm:justify-self-end ${
           displayValue ? "text-zinc-950 dark:text-white" : "text-zinc-400 dark:text-zinc-500"
         }`}
       >
@@ -175,7 +180,7 @@ function EditableRow({
   type?: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-zinc-200/80 py-3 last:border-b-0 dark:border-white/10">
+    <div className="grid gap-2 border-b border-zinc-200/80 py-3 last:border-b-0 sm:grid-cols-[140px,minmax(0,1fr)] sm:items-center sm:gap-4 dark:border-white/10">
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-500">
         {label}
       </p>
@@ -184,7 +189,7 @@ function EditableRow({
         value={value}
         onChange={(event) => onChange(name, event.target.value)}
         placeholder={placeholder}
-        className="h-9 w-full max-w-[220px] border-zinc-200 bg-zinc-50 text-right dark:border-white/10 dark:bg-white/[0.03]"
+        className="h-10 w-full border-zinc-200 bg-zinc-50 sm:max-w-[420px] sm:justify-self-end sm:text-right dark:border-white/10 dark:bg-white/[0.03]"
       />
     </div>
   );
@@ -204,12 +209,12 @@ function EditableSelectRow({
   onValueChange: (value: string) => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-zinc-200/80 py-3 last:border-b-0 dark:border-white/10">
+    <div className="grid gap-2 border-b border-zinc-200/80 py-3 last:border-b-0 sm:grid-cols-[140px,minmax(0,1fr)] sm:items-center sm:gap-4 dark:border-white/10">
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-500">
         {label}
       </p>
       <Select value={value} onValueChange={onValueChange}>
-        <SelectTrigger className="h-9 w-full max-w-[220px] border-zinc-200 bg-zinc-50 text-right dark:border-white/10 dark:bg-white/[0.03]">
+        <SelectTrigger className="h-10 w-full border-zinc-200 bg-zinc-50 sm:max-w-[420px] sm:justify-self-end sm:text-right dark:border-white/10 dark:bg-white/[0.03]">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
@@ -229,6 +234,11 @@ export function PostProfileSubmitButton({
   postTitle,
   profile,
   existingSubmission,
+  accentTheme = {
+    solidBg: "bg-orange-500",
+    solidBgHover: "hover:bg-orange-600",
+    text: "text-orange-500",
+  },
 }: PostProfileSubmitButtonProps) {
   const initialState = useMemo(
     () => buildInitialState(profile, existingSubmission),
@@ -246,7 +256,7 @@ export function PostProfileSubmitButton({
 
   useEffect(() => {
     setForm(initialState);
-    setIsEditing(getMissingRequiredFields(initialState).length > 0);
+    setIsEditing(false);
   }, [initialState, open]);
 
   const missingRequiredFields = getMissingRequiredFields(form);
@@ -255,6 +265,14 @@ export function PostProfileSubmitButton({
     missingRequiredFields.length > 0
       ? missingRequiredFields.map((field) => LABELS[field]).join(", ")
       : "";
+  const requiresEditsBeforeSubmit = !isReadyToSend;
+  const primaryButtonLabel = success
+    ? "Update Submission"
+    : requiresEditsBeforeSubmit
+      ? isEditing
+        ? "Complete Required Fields"
+        : "Edit Profile Details"
+      : "Send Profile";
 
   function updateField(name: keyof FormState, value: string) {
     setForm((current) => ({ ...current, [name]: value }));
@@ -298,7 +316,7 @@ export function PostProfileSubmitButton({
           className={
             success
               ? "rounded-full border border-emerald-200 bg-emerald-50 px-4 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-900/70 dark:bg-emerald-950/30 dark:text-emerald-400"
-              : "rounded-full bg-orange-500 px-4 text-white hover:bg-orange-600"
+              : `rounded-full px-4 text-white ${accentTheme.solidBg} ${accentTheme.solidBgHover}`
           }
         >
           {success ? (
@@ -315,8 +333,8 @@ export function PostProfileSubmitButton({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[88vh] max-w-xl overflow-hidden border-zinc-200 bg-white p-0 dark:border-white/10 dark:bg-zinc-950">
-        <DialogHeader className="border-b border-zinc-200/80 px-5 pb-4 pt-5 dark:border-white/10">
+      <DialogContent className="max-h-[92vh] w-[calc(100vw-1rem)] max-w-3xl overflow-hidden border-zinc-200 bg-white p-0 dark:border-white/10 dark:bg-zinc-950 sm:w-full">
+        <DialogHeader className="border-b border-zinc-200/80 px-4 pb-4 pt-5 sm:px-5 dark:border-white/10">
           <DialogTitle className="text-2xl font-bold tracking-[-0.03em] text-zinc-950 dark:text-white">
             Send Profile
           </DialogTitle>
@@ -325,8 +343,8 @@ export function PostProfileSubmitButton({
           </DialogDescription>
         </DialogHeader>
 
-        <form className="flex max-h-[calc(88vh-90px)] flex-col" onSubmit={handleSubmit}>
-          <div className="flex-1 overflow-y-auto px-5 py-4">
+        <form className="flex max-h-[calc(92vh-90px)] flex-col" onSubmit={handleSubmit}>
+          <div className="flex-1 overflow-y-auto px-4 py-4 pb-24 sm:px-5 sm:pb-8">
             <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/80 px-4 py-3 dark:border-white/10 dark:bg-white/[0.03]">
               <div className="flex items-center gap-2 text-sm">
                 {isReadyToSend ? (
@@ -338,7 +356,7 @@ export function PostProfileSubmitButton({
                   </>
                 ) : (
                   <>
-                    <CircleAlert className="h-4 w-4 text-orange-500" />
+                    <CircleAlert className={`h-4 w-4 ${accentTheme.text}`} />
                     <span className="font-medium text-zinc-950 dark:text-white">
                       Missing {missingFieldLabel.toLowerCase()}
                     </span>
@@ -401,7 +419,7 @@ export function PostProfileSubmitButton({
                     placeholder="https://..."
                   />
                   <div className="border-b border-zinc-200/80 py-3 last:border-b-0 dark:border-white/10">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="grid gap-2 sm:grid-cols-[140px,minmax(0,1fr)] sm:items-start sm:gap-4">
                       <p className="pt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-500 dark:text-zinc-500">
                         Message
                       </p>
@@ -409,7 +427,7 @@ export function PostProfileSubmitButton({
                         value={form.message}
                         onChange={(event) => updateField("message", event.target.value)}
                         placeholder="Optional note"
-                        className="min-h-[90px] w-full max-w-[220px] border-zinc-200 bg-zinc-50 text-right dark:border-white/10 dark:bg-white/[0.03] dark:text-white"
+                        className="min-h-[110px] w-full border-zinc-200 bg-zinc-50 sm:max-w-[420px] sm:justify-self-end sm:text-right dark:border-white/10 dark:bg-white/[0.03] dark:text-white"
                       />
                     </div>
                   </div>
@@ -432,7 +450,7 @@ export function PostProfileSubmitButton({
                 <CollapsibleTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-orange-500 transition hover:text-orange-600"
+                    className={`inline-flex items-center gap-2 text-sm font-medium transition ${accentTheme.text}`}
                   >
                     <Pencil className="h-4 w-4" />
                     {isEditing ? "Hide edit" : "Edit details"}
@@ -447,19 +465,26 @@ export function PostProfileSubmitButton({
             {error ? <p className="mt-3 text-sm text-red-500">{error}</p> : null}
           </div>
 
-          <DialogFooter className="border-t border-zinc-200/80 bg-white px-5 py-4 dark:border-white/10 dark:bg-zinc-950">
-            <div className="flex w-full items-center justify-between gap-4">
+          <DialogFooter className="sticky bottom-0 z-10 border-t border-zinc-200/80 bg-white px-4 py-4 sm:px-5 dark:border-white/10 dark:bg-zinc-950">
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 {isReadyToSend
                   ? "Looks good."
-                  : "Add the missing field first."}
+                  : isEditing
+                    ? "Complete the missing fields to submit."
+                    : "Review your profile first. You’ll need to edit missing details before submitting."}
               </p>
               <Button
-                type="submit"
+                type={requiresEditsBeforeSubmit ? "button" : "submit"}
                 loading={submitting}
-                className="h-10 rounded-full bg-orange-500 px-5 text-white hover:bg-orange-600"
+                className={`h-10 w-full rounded-full px-5 text-white sm:w-auto ${accentTheme.solidBg} ${accentTheme.solidBgHover}`}
+                onClick={
+                  requiresEditsBeforeSubmit
+                    ? () => setIsEditing(true)
+                    : undefined
+                }
               >
-                {success ? "Update Submission" : "Send Profile"}
+                {primaryButtonLabel}
               </Button>
             </div>
           </DialogFooter>

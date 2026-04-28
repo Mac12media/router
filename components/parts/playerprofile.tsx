@@ -31,6 +31,7 @@ export const PlayerProfile = ({
   id,
   gradClass,
   position,
+  sport,
   height,
   weight,
   imageUrl,
@@ -42,6 +43,7 @@ export const PlayerProfile = ({
   id: string;
   gradClass: string;
   position: string;
+  sport: string;
   height: string;
   weight: string;
   imageUrl: string;
@@ -50,6 +52,20 @@ export const PlayerProfile = ({
   plan?: string | null;
 }) => {
   const showExpoMember = plan && plan !== "free";
+  const normalizedSport = (sport ?? "").trim().toLowerCase();
+  const isFlagFootball =
+    normalizedSport === "girls_flag_football" || normalizedSport.includes("flag");
+  const isFootball = normalizedSport === "football";
+  const cardGradient = isFlagFootball
+    ? "linear-gradient(145deg, rgba(244,114,182,0.98) 0%, rgba(236,72,153,0.92) 46%, rgba(190,24,93,0.84) 100%)"
+    : isFootball
+      ? "linear-gradient(145deg, rgba(255,153,92,0.98) 0%, rgba(255,114,0,0.92) 46%, rgba(194,65,12,0.84) 100%)"
+      : "linear-gradient(145deg, rgba(255,153,92,0.98) 0%, rgba(255,114,0,0.92) 46%, rgba(194,65,12,0.84) 100%)";
+  const scoreTextClass = isFlagFootball
+    ? "text-pink-500"
+    : isFootball
+      ? "text-[#FF7200]"
+      : "text-[#FF7200]";
   return (
     <div className="space-y-6">
       {/* Profile Card */}
@@ -60,7 +76,10 @@ export const PlayerProfile = ({
           </CardHeader>
 
           <CardContent className="space-y-6 flex-grow">
-            <div className="grid gap-3 p-3 shadow-lg border rounded-2xl bg-[#FF7200]">
+            <div
+              className="grid gap-3 rounded-2xl border p-3 shadow-lg"
+              style={{ background: cardGradient }}
+            >
               <div className="flex items-center space-x-4">
                   <img
                     src={imageUrl}
@@ -120,7 +139,7 @@ export const PlayerProfile = ({
                 >
                 <span className="text-sm text-muted-foreground">Academic</span>
  
-                <span className="font-semibold text-lg text-[#FF7200]">{ACD_score}</span>
+                <span className={`font-semibold text-lg ${scoreTextClass}`}>{ACD_score}</span>
 
                 </Link>
                 <Link
@@ -131,7 +150,7 @@ export const PlayerProfile = ({
                 >
                                   <span className="text-sm text-center text-muted-foreground">Athletic</span>
 
-                                    <span className="font-semibold text-lg text-[#FF7200]">{ATH_score}</span>
+                                    <span className={`font-semibold text-lg ${scoreTextClass}`}>{ATH_score}</span>
 
                 </Link>
 

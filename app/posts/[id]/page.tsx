@@ -14,8 +14,10 @@ import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import {
   extractTweetUrls,
   formatDate,
+  getPostSportAccentTheme,
   getPostSportFade,
   getPostSportImage,
+  getPostSportOverlayStyle,
   getPostById,
   normalizeSport,
   stripTweetUrls,
@@ -89,16 +91,14 @@ export default async function PostDetailPage({ params }: PageProps) {
   const postHref = `/posts/${post.id}`;
   const postSummary = summary(post);
   const showMatch = userSport && normalizeSport(post.sport) === userSport;
+  const accentTheme = getPostSportAccentTheme(post.sport);
   const heroFadeClass = getPostSportFade(post.sport);
   const existingSubmission = await getPostSubmissionForUser(post.id, userId);
   const programDetailsTweetUrls = extractTweetUrls(post.programDetails);
   const postBodyTweetUrls = extractTweetUrls(post.content || post.excerpt);
   const cleanProgramDetails = stripTweetUrls(post.programDetails);
   const cleanPostBody = stripTweetUrls(post.content || post.excerpt);
-  const heroOverlayStyle = {
-    backgroundImage:
-      "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(249,115,22,0.16)), linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.82))",
-  } as const;
+  const heroOverlayStyle = getPostSportOverlayStyle(post.sport);
   return (
     <>
       <Breadcrumbs pageName={post.title} />
@@ -156,7 +156,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-start gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-orange-500 text-[10px] font-black uppercase text-white shadow-sm">
+                      <div className={`flex h-11 w-11 items-center justify-center rounded-full text-[10px] font-black uppercase text-white shadow-sm ${accentTheme.solidBg}`}>
                         Expo
                       </div>
                       <div>
@@ -214,7 +214,7 @@ export default async function PostDetailPage({ params }: PageProps) {
 
                   {(cleanProgramDetails || programDetailsTweetUrls.length > 0) ? (
                     <div className="mt-6 border-t border-zinc-200/80 pt-5 dark:border-zinc-800 sm:rounded-[1.4rem] sm:border sm:bg-zinc-50/80 sm:px-5 sm:py-5 dark:sm:bg-zinc-900/50">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-500">
+                      <p className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${accentTheme.text}`}>
                         Program Details
                       </p>
                       {cleanProgramDetails ? (
@@ -259,6 +259,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                         postTitle={post.title}
                         profile={userResult?.data}
                         existingSubmission={existingSubmission}
+                        accentTheme={accentTheme}
                       />
 
                       <Link
@@ -274,7 +275,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                 {isLocked ? (
                   <div className="absolute inset-0 flex items-start justify-center px-4 pt-4 sm:items-center sm:px-0 sm:pt-0">
                     <div className="mx-auto max-w-sm rounded-[1.5rem] border border-zinc-200/80 bg-white/92 p-6 text-center shadow-xl backdrop-blur dark:border-zinc-700 dark:bg-zinc-950/90">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-500">
+                      <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${accentTheme.text}`}>
                         Member Preview
                       </p>
                       <h2 className="mt-3 text-xl font-semibold tracking-[-0.03em] text-zinc-950 dark:text-white">
@@ -285,7 +286,7 @@ export default async function PostDetailPage({ params }: PageProps) {
                       </p>
                       <Link
                         href="/upgrade"
-                        className="mt-5 inline-flex items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600"
+                        className={`mt-5 inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-white transition ${accentTheme.solidBg} ${accentTheme.solidBgHover}`}
                       >
                         Upgrade Now
                       </Link>

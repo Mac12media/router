@@ -27,6 +27,50 @@ const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
 const PUBLIC_APP_URL =
   process.env.NEXT_PUBLIC_APP_URL || "https://app.exporecruits.com";
 
+function getProfileTheme(sport?: string | null) {
+  const normalized = (sport ?? "").trim().toLowerCase();
+
+  if (
+    normalized === "girls_flag_football" ||
+    normalized.includes("flag")
+  ) {
+    return {
+      accentColor: "#EC4899",
+      profileGradient:
+        "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(244,114,182,0.98) 0%, rgba(236,72,153,0.92) 46%, rgba(190,24,93,0.84) 100%)",
+      scoreGradient:
+        "linear-gradient(135deg, rgba(236,72,153,0.96), rgba(190,24,93,0.8))",
+      nameClass: "text-pink-100",
+      metaClass: "text-pink-100/80",
+      combineLinkClass: "text-pink-500 dark:text-pink-400",
+    } as const;
+  }
+
+  if (normalized === "football") {
+    return {
+      accentColor: "#FF7200",
+      profileGradient:
+        "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(255,153,92,0.98) 0%, rgba(255,114,0,0.92) 46%, rgba(194,65,12,0.84) 100%)",
+      scoreGradient:
+        "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))",
+      nameClass: "text-white",
+      metaClass: "text-white/80",
+      combineLinkClass: "text-[#FF7200] dark:text-[#FF7200]",
+    } as const;
+  }
+
+  return {
+    accentColor: "#FF7200",
+    profileGradient:
+      "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(255,153,92,0.98) 0%, rgba(255,114,0,0.92) 46%, rgba(194,65,12,0.84) 100%)",
+    scoreGradient:
+      "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))",
+    nameClass: "text-white",
+    metaClass: "text-white/80",
+    combineLinkClass: "text-[#FF7200] dark:text-[#FF7200]",
+  } as const;
+}
+
 type PageProps = {
   params: Promise<{ id: string }>;
 };
@@ -147,10 +191,8 @@ export default async function ProfilePage({ params }: PageProps) {
   const user = await getPublicUserById({ id: id ?? DEFAULT_ID });
     const result = await getUser();
     const real = result?.data;
-  const isFlagFootball =
-    user?.sport === "girls_flag_football" ||
-    user?.sport?.toLowerCase().includes("flag");
-  const accentColor = isFlagFootball ? "#EC4899" : "#FF7200";
+  const profileTheme = getProfileTheme(user?.sport);
+  const accentColor = profileTheme.accentColor;
 
         const leadId = await createLead(id);
 
@@ -163,16 +205,8 @@ export default async function ProfilePage({ params }: PageProps) {
 <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-8 gap-y-4 sm:gap-x-4">
 
 {(() => {
-  const isFlagFootball =
-    user.sport === "girls_flag_football" ||
-    user.sport?.toLowerCase().includes("flag");
-  const profileGradient = isFlagFootball
-    ? "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(244,114,182,0.98) 0%, rgba(236,72,153,0.92) 46%, rgba(190,24,93,0.84) 100%)"
-    : "radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 34%), linear-gradient(145deg, rgba(255,153,92,0.98) 0%, rgba(255,114,0,0.92) 46%, rgba(194,65,12,0.84) 100%)";
-  const nameClass = isFlagFootball ? "text-pink-100" : "text-white";
-  const metaClass = isFlagFootball ? "text-pink-100/80" : "text-white/80";
   return (
-<Card className="relative w-full col-span-2 content-center p-5 sm:p-8 text-white" style={{ background: profileGradient }}>
+<Card className="relative w-full col-span-2 content-center p-5 sm:p-8 text-white" style={{ background: profileTheme.profileGradient }}>
   <div className="w-full flex flex-col items-center gap-6">
     {/* Profile Image */}
     <div className="relative">
@@ -190,7 +224,7 @@ export default async function ProfilePage({ params }: PageProps) {
 
     {/* Name, Class, Position */}
     <div className="flex flex-col items-center text-center space-y-2">
-      <CardTitle className={`text-2xl font-bold tracking-tight ${nameClass}`}>
+      <CardTitle className={`text-2xl font-bold tracking-tight ${profileTheme.nameClass}`}>
         {user.name} {user.last_name}
       </CardTitle>
       {user.plan && user.plan !== "free" && (
@@ -199,7 +233,7 @@ export default async function ProfilePage({ params }: PageProps) {
           Expo Member
         </span>
       )}
-      <div className={`text-lg font-medium ${metaClass}`}>
+      <div className={`text-lg font-medium ${profileTheme.metaClass}`}>
         {user.grad_year} • {user.position}
       </div>
     </div>
@@ -323,7 +357,7 @@ export default async function ProfilePage({ params }: PageProps) {
   {/* EXPO+ SCORES */}
   <div
     className="text-white text-center py-4 text-xl font-extrabold tracking-wide"
-    style={{ background: "linear-gradient(135deg, rgba(255,114,0,0.95), rgba(255,114,0,0.75))" }}
+    style={{ background: profileTheme.scoreGradient }}
   >
     EXPO SCORES
   </div>
@@ -404,7 +438,7 @@ export default async function ProfilePage({ params }: PageProps) {
             href="https://exporecruits.com/combine"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-semibold text-[#FF7200] dark:[#FF7200]"
+            className={`font-semibold ${profileTheme.combineLinkClass}`}
           >
             EXPO Combine
           </a>

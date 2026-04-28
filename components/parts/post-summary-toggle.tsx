@@ -8,9 +8,17 @@ type PostSummaryToggleProps = {
   text: string;
   href?: string;
   tweetUrls?: string[];
+  accentTextClass?: string;
+  accentHoverTextClass?: string;
 };
 
-export function PostSummaryToggle({ text, href, tweetUrls = [] }: PostSummaryToggleProps) {
+export function PostSummaryToggle({
+  text,
+  href,
+  tweetUrls = [],
+  accentTextClass = "text-orange-500",
+  accentHoverTextClass = "hover:text-orange-600",
+}: PostSummaryToggleProps) {
   const textRef = useRef<HTMLParagraphElement>(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -51,7 +59,7 @@ export function PostSummaryToggle({ text, href, tweetUrls = [] }: PostSummaryTog
         href ? (
           <Link
             href={href}
-            className="mt-2 inline-flex text-xs font-semibold text-orange-500 transition hover:text-orange-600"
+            className={`mt-2 inline-flex text-xs font-semibold transition ${accentTextClass} ${accentHoverTextClass}`}
           >
             Show more
           </Link>
