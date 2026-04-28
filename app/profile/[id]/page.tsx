@@ -24,6 +24,8 @@ const COLORS = ["#FF7200", "#e5e5e5"];
 const CircleChart = dynamic(() => import("@/components/parts/charts"));
 
 const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
+const PUBLIC_APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL || "https://app.exporecruits.com";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -71,8 +73,19 @@ function getProfileMetaDescription(user: {
   return "View this athlete's EXPO recruiting profile.";
 }
 
+function getAbsoluteUrl(pathOrUrl: string) {
+  if (/^https?:\/\//i.test(pathOrUrl)) {
+    return pathOrUrl;
+  }
+
+  return new URL(pathOrUrl, PUBLIC_APP_URL).toString();
+}
+
 function getProfileMetaImage(image: string | null) {
-  return image && !image.includes("blob") ? image : "/userplaceholder.png";
+  const resolvedImage =
+    image && !image.includes("blob") ? image : "/userplaceholder.png";
+
+  return getAbsoluteUrl(resolvedImage);
 }
 
 export async function generateMetadata({
@@ -91,6 +104,7 @@ export async function generateMetadata({
   const description = getProfileMetaDescription(user);
   const imageUrl = getProfileMetaImage(user.image);
   const url = `/profile/${id}`;
+  const profileName = [user.name, user.last_name].filter(Boolean).join(" ").trim() || "EXPO athlete";
 
   return {
     title,
@@ -107,7 +121,9 @@ export async function generateMetadata({
       images: [
         {
           url: imageUrl,
-          alt: `${[user.name, user.last_name].filter(Boolean).join(" ")} profile photo`,
+          width: 1200,
+          height: 630,
+          alt: `${profileName} profile photo`,
         },
       ],
     },
@@ -115,7 +131,12 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [imageUrl],
+      images: [
+        {
+          url: imageUrl,
+          alt: `${profileName} profile photo`,
+        },
+      ],
     },
   };
 }
