@@ -1,6 +1,7 @@
 import { Breadcrumbs } from "@/components/parts/breadcrumbs";
 import { Header } from "@/components/parts/header";
 import { PageWrapper } from "@/components/parts/page-wrapper";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPublicUserById, getUser, getUserFullById } from "@/lib/data/users";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -24,7 +25,102 @@ const CircleChart = dynamic(() => import("@/components/parts/charts"));
 
 const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
 
-export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+function getProfileMetaTitle(user: {
+  name: string | null;
+  last_name: string | null;
+  height: string | null;
+  grad_year: string | null;
+  position: string | null;
+}) {
+  const fullName = [user.name, user.last_name].filter(Boolean).join(" ").trim();
+  const parts = [fullName, user.height, user.grad_year, user.position]
+    .map((value) => value?.trim())
+    .filter(Boolean);
+
+  if (!parts.length) {
+    return "EXPO Profile";
+  }
+
+  return `${parts.join(" ")} | EXPO Profile`;
+}
+
+function getProfileMetaDescription(user: {
+  sport: string | null;
+  high_school: string | null;
+  city: string | null;
+  state: string | null;
+  bio: string | null;
+}) {
+  const location = [user.city, user.state].filter(Boolean).join(", ");
+  const details = [user.sport, user.high_school, location]
+    .map((value) => value?.trim())
+    .filter(Boolean);
+
+  if (user.bio?.trim()) {
+    return user.bio.trim();
+  }
+
+  if (details.length) {
+    return `${details.join(" • ")} | EXPO athlete profile`;
+  }
+
+  return "View this athlete's EXPO recruiting profile.";
+}
+
+function getProfileMetaImage(image: string | null) {
+  return image && !image.includes("blob") ? image : "/userplaceholder.png";
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const user = await getPublicUserById({ id: id ?? DEFAULT_ID });
+
+  if (!user) {
+    return {
+      title: "Profile Not Found | EXPO",
+    };
+  }
+
+  const title = getProfileMetaTitle(user);
+  const description = getProfileMetaDescription(user);
+  const imageUrl = getProfileMetaImage(user.image);
+  const url = `/profile/${id}`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "EXPO",
+      type: "profile",
+      images: [
+        {
+          url: imageUrl,
+          alt: `${[user.name, user.last_name].filter(Boolean).join(" ")} profile photo`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
+
+export default async function ProfilePage({ params }: PageProps) {
   const { id } = await params;
 
   const user = await getPublicUserById({ id: id ?? DEFAULT_ID });
