@@ -383,7 +383,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
                   </div>
                   <div>
                     <p style={{ fontSize: 13, fontWeight: 800, color: c.brand, margin: 0, letterSpacing: "-0.01em" }}>EXPO Recruits</p>
-                    <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase" as const, color: c.brandSub, margin: 0 }}>ATHLETE PASS</p>
+                    <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase" as const, color: c.brandSub, margin: 0 }}>Player Card</p>
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
