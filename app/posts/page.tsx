@@ -265,7 +265,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                       <div className="absolute inset-0 flex items-center justify-center px-3">
                         <Link
                           href="/upgrade"
-                          className={`rounded-full bg-black px-4 py-2 text-[11px] font-semibold uppercase text-white shadow-lg transition hover:bg-zinc-900 ${accentTheme.darkSolidBg} ${accentTheme.darkSolidText} ${accentTheme.darkSolidBgHover}`}
+                          className={`rounded-full bg-black px-4 py-2 text-[11px] font-semibold uppercase text-white shadow-lg transition hover:bg-zinc-900 ${accentTheme.darkSolidBg} ${accentTheme.darkSolidText} ${accentTheme.solidBgDarkHover}`}
                         >
                           Upgrade to Unlock
                         </Link>
