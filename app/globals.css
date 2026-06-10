@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 36 33% 98%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --primary: 24 100% 50%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
+    --secondary: 36 16% 92%;
     --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
+    --muted: 36 16% 92%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
+    --accent: 36 16% 92%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --radius: 0.75rem;
+    --border: 32 18% 87%;
+    --input: 32 18% 87%;
+    --ring: 24 100% 50%;
+    --radius: 0.875rem;
     --chart-1: 26 100% 50%;
     --chart-2: 26 100% 50%;
     --chart-3: 197 37% 24%;
@@ -32,17 +32,17 @@
   }
 
   .dark {
-    --background: 220 20% 6%;
+    --background: 0 0% 5%;
     --foreground: 0 0% 98%;
-    --card: 220 18% 10%;
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
-    --popover: 220 18% 10%;
+    --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;
     --primary: 24 100% 50%;
     --primary-foreground: 0 0% 8%;
-    --secondary: 220 14% 16%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 220 14% 16%;
+    --muted: 0 0% 12%;
     --muted-foreground: 0 0% 70%;
     --accent: 24 35% 18%;
     --accent-foreground: 0 0% 98%;
@@ -64,8 +64,150 @@
     @apply border-border;
   }
 
+  html {
+    @apply scroll-smooth;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+  /* ── Selection ── */
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+
+  /* ── Focus ── */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background rounded-sm;
+  }
+
+  /* ── Typography defaults ── */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight text-foreground;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* ── Links ── */
+  a {
+    @apply transition-colors duration-150;
+  }
+
+  /* ── Inputs ── */
+  input, textarea, select {
+    @apply transition-shadow duration-150;
+  }
+  input:focus, textarea:focus, select:focus {
+    @apply outline-none;
+  }
+
+  /* ── Images ── */
+  img, video {
+    @apply max-w-full;
+  }
+
+  /* ── Buttons ── */
+  button {
+    @apply transition-all duration-150 cursor-pointer;
+  }
+  button:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Glass morphism */
+  .glass {
+    @apply bg-background/60 backdrop-blur-xl border border-border/60;
+  }
+  .glass-sm {
+    @apply bg-background/50 backdrop-blur-md border border-border/40;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60;
+  }
+
+  /* Subtle surface lift on hover */
+  .hover-lift {
+    @apply transition-transform duration-200 ease-out;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-0.5;
+  }
+
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out both;
+  }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Smooth underline link style */
+  .link-underline {
+    @apply relative inline-block text-foreground/70 hover:text-foreground transition-colors duration-150;
+  }
+  .link-underline::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-px bg-primary transition-all duration-200;
+  }
+  .link-underline:hover::after {
+    @apply w-full;
+  }
+
+  /* Hide scrollbar but keep scrollable */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Muted card surface */
+  .surface {
+    @apply bg-card border border-border/60 rounded-xl shadow-sm;
+  }
+  .surface-sm {
+    @apply bg-card border border-border/50 rounded-lg shadow-sm;
+  }
+
+  /* Dot grid background */
+  .bg-dots {
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 }
 
@@ -79,3 +221,136 @@
     scrollbar-width: none;
   }
 } */
+
+/* ── Player Card 1 responsive layout ── */
+.pc-top-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+  text-align: center;
+}
+
+.pc-outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.pc-sidebar {
+  display: none;
+}
+
+.pc-bottom-actions {
+  display: flex;
+  margin-top: 24px;
+  position: relative;
+}
+
+@media (min-width: 960px) {
+  .pc-outer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+  }
+  .pc-top-header {
+    display: none;
+  }
+  .pc-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 260px;
+  }
+  .pc-bottom-actions {
+    display: none;
+  }
+}
+
+/* ── Player Card 2 layout ── */
+.pc2-card-section {
+  padding: 36px 16px 52px;
+}
+@media (min-width: 480px) {
+  .pc2-card-section {
+    padding: 52px 24px 72px;
+  }
+}
+
+.pc2-flip-wrap {
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  flex-shrink: 0;
+}
+
+.pc2-actions {
+  width: 100%;
+  max-width: 340px;
+}
+
+.pc2-why-section {
+  padding: 0 16px 72px;
+}
+@media (min-width: 480px) {
+  .pc2-why-section {
+    padding: 0 24px 88px;
+  }
+}
+
+/* ── June 15 Banner responsive ── */
+.june15-banner-section {
+  padding: 40px 20px 52px;
+}
+@media (min-width: 600px) {
+  .june15-banner-section {
+    padding: 52px 24px 64px;
+  }
+}
+
+.june15-banner-body {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.june15-banner-img {
+  width: min(300px, 42%);
+  flex-shrink: 0;
+}
+
+@media (max-width: 680px) {
+  .june15-banner-body {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .june15-banner-img {
+    width: 100%;
+    max-width: 340px;
+    align-self: center;
+  }
+}
+
+/* ── Player card 1 why section ── */
+.pc-why-section {
+  padding: 0 16px 72px;
+}
+@media (min-width: 480px) {
+  .pc-why-section {
+    padding: 0 24px 88px;
+  }
+}
+
+/* ── Player card dotted background ── */
+/* Applied directly to the page <main> — no fixed positioning, no z-index clash with nav */
+.pc-page-bg {
+  background-color: #f7f5f2;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.10) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+.dark .pc-page-bg {
+  background-color: #080808;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.13) 1px, transparent 1px);
+}

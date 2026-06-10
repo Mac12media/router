@@ -86,6 +86,37 @@ function normalizeSport(value?: string | null) {
   }
 }
 
+function June15NavBanner({ id: _id }: { id: string | null }) {
+  const href = "https://www.exporecruits.com/june15";
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="hover:opacity-80 transition-opacity duration-200"
+      style={{ textDecoration: "none", display: "block" }}
+    >
+      <div style={{
+        borderRadius: 10,
+        padding: "12px 10px",
+        textAlign: "center",
+      }}>
+        <span style={{
+          fontFamily: "'Impact', 'Arial Black', sans-serif",
+          fontSize: 17,
+          color: "#FF6600",
+          letterSpacing: "0.03em",
+          textTransform: "uppercase",
+          lineHeight: 1,
+          display: "block",
+        }}>
+          JUNE15TH JUMPSTART
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 export default async function Nav() {
   const usage = await getUsageForUser();
   const plan = usage?.data?.plan;
@@ -160,6 +191,9 @@ export default async function Nav() {
             ))}
           </div>
         </div>
+
+        {/* June 15 banner */}
+        <June15NavBanner id={id ?? null} />
 
         {/* Footer */}
         <div className="flex flex-col gap-8">

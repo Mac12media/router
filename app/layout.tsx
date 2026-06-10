@@ -42,7 +42,7 @@ export default function RootLayout({
         >
           <PostHogProvider>
             <Nav />
-            <main className="relative z-10 flex min-h-screen flex-col gap-4  py-4 ">
+            <main className="relative z-10 flex min-h-screen flex-col gap-4 py-4 sm:overflow-y-auto">
               {children}
             </main>
 
