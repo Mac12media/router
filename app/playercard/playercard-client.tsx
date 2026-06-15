@@ -141,29 +141,38 @@ function Row({
   label,
   value,
   accent = false,
+  dk = false,
 }: {
   label: string;
   value: string;
   accent?: boolean;
+  dk?: boolean;
 }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(0,0,0,0.42)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+      <span style={{ fontSize: 10, fontWeight: 700, color: dk ? "rgba(255,255,255,0.44)" : "rgba(0,0,0,0.42)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
         {label}
       </span>
-      <span style={{ fontSize: 15, fontWeight: 900, color: accent ? OG : "#111", letterSpacing: "-0.01em" }}>
+      <span style={{ fontSize: 15, fontWeight: 900, color: accent ? OG : dk ? "rgba(255,255,255,0.95)" : "#111", letterSpacing: "-0.01em" }}>
         {value}
       </span>
     </div>
   );
 }
 
-function BackCard({ card, userId }: { card: Card; userId: string }) {
+function BackCard({ card, userId, dk }: { card: Card; userId: string; dk: boolean }) {
   const yr = card.dept.replace(/^#/, "");
   const xUrl = card.x ? `https://x.com/${card.x.replace(/^@/, "")}` : null;
+  const bg = dk ? "#0a0a0c" : "#fff";
+  const text = dk ? "rgba(255,255,255,0.95)" : "#111";
+  const sub = dk ? "rgba(255,255,255,0.42)" : "rgba(0,0,0,0.42)";
+  const rule = dk ? "rgba(255,255,255,0.08)" : "#efefef";
+  const buttonBg = dk ? OG : "#111";
+  const buttonText = dk ? "#111" : "#fff";
+  const noiseBlend = (dk ? "overlay" : "multiply") as React.CSSProperties["mixBlendMode"];
 
   return (
-    <div style={{ width: "100%", height: "100%", background: "#fff", borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column", fontFamily: "system-ui,-apple-system,sans-serif" }}>
+    <div style={{ width: "100%", height: "100%", background: bg, borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column", fontFamily: "system-ui,-apple-system,sans-serif", position: "relative" }}>
       <div style={{ height: 46, background: "#111", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -175,29 +184,56 @@ function BackCard({ card, userId }: { card: Card; userId: string }) {
         </div>
       </div>
       <div style={{ height: 3, background: OG, flexShrink: 0 }} />
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", top: "12%", left: "10%",
+          width: 220, height: 220, borderRadius: "50%",
+          background: `radial-gradient(circle, ${OG}${dk ? "12" : "0b"} 0%, transparent 68%)`,
+        }} />
+        <div style={{
+          position: "absolute", bottom: "-8%", right: "-2%",
+          width: 260, height: 260, borderRadius: "50%",
+          background: `radial-gradient(circle, ${OG}${dk ? "0a" : "08"} 0%, transparent 72%)`,
+        }} />
+        <svg viewBox="0 0 355 516" preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+          <path d="M-60,190 C88,272 228,216 425,318" stroke={`${OG}${dk ? "11" : "0e"}`} strokeWidth="1.1" fill="none" />
+          <path d="M-60,270 C88,352 228,296 425,398" stroke={`${OG}${dk ? "0d" : "0b"}`} strokeWidth="0.9" fill="none" />
+          <path d="M-60,350 C88,432 228,376 425,478" stroke={`${OG}${dk ? "14" : "10"}`} strokeWidth="1.4" fill="none" />
+        </svg>
+        <svg viewBox="0 0 355 516" preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+          <defs>
+            <filter id="back-gn">
+              <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="3" result="n" />
+              <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.04 0" />
+              <feComposite operator="in" in2="SourceGraphic" />
+            </filter>
+          </defs>
+          <rect width="355" height="516" fill={dk ? "#fff" : "#000"} filter="url(#back-gn)" style={{ mixBlendMode: noiseBlend }} />
+        </svg>
+      </div>
       <div style={{ flex: 1, padding: "18px 18px 16px", display: "flex", flexDirection: "column" }}>
-        <div style={{ marginBottom: 18, paddingBottom: 16, borderBottom: "1px solid #efefef" }}>
+        <div style={{ marginBottom: 18, paddingBottom: 16, borderBottom: `1px solid ${rule}` }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: OG, letterSpacing: "0.24em", textTransform: "uppercase", marginBottom: 3 }}>ATHLETE PROFILE</div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: "#111", letterSpacing: "-0.03em", textTransform: "uppercase" }}>{card.fullName}</div>
-          <div style={{ fontSize: 11, color: "rgba(0,0,0,0.42)", marginTop: 2 }}>{card.role} · {card.subtitle}</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: text, letterSpacing: "-0.03em", textTransform: "uppercase" }}>{card.fullName}</div>
+          <div style={{ fontSize: 11, color: sub, marginTop: 2 }}>{card.role} · {card.subtitle}</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 18 }}>
-          <Row label="ATH SCORE" value={card.athScore !== "--" ? card.athScore : "—"} accent />
-          <Row label="ACD SCORE" value={card.acdScore !== "--" ? card.acdScore : "—"} accent />
-          <Row label="SCHOOL" value={card.refId || "—"} />
-          <Row label="GRAD YEAR" value={card.dept || "—"} />
-          {card.height !== "--" && card.weight !== "--" && <Row label="HT / WT" value={`${card.height} · ${card.weight}`} />}
+          <Row label="ATH SCORE" value={card.athScore !== "--" ? card.athScore : "—"} accent dk={dk} />
+          <Row label="ACD SCORE" value={card.acdScore !== "--" ? card.acdScore : "—"} accent dk={dk} />
+          <Row label="SCHOOL" value={card.refId || "—"} dk={dk} />
+          <Row label="GRAD YEAR" value={card.dept || "—"} dk={dk} />
+          {card.height !== "--" && card.weight !== "--" && <Row label="HT / WT" value={`${card.height} · ${card.weight}`} dk={dk} />}
         </div>
         <div style={{ flex: 1 }} />
         <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
           <Link href={`/profile/${userId}`} style={{ textDecoration: "none" }}>
-            <div style={{ padding: "12px 0", background: "#111", borderRadius: 10, textAlign: "center", fontSize: 11, fontWeight: 900, color: "#fff", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
+            <div style={{ padding: "12px 0", background: buttonBg, borderRadius: 10, textAlign: "center", fontSize: 11, fontWeight: 900, color: buttonText, letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
               View Full Profile
             </div>
           </Link>
           {xUrl && (
             <a href={xUrl} target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
-              <div style={{ padding: "12px 0", border: `2px solid ${OG}`, borderRadius: 10, textAlign: "center", fontSize: 11, fontWeight: 900, color: OG, letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
+              <div style={{ padding: "12px 0", border: `2px solid ${OG}`, background: dk ? "rgba(255,255,255,0.02)" : "#fff", borderRadius: 10, textAlign: "center", fontSize: 11, fontWeight: 900, color: OG, letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
                 Share on X
               </div>
             </a>
@@ -671,11 +707,11 @@ export default function PlayerCardClient({ card }: { card: Card }) {
                   transform: "rotateY(180deg)",
                   borderRadius: 26,
                   overflow: "hidden",
-                  background: "#fff",
+                  background: dk ? "#0a0a0c" : "#fff",
                   boxShadow: c.shadow,
                 }}
               >
-                <BackCard card={card} userId={card.userId} />
+                <BackCard card={card} userId={card.userId} dk={dk} />
               </div>
             </div>
           </div>
