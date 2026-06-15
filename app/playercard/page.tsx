@@ -38,6 +38,7 @@ function getCardText(user: {
       user.high_school?.trim() ||
       [user.city, user.state].filter(Boolean).join(", ").trim() ||
       "EXPO RECRUITS",
+    state: user.state?.trim().toUpperCase() || "--",
     dept: user.grad_year?.trim() || "2027",
     height: user.height?.trim() || "--",
     weight: user.weight?.trim() || "--",
@@ -59,7 +60,7 @@ export default async function PlayerCardPage({ searchParams }: PageProps) {
     notFound();
   }
 
-  const card = getCardText(user);
+  const card = { ...getCardText(user), userId: id };
 
   return <PlayerCardClient card={card} />;
 }

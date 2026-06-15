@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useRef, useEffect, type PointerEvent } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, type PointerEvent } from "react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 type Card = {
+  userId: string;
   fullName: string;
   role: string;
   subtitle: string;
   bio: string;
   refId: string;
+  state: string;
   dept: string;
   height: string;
   weight: string;
@@ -23,6 +26,116 @@ type Card = {
 const OG     = "#FF6600";
 const CARD_W = 355;
 const JUNE15 = new Date("2026-06-15T05:00:00Z");
+const FONT = "'Impact', 'Arial Black', sans-serif";
+
+function splitName(fullName: string) {
+  const parts = fullName.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length <= 1) {
+    return { first: "", last: fullName.trim() || "ATHLETE" };
+  }
+
+  return {
+    first: parts.slice(0, -1).join(" "),
+    last: parts.at(-1) || fullName.trim() || "ATHLETE",
+  };
+}
+
+function BigMetric({
+  label,
+  value,
+  bg,
+  border,
+  labelColor,
+  valueColor,
+  align = "left",
+  fit = false,
+}: {
+  label: string;
+  value: string;
+  bg: string;
+  border: string;
+  labelColor: string;
+  valueColor: string;
+  align?: "left" | "right";
+  fit?: boolean;
+}) {
+  const valueRef = useRef<HTMLSpanElement | null>(null);
+  const [valueScale, setValueScale] = useState(1);
+
+  useLayoutEffect(() => {
+    if (!fit) {
+      setValueScale(1);
+      return;
+    }
+
+    const el = valueRef.current;
+    const parent = el?.parentElement;
+    if (!el || !parent) return;
+
+    const measure = () => {
+      const availableWidth = parent.clientWidth - 8;
+      const contentWidth = el.scrollWidth;
+      if (!availableWidth || !contentWidth) return;
+      const nextScale = Math.min(1, Math.max(0.26, availableWidth / contentWidth));
+      setValueScale((current) => (Math.abs(current - nextScale) < 0.01 ? current : nextScale));
+    };
+
+    measure();
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(parent);
+
+    return () => ro.disconnect();
+  }, [fit, value]);
+
+  return (
+    <div
+      style={{
+        borderRadius: 20,
+        padding: "10px 12px 12px",
+        border: `1px solid ${border}`,
+        background: bg,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        minHeight: 76,
+        overflow: "hidden",
+      }}
+    >
+      <span
+        style={{
+          fontSize: 7.5,
+          fontWeight: 700,
+          letterSpacing: "0.22em",
+          textTransform: "uppercase",
+          color: labelColor,
+          textAlign: align,
+        }}
+      >
+        {label}
+      </span>
+      <span
+        ref={valueRef}
+        style={{
+          fontSize: label === "SCHOOL" ? 22 * valueScale : 34,
+          fontWeight: 900,
+          letterSpacing: label === "SCHOOL" ? "-0.08em" : "-0.06em",
+          lineHeight: 0.9,
+          color: valueColor,
+          textTransform: "uppercase",
+          alignSelf: align === "left" ? "flex-start" : "flex-end",
+          whiteSpace: "nowrap",
+          width: "100%",
+          display: "block",
+          textAlign: align,
+        }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
 
 export default function PlayerCardClient({ card }: { card: Card }) {
   const [mounted, setMounted] = useState(false);
@@ -63,6 +176,10 @@ export default function PlayerCardClient({ card }: { card: Card }) {
     rule:       dk ? "rgba(255,255,255,0.06)"   : "rgba(0,0,0,0.07)",
     statLabel:  dk ? "rgba(255,255,255,0.27)"   : "rgba(0,0,0,0.3)",
     statValue:  dk ? "rgba(255,255,255,0.92)"   : "rgba(0,0,0,0.88)",
+    metricBg:   dk ? "rgba(255,255,255,0.03)"   : "rgba(0,0,0,0.02)",
+    metricBorder: dk ? "rgba(255,255,255,0.09)" : "rgba(0,0,0,0.08)",
+    metricLabel: dk ? "rgba(255,255,255,0.34)"   : "rgba(0,0,0,0.34)",
+    metricValue: dk ? "rgba(255,255,255,0.94)"   : "rgba(0,0,0,0.9)",
     brand:      dk ? "rgba(255,255,255,0.9)"    : "rgba(0,0,0,0.85)",
     brandSub:   dk ? "rgba(255,255,255,0.28)"   : "rgba(0,0,0,0.28)",
     htwtLabel:  dk ? "rgba(255,255,255,0.27)"   : "rgba(0,0,0,0.28)",
@@ -143,8 +260,8 @@ export default function PlayerCardClient({ card }: { card: Card }) {
   const t3d = swingDone.current
     ? `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
     : `perspective(1200px) rotateZ(${swingZ}deg)`;
-
-  const FONT = "'Impact', 'Arial Black', sans-serif";
+  const { first, last } = splitName(card.fullName);
+  const stateLabel = card.state || "--";
 
   if (!mounted) {
     return (
@@ -161,11 +278,12 @@ export default function PlayerCardClient({ card }: { card: Card }) {
         display: "flex", flexDirection: "column",
       }}
     >
-      {/* June 15 promo — full width at top */}
-      <June15Banner dk={dk} />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <June15Banner dk={dk} />
+      </div>
 
-      {/* Content wrapper */}
-      <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", padding: "48px 20px", flex: 1 }}>
+      {/* June 15 promo — full width at top */}
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", padding: "40px 20px 48px", flex: 1 }}>
 
       {/* Ambient glows */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
@@ -188,7 +306,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: OG }} />
           <span style={{ fontFamily: FONT, fontSize: 11, letterSpacing: "0", textTransform: "uppercase" as const, color: OG }}>JUNE 15 RECRUITING WINDOW</span>
         </div>
-         </div>
+      </div>
 
       {/* ─── Main layout ─── */}
       <div className="pc-outer">
@@ -261,6 +379,20 @@ export default function PlayerCardClient({ card }: { card: Card }) {
             marginTop: -42, zIndex: 1,
             boxShadow: c.shadow,
           }}>
+            {/* PlayerCard2-style top header */}
+            <div style={{ height: 46, background: "#111", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/expo.avif" alt="Expo" style={{ width: 22, height: 22, objectFit: "contain", filter: "invert(1)" }} />
+                <span style={{ fontSize: 11, fontWeight: 900, color: "#fff", letterSpacing: "0.16em" }}>EXPO RECRUITS</span>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 16, fontWeight: 900, color: OG }}>CLASS {card.dept.replace(/^#/, "")}</div>
+              </div>
+            </div>
+
+            <div style={{ height: 3, background: OG, flexShrink: 0 }} />
+
             {/* Orange top bar */}
             <div style={{ height: 2, background: `linear-gradient(to right,transparent,${OG}ee,${OG}88,transparent)` }}/>
 
@@ -312,21 +444,20 @@ export default function PlayerCardClient({ card }: { card: Card }) {
             }}/>
 
             {/* ── Content ── */}
-            <div style={{ position: "relative", zIndex: 5, padding: "56px 28px 30px", display: "flex", flexDirection: "column" }}>
-
-              <p style={{
-                fontSize: 9, fontWeight: 700, letterSpacing: "0.26em",
-                textTransform: "uppercase" as const, color: c.label,
-                textAlign: "center", margin: "0 0 18px",
-              }}>PLAYER CARD</p>
+            <div style={{ position: "relative", zIndex: 5, padding: "52px 24px 28px", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
               {/* Photo */}
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 18, width: "100%" }}>
                 <div style={{
-                  width: 272, height: 158, borderRadius: 14, overflow: "hidden",
-                  border: `2px solid ${OG}44`,
-                  boxShadow: `0 0 0 4px ${OG}16, 0 12px 28px ${dk ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.1)"}`,
-                  background: c.photoBg, flexShrink: 0,
+                  width: "100%",
+                  maxWidth: 285,
+                  height: 168,
+                  borderRadius: 18,
+                  overflow: "hidden",
+                  border: `2px solid ${OG}42`,
+                  boxShadow: `0 0 0 5px ${OG}12, 0 14px 30px ${dk ? "rgba(0,0,0,0.62)" : "rgba(0,0,0,0.12)"}`,
+                  background: c.photoBg,
+                  flexShrink: 0,
                 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -339,59 +470,90 @@ export default function PlayerCardClient({ card }: { card: Card }) {
               </div>
 
               {/* Name */}
-              <h2 style={{
-                fontSize: 30, fontWeight: 800, letterSpacing: "-0.03em",
-                color: c.name, lineHeight: 1.05,
-                margin: "0 0 10px", textAlign: "center",
-              }}>{card.fullName || "EXPO PLAYER"}</h2>
+              <div style={{ width: "100%", textAlign: "center", marginBottom: 12 }}>
+                {first ? (
+                  <div style={{ fontSize: 12, fontWeight: 600, color: c.roleText, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 4 }}>
+                    {first}
+                  </div>
+                ) : null}
+                <h2 style={{
+                  fontSize: first ? 34 : 30, fontWeight: 900, letterSpacing: "-0.04em",
+                  color: c.name, lineHeight: 0.94,
+                  margin: 0, textAlign: "center",
+                  textTransform: "uppercase",
+                }}>{last || card.fullName || "EXPO PLAYER"}</h2>
+              </div>
 
               {/* Orange divider */}
-              <div style={{ width: "65%", height: 1.5, alignSelf: "center", background: `linear-gradient(to right,transparent,${OG}cc,transparent)`, marginBottom: 10 }}/>
+              <div style={{ width: "72%", height: 1.5, alignSelf: "center", background: `linear-gradient(to right,transparent,${OG}cc,transparent)`, marginBottom: 10 }}/>
 
               {/* Position • Sport */}
               <p style={{
                 fontSize: 10, fontWeight: 700, letterSpacing: "0.2em",
                 textTransform: "uppercase" as const, color: c.roleText,
-                margin: "0 0 20px", textAlign: "center",
+                margin: "0 0 18px", textAlign: "center",
               }}>{card.role} • {card.subtitle}</p>
 
-              {/* Thin rule */}
-              <div style={{ height: 1, background: c.rule, marginBottom: 20 }}/>
-
-              {/* Stats grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", rowGap: 18, columnGap: 8, marginBottom: 20 }}>
-                <Stat label="GRAD YEAR" value={`#${card.dept}`} labelColor={c.statLabel} valueColor={c.statValue}/>
-                <Stat label="SCHOOL" value={card.refId} right labelColor={c.statLabel} valueColor={c.statValue}/>
-                <Stat label="ATH SCORE" value={card.athScore} accent labelColor={c.statLabel} valueColor={c.statValue}/>
-                <Stat label="ACD SCORE" value={card.acdScore} accent right labelColor={c.statLabel} valueColor={c.statValue}/>
+              {/* Four stat boxes */}
+              <div style={{ width: "100%", display: "grid", gridTemplateColumns: "0.8fr 1.3fr", gap: 8, marginBottom: 16 }}>
+                <BigMetric
+                  label="HEIGHT"
+                  value={card.height}
+                  bg={c.metricBg}
+                  border={c.metricBorder}
+                  labelColor={c.metricLabel}
+                  valueColor={OG}
+                  align="left"
+                />
+                <BigMetric
+                  label="SCHOOL"
+                  value={card.refId}
+                  bg={c.metricBg}
+                  border={c.metricBorder}
+                  labelColor={c.metricLabel}
+                  valueColor={c.metricValue}
+                  align="right"
+                  fit
+                />
+                <BigMetric
+                  label="WEIGHT"
+                  value={card.weight}
+                  bg={c.metricBg}
+                  border={c.metricBorder}
+                  labelColor={c.metricLabel}
+                  valueColor={OG}
+                  align="left"
+                />
+                <BigMetric
+                  label="STATE"
+                  value={stateLabel}
+                  bg={c.metricBg}
+                  border={c.metricBorder}
+                  labelColor={c.metricLabel}
+                  valueColor={c.metricValue}
+                  align="right"
+                  fit
+                />
               </div>
 
-              {/* Thin rule */}
-              <div style={{ height: 1, background: c.rule, marginBottom: 20 }}/>
-
-              {/* Footer */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: "100%", marginTop: 2 }}>
+                <Link href={`/profile/${card.userId}`} style={{ textDecoration: "none", display: "block" }}>
                   <div style={{
-                    width: 32, height: 32, borderRadius: 9,
-                    background: `${OG}22`, border: `1px solid ${OG}33`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    overflow: "hidden",
+                    width: "100%",
+                    padding: "14px 16px",
+                    borderRadius: 14,
+                    background: dk ? OG : "#111",
+                    color: dk ? "#111" : "#fff",
+                    textAlign: "center",
+                    fontSize: 11,
+                    fontWeight: 900,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    boxShadow: dk ? `0 14px 28px ${OG}24` : "0 14px 28px rgba(0,0,0,0.16)",
                   }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/expo.avif" alt="Expo" style={{ width: 22, height: 22, objectFit: "contain", filter: dk ? "invert(1)" : "none" }} />
+                    View Full Profile
                   </div>
-                  <div>
-                    <p style={{ fontSize: 13, fontWeight: 800, color: c.brand, margin: 0, letterSpacing: "-0.01em" }}>EXPO Recruits</p>
-                    <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.26em", textTransform: "uppercase" as const, color: c.brandSub, margin: 0 }}>Player Card</p>
-                  </div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <p style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0", textTransform: "uppercase" as const, color: c.htwtLabel, margin: "0 0 3px" }}>HT • WT</p>
-                  <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: "0.1em", color: c.htwtValue, margin: 0 }}>
-                    {card.height} • {card.weight}
-                  </p>
-                </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -443,12 +605,15 @@ export default function PlayerCardClient({ card }: { card: Card }) {
       {/* Mobile action bar */}
       <div className="pc-bottom-actions">
         <div style={{
-          display: "flex", alignItems: "center",
+          display: "flex",
+          alignItems: "center",
           borderRadius: 100,
           border: `1px solid ${pg.actionBd}`,
           background: pg.actionBg,
-          backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
           overflow: "hidden",
+          boxShadow: "0 18px 40px rgba(0,0,0,0.10)",
         }}>
           <button type="button" onClick={copyInfo} style={{ ...btnStyle, color: pg.actionText }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -470,8 +635,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
 
       </div>{/* end content wrapper */}
 
-      {/* Why your card matters section */}
-      <div className="pc-why-section" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div className="pc-why-section" style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
         <div style={{ maxWidth: CARD_W, width: "100%" }}>
           <div style={{ borderTop: `1px solid ${pg.divider}`, paddingTop: 36 }}>
             <p style={{ fontFamily: FONT, fontSize: 10, letterSpacing: "0.28em", color: OG, margin: "0 0 14px", textTransform: "uppercase" }}>
@@ -499,6 +663,32 @@ export default function PlayerCardClient({ card }: { card: Card }) {
                 LEARN ABOUT THE JUNE 15 WINDOW
               </div>
             </a>
+            <div style={{ display: "grid", gap: 10, marginTop: 18 }}>
+              <a href={xUrl || "#"} onClick={(e) => { if (!xUrl) e.preventDefault(); }} target={xUrl ? "_blank" : undefined} rel={xUrl ? "noreferrer" : undefined} style={{ textDecoration: "none" }}>
+                <div style={{ padding: "13px 0", borderRadius: 12, textAlign: "center", fontFamily: FONT, fontSize: 12, color: pg.text, letterSpacing: "0.14em", textTransform: "uppercase", border: `1px solid ${pg.btnAltBd}`, background: pg.btnAlt }}>
+                  SHARE ON X
+                </div>
+              </a>
+              <button
+                type="button"
+                onClick={copyInfo}
+                style={{
+                  padding: "13px 0",
+                  borderRadius: 12,
+                  textAlign: "center",
+                  fontFamily: FONT,
+                  fontSize: 12,
+                  color: "#fff",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  border: "none",
+                  background: OG,
+                  cursor: "pointer",
+                }}
+              >
+                {copied ? "COPIED!" : "COPY INFO"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -508,6 +698,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
 
 function FramerCountdown({ dk }: { dk: boolean }) {
   const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
+
   useEffect(() => {
     const tick = () => {
       const diff = Math.max(0, JUNE15.getTime() - Date.now());
@@ -518,9 +709,10 @@ function FramerCountdown({ dk }: { dk: boolean }) {
         s: Math.floor((diff % 60000) / 1000),
       });
     };
+
     tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
   }, []);
 
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -556,13 +748,12 @@ function FramerCountdown({ dk }: { dk: boolean }) {
 }
 
 function June15Banner({ dk }: { dk: boolean }) {
-  const fg    = dk ? "#fff"                   : "#111";
+  const fg = dk ? "#fff" : "#111";
   const fgDim = dk ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.6)";
-  const fgX   = dk ? "rgba(255,255,255,0.5)"  : "rgba(0,0,0,0.45)";
-  const ring  = dk ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.22)";
-  const xStr  = dk ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.32)";
+  const fgX = dk ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.45)";
+  const ring = dk ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.22)";
+  const xStr = dk ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.32)";
   const divBd = dk ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)";
-  const FONT  = "'Impact', 'Arial Black', sans-serif";
 
   return (
     <section className="june15-banner-section" style={{ width: "100%", boxSizing: "border-box", borderBottom: `1px solid ${divBd}` }}>
@@ -572,12 +763,12 @@ function June15Banner({ dk }: { dk: boolean }) {
         </div>
         <div className="june15-banner-body">
           <div style={{ flex: 1, minWidth: 0 }}>
-            <h2 style={{ fontFamily: FONT, fontSize: "clamp(34px, 5vw, 58px)", color: fg, textTransform: "uppercase", lineHeight: 0.9, margin: "0 0 18px", letterSpacing: "0.01em" }}>
+            <h2 style={{ fontFamily: FONT, fontSize: "clamp(32px, 5vw, 58px)", color: fg, textTransform: "uppercase", lineHeight: 0.9, margin: "0 0 18px", letterSpacing: "0.01em" }}>
               THE MOST IMPORTANT<br />DAY IN <span style={{ color: OG }}>RECRUITING</span>
             </h2>
             <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", color: fgDim, textTransform: "uppercase", margin: "0 0 22px", lineHeight: 1.65 }}>
               <span style={{ color: OG }}>JUNE 15TH</span> IS WHEN COLLEGE COACHES CAN OFFICIALLY<br />
-              BEGIN DIRECT CONTACT WITH 2028 RECRUITS — AND YOUR<br />
+              BEGIN DIRECT CONTACT WITH 2028 RECRUITS - AND YOUR<br />
               CUSTOM PLAYER CARD GETS YOU SEEN FIRST.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
@@ -602,8 +793,11 @@ function June15Banner({ dk }: { dk: boolean }) {
           </div>
           <div className="june15-banner-img">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://static.wixstatic.com/media/e49d37_31b774e319fb4863b8b8662d000b050d~mv2.png/v1/fill/w_742,h_782,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/ea443b42-63d2-4cdb-be9a-febaceaa5f1c.png"
-              alt="June 15" style={{ width: "100%", display: "block", borderRadius: 12 }} />
+            <img
+              src="https://static.wixstatic.com/media/e49d37_31b774e319fb4863b8b8662d000b050d~mv2.png/v1/fill/w_742,h_782,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/ea443b42-63d2-4cdb-be9a-febaceaa5f1c.png"
+              alt="June 15 Recruiting"
+              style={{ width: "100%", display: "block", borderRadius: 12 }}
+            />
           </div>
         </div>
       </div>
