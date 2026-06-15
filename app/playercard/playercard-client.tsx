@@ -93,19 +93,19 @@ function BigMetric({
     <div
       style={{
         borderRadius: 20,
-        padding: "10px 12px 12px",
+        padding: "9px 11px 10px",
         border: `1px solid ${border}`,
         background: bg,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        minHeight: 76,
+        minHeight: 66,
         overflow: "hidden",
       }}
     >
       <span
         style={{
-          fontSize: 7.5,
+          fontSize: 7,
           fontWeight: 700,
           letterSpacing: "0.22em",
           textTransform: "uppercase",
@@ -118,7 +118,7 @@ function BigMetric({
       <span
         ref={valueRef}
         style={{
-          fontSize: label === "SCHOOL" ? 22 * valueScale : 34,
+          fontSize: label === "SCHOOL" ? 20 * valueScale : 30,
           fontWeight: 900,
           letterSpacing: label === "SCHOOL" ? "-0.08em" : "-0.06em",
           lineHeight: 0.9,
@@ -133,6 +133,77 @@ function BigMetric({
       >
         {value}
       </span>
+    </div>
+  );
+}
+
+function Row({
+  label,
+  value,
+  accent = false,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(0,0,0,0.42)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+        {label}
+      </span>
+      <span style={{ fontSize: 15, fontWeight: 900, color: accent ? OG : "#111", letterSpacing: "-0.01em" }}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function BackCard({ card, userId }: { card: Card; userId: string }) {
+  const yr = card.dept.replace(/^#/, "");
+  const xUrl = card.x ? `https://x.com/${card.x.replace(/^@/, "")}` : null;
+
+  return (
+    <div style={{ width: "100%", height: "100%", background: "#fff", borderRadius: 18, overflow: "hidden", display: "flex", flexDirection: "column", fontFamily: "system-ui,-apple-system,sans-serif" }}>
+      <div style={{ height: 46, background: "#111", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/expo.avif" alt="Expo" style={{ width: 22, height: 22, objectFit: "contain", filter: "invert(1)" }} />
+          <span style={{ fontSize: 11, fontWeight: 900, color: "#fff", letterSpacing: "0.16em" }}>EXPO RECRUITS</span>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 16, fontWeight: 900, color: OG }}>CLASS {yr}</div>
+        </div>
+      </div>
+      <div style={{ height: 3, background: OG, flexShrink: 0 }} />
+      <div style={{ flex: 1, padding: "18px 18px 16px", display: "flex", flexDirection: "column" }}>
+        <div style={{ marginBottom: 18, paddingBottom: 16, borderBottom: "1px solid #efefef" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: OG, letterSpacing: "0.24em", textTransform: "uppercase", marginBottom: 3 }}>ATHLETE PROFILE</div>
+          <div style={{ fontSize: 22, fontWeight: 900, color: "#111", letterSpacing: "-0.03em", textTransform: "uppercase" }}>{card.fullName}</div>
+          <div style={{ fontSize: 11, color: "rgba(0,0,0,0.42)", marginTop: 2 }}>{card.role} · {card.subtitle}</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 11, marginBottom: 18 }}>
+          <Row label="ATH SCORE" value={card.athScore !== "--" ? card.athScore : "—"} accent />
+          <Row label="ACD SCORE" value={card.acdScore !== "--" ? card.acdScore : "—"} accent />
+          <Row label="SCHOOL" value={card.refId || "—"} />
+          <Row label="GRAD YEAR" value={card.dept || "—"} />
+          {card.height !== "--" && card.weight !== "--" && <Row label="HT / WT" value={`${card.height} · ${card.weight}`} />}
+        </div>
+        <div style={{ flex: 1 }} />
+        <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
+          <Link href={`/profile/${userId}`} style={{ textDecoration: "none" }}>
+            <div style={{ padding: "12px 0", background: "#111", borderRadius: 10, textAlign: "center", fontSize: 11, fontWeight: 900, color: "#fff", letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
+              View Full Profile
+            </div>
+          </Link>
+          {xUrl && (
+            <a href={xUrl} target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+              <div style={{ padding: "12px 0", border: `2px solid ${OG}`, borderRadius: 10, textAlign: "center", fontSize: 11, fontWeight: 900, color: OG, letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer" }}>
+                Share on X
+              </div>
+            </a>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -202,6 +273,8 @@ export default function PlayerCardClient({ card }: { card: Card }) {
   const [swingZ, setSwingZ] = useState(0);
   const [glare, setGlare] = useState({ x: 50, y: 50, op: 0 });
   const [copied, setCopied] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const [hasFlipped, setHasFlipped] = useState(false);
 
   useEffect(() => {
     if (!mounted) return;
@@ -244,6 +317,11 @@ export default function PlayerCardClient({ card }: { card: Card }) {
     if (!swingDone.current) return;
     setTilt({ x: 0, y: 0 });
     setGlare({ x: 50, y: 50, op: 0 });
+  };
+
+  const flip = () => {
+    setFlipped((prev) => !prev);
+    setHasFlipped(true);
   };
 
   const copyInfo = async () => {
@@ -373,12 +451,39 @@ export default function PlayerCardClient({ card }: { card: Card }) {
           </div>
 
           {/* ── Card body ── */}
-          <div style={{
-            width: CARD_W, borderRadius: 26, overflow: "hidden",
-            position: "relative", background: c.bg,
-            marginTop: -42, zIndex: 1,
-            boxShadow: c.shadow,
-          }}>
+          <div
+            onClick={flip}
+            style={{
+              width: CARD_W,
+              height: 560,
+              perspective: "1000px",
+              borderRadius: 26,
+              position: "relative",
+              marginTop: -42,
+              zIndex: 1,
+              cursor: "pointer",
+              userSelect: "none",
+            }}
+          >
+            <div style={{
+              width: "100%",
+              height: "100%",
+              position: "relative",
+              transformStyle: "preserve-3d",
+              transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+              transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              willChange: "transform",
+            }}>
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden" as const,
+                borderRadius: 26,
+                overflow: "hidden",
+                background: c.bg,
+                boxShadow: c.shadow,
+              }}>
             {/* PlayerCard2-style top header */}
             <div style={{ height: 46, background: "#111", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
@@ -444,14 +549,14 @@ export default function PlayerCardClient({ card }: { card: Card }) {
             }}/>
 
             {/* ── Content ── */}
-            <div style={{ position: "relative", zIndex: 5, padding: "52px 24px 28px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ position: "relative", zIndex: 5, padding: "44px 20px 18px", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
               {/* Photo */}
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 18, width: "100%" }}>
                 <div style={{
                   width: "100%",
                   maxWidth: 285,
-                  height: 168,
+                  height: 152,
                   borderRadius: 18,
                   overflow: "hidden",
                   border: `2px solid ${OG}42`,
@@ -472,12 +577,12 @@ export default function PlayerCardClient({ card }: { card: Card }) {
               {/* Name */}
               <div style={{ width: "100%", textAlign: "center", marginBottom: 12 }}>
                 {first ? (
-                  <div style={{ fontSize: 12, fontWeight: 600, color: c.roleText, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 4 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: c.roleText, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 2 }}>
                     {first}
                   </div>
                 ) : null}
                 <h2 style={{
-                  fontSize: first ? 34 : 30, fontWeight: 900, letterSpacing: "-0.04em",
+                  fontSize: first ? 30 : 28, fontWeight: 900, letterSpacing: "-0.04em",
                   color: c.name, lineHeight: 0.94,
                   margin: 0, textAlign: "center",
                   textTransform: "uppercase",
@@ -485,17 +590,17 @@ export default function PlayerCardClient({ card }: { card: Card }) {
               </div>
 
               {/* Orange divider */}
-              <div style={{ width: "72%", height: 1.5, alignSelf: "center", background: `linear-gradient(to right,transparent,${OG}cc,transparent)`, marginBottom: 10 }}/>
+              <div style={{ width: "68%", height: 1.5, alignSelf: "center", background: `linear-gradient(to right,transparent,${OG}cc,transparent)`, marginBottom: 8 }}/>
 
               {/* Position • Sport */}
               <p style={{
-                fontSize: 10, fontWeight: 700, letterSpacing: "0.2em",
+                fontSize: 9, fontWeight: 700, letterSpacing: "0.18em",
                 textTransform: "uppercase" as const, color: c.roleText,
-                margin: "0 0 18px", textAlign: "center",
+                margin: "0 0 12px", textAlign: "center",
               }}>{card.role} • {card.subtitle}</p>
 
               {/* Four stat boxes */}
-              <div style={{ width: "100%", display: "grid", gridTemplateColumns: "0.8fr 1.3fr", gap: 8, marginBottom: 16 }}>
+              <div style={{ width: "100%", display: "grid", gridTemplateColumns: "0.8fr 1.3fr", gap: 7, marginBottom: 10 }}>
                 <BigMetric
                   label="HEIGHT"
                   value={card.height}
@@ -537,23 +642,40 @@ export default function PlayerCardClient({ card }: { card: Card }) {
               </div>
 
               <div style={{ width: "100%", marginTop: 2 }}>
-                <Link href={`/profile/${card.userId}`} style={{ textDecoration: "none", display: "block" }}>
+                <Link href={`/profile/${card.userId}`} style={{ textDecoration: "none", display: "block" }} onClick={(e) => e.stopPropagation()}>
                   <div style={{
                     width: "100%",
-                    padding: "14px 16px",
-                    borderRadius: 14,
+                    padding: "11px 16px",
+                    borderRadius: 12,
                     background: dk ? OG : "#111",
                     color: dk ? "#111" : "#fff",
                     textAlign: "center",
-                    fontSize: 11,
+                    fontSize: 10,
                     fontWeight: 900,
-                    letterSpacing: "0.18em",
+                    letterSpacing: "0.16em",
                     textTransform: "uppercase",
                     boxShadow: dk ? `0 14px 28px ${OG}24` : "0 14px 28px rgba(0,0,0,0.16)",
                   }}>
                     View Full Profile
                   </div>
                 </Link>
+              </div>
+              </div>
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden" as const,
+                  transform: "rotateY(180deg)",
+                  borderRadius: 26,
+                  overflow: "hidden",
+                  background: "#fff",
+                  boxShadow: c.shadow,
+                }}
+              >
+                <BackCard card={card} userId={card.userId} />
               </div>
             </div>
           </div>
