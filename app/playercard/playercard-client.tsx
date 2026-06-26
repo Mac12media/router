@@ -25,7 +25,6 @@ type Card = {
 
 const OG     = "#FF6600";
 const CARD_W = 355;
-const JUNE15 = new Date("2026-06-15T05:00:00Z");
 const FONT = "'Impact', 'Arial Black', sans-serif";
 
 function splitName(fullName: string) {
@@ -361,7 +360,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
   };
 
   const copyInfo = async () => {
-    const text = `${card.fullName}\n${card.role} • ${card.subtitle}\n${card.email}`;
+    const text = `${window.location.origin}/playercard?id=${encodeURIComponent(card.userId)}`;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -383,7 +382,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
     );
   }
 
-  return (
+    return (
     <main
       className="pc-page-bg"
       style={{
@@ -392,11 +391,6 @@ export default function PlayerCardClient({ card }: { card: Card }) {
         display: "flex", flexDirection: "column",
       }}
     >
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <June15Banner dk={dk} />
-      </div>
-
-      {/* June 15 promo — full width at top */}
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", padding: "40px 20px 48px", flex: 1 }}>
 
       {/* Ambient glows */}
@@ -415,14 +409,6 @@ export default function PlayerCardClient({ card }: { card: Card }) {
       </div>
 
       {/* Mobile-only header */}
-      <div className="pc-top-header">
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 100, border: `1px solid ${OG}50`, background: `${OG}15`, padding: "5px 16px", marginBottom: 14 }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: OG }} />
-          <span style={{ fontFamily: FONT, fontSize: 11, letterSpacing: "0", textTransform: "uppercase" as const, color: OG }}>JUNE 15 RECRUITING WINDOW</span>
-        </div>
-      </div>
-
-      {/* ─── Main layout ─── */}
       <div className="pc-outer">
 
         {/* Card + lanyard assembly */}
@@ -719,10 +705,6 @@ export default function PlayerCardClient({ card }: { card: Card }) {
 
         {/* ── Desktop sidebar ── */}
         <div className="pc-sidebar">
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 100, border: `1px solid ${OG}50`, background: `${OG}15`, padding: "5px 16px", marginBottom: 14 }}>
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: OG }} />
-            <span style={{ fontFamily: FONT, fontSize: 10, letterSpacing: "0", textTransform: "uppercase" as const, color: OG }}>JUNE 15 RECRUITING</span>
-          </div>
           <p style={{ fontFamily: FONT, fontSize: 13, color: pg.textDim, margin: "0 0 4px", letterSpacing: "0.18em", textTransform: "uppercase" as const }}>YOUR CUSTOM PLAYER CARD</p>
           <h1 style={{ fontFamily: FONT, fontSize: 38, color: pg.text, margin: "0 0 6px", letterSpacing: "0.02em", textTransform: "uppercase", lineHeight: 0.92 }}>{card.fullName}</h1>
           <p style={{ fontFamily: FONT, fontSize: 11, color: pg.textDim, margin: "0 0 28px", letterSpacing: "0.16em", textTransform: "uppercase" as const }}>
@@ -741,7 +723,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
             </svg>
-            {copied ? "COPIED!" : "COPY INFO"}
+            {copied ? "COPIED!" : "COPY LINK"}
           </button>
 
           <button type="button" onClick={() => window.open(xUrl, "_blank")} style={{
@@ -778,7 +760,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
             </svg>
-            <span>{copied ? "Copied!" : "Copy Info"}</span>
+            <span>{copied ? "Copied!" : "Copy Link"}</span>
           </button>
           <div style={{ width: 1, height: 20, background: pg.actionDiv, flexShrink: 0 }}/>
           <button type="button" onClick={() => window.open(xUrl, "_blank")} style={{ ...btnStyle, color: pg.actionText }}>
@@ -795,7 +777,7 @@ export default function PlayerCardClient({ card }: { card: Card }) {
 
       <div className="pc-why-section" style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
         <div style={{ maxWidth: CARD_W, width: "100%" }}>
-          <div style={{ borderTop: `1px solid ${pg.divider}`, paddingTop: 36 }}>
+            <div style={{ borderTop: `1px solid ${pg.divider}`, paddingTop: 36 }}>
             <p style={{ fontFamily: FONT, fontSize: 10, letterSpacing: "0.28em", color: OG, margin: "0 0 14px", textTransform: "uppercase" }}>
               WHY THIS CARD MATTERS
             </p>
@@ -816,11 +798,6 @@ export default function PlayerCardClient({ card }: { card: Card }) {
                 </div>
               ))}
             </div>
-            <a href="https://www.exporecruits.com/june15" target="_blank" rel="noreferrer" style={{ textDecoration: "none", display: "block" }}>
-              <div style={{ padding: "13px 0", border: `1px solid ${pg.btnAltBd}`, borderRadius: 12, textAlign: "center", fontFamily: FONT, fontSize: 12, color: OG, letterSpacing: "0.18em", textTransform: "uppercase" }}>
-                LEARN ABOUT THE JUNE 15 WINDOW
-              </div>
-            </a>
             <div style={{ display: "grid", gap: 10, marginTop: 18 }}>
               <a href={xUrl || "#"} onClick={(e) => { if (!xUrl) e.preventDefault(); }} target={xUrl ? "_blank" : undefined} rel={xUrl ? "noreferrer" : undefined} style={{ textDecoration: "none" }}>
                 <div style={{ padding: "13px 0", borderRadius: 12, textAlign: "center", fontFamily: FONT, fontSize: 12, color: pg.text, letterSpacing: "0.14em", textTransform: "uppercase", border: `1px solid ${pg.btnAltBd}`, background: pg.btnAlt }}>
@@ -844,122 +821,13 @@ export default function PlayerCardClient({ card }: { card: Card }) {
                   cursor: "pointer",
                 }}
               >
-                {copied ? "COPIED!" : "COPY INFO"}
+                {copied ? "COPIED!" : "COPY LINK"}
               </button>
             </div>
           </div>
         </div>
       </div>
     </main>
-  );
-}
-
-function FramerCountdown({ dk }: { dk: boolean }) {
-  const [t, setT] = useState({ d: 0, h: 0, m: 0, s: 0 });
-
-  useEffect(() => {
-    const tick = () => {
-      const diff = Math.max(0, JUNE15.getTime() - Date.now());
-      setT({
-        d: Math.floor(diff / 86400000),
-        h: Math.floor((diff % 86400000) / 3600000),
-        m: Math.floor((diff % 3600000) / 60000),
-        s: Math.floor((diff % 60000) / 1000),
-      });
-    };
-
-    tick();
-    const id = window.setInterval(tick, 1000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const pad = (n: number) => String(n).padStart(2, "0");
-  const units = [
-    { v: pad(t.d), label: "DAYS" },
-    { v: pad(t.h), label: "HOURS" },
-    { v: pad(t.m), label: "MINUTES" },
-    { v: pad(t.s), label: "SECONDS" },
-  ];
-  const digitColor = dk ? "rgb(183,183,183)" : "rgb(50,50,50)";
-  const labelColor = dk ? "rgb(153,153,153)" : "rgb(110,110,110)";
-
-  return (
-    <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: 22, fontFamily: "Inter, sans-serif", fontWeight: 900 }}>
-      {units.map(({ v, label }) => (
-        <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {v.split("").map((digit, i) => (
-              <div key={i} style={{ position: "relative", height: 52.8, width: 31.2, overflow: "hidden", display: "flex", justifyContent: "center" }}>
-                <span style={{ fontSize: 48, lineHeight: 1, color: digitColor, position: "absolute", fontFamily: "Inter, sans-serif", fontWeight: "inherit" }}>
-                  {digit}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", marginTop: 6, textAlign: "center", color: labelColor, fontFamily: "Inter, sans-serif" }}>
-            {label}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function June15Banner({ dk }: { dk: boolean }) {
-  const fg = dk ? "#fff" : "#111";
-  const fgDim = dk ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,0.6)";
-  const fgX = dk ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.45)";
-  const ring = dk ? "rgba(255,255,255,0.28)" : "rgba(0,0,0,0.22)";
-  const xStr = dk ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.32)";
-  const divBd = dk ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)";
-
-  return (
-    <section className="june15-banner-section" style={{ width: "100%", boxSizing: "border-box", borderBottom: `1px solid ${divBd}` }}>
-      <div style={{ maxWidth: 860, margin: "0 auto" }}>
-        <div style={{ marginBottom: 32 }}>
-          <FramerCountdown dk={dk} />
-        </div>
-        <div className="june15-banner-body">
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <h2 style={{ fontFamily: FONT, fontSize: "clamp(32px, 5vw, 58px)", color: fg, textTransform: "uppercase", lineHeight: 0.9, margin: "0 0 18px", letterSpacing: "0.01em" }}>
-              THE MOST IMPORTANT<br />DAY IN <span style={{ color: OG }}>RECRUITING</span>
-            </h2>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.05em", color: fgDim, textTransform: "uppercase", margin: "0 0 22px", lineHeight: 1.65 }}>
-              <span style={{ color: OG }}>JUNE 15TH</span> IS WHEN COLLEGE COACHES CAN OFFICIALLY<br />
-              BEGIN DIRECT CONTACT WITH 2028 RECRUITS - AND YOUR<br />
-              CUSTOM PLAYER CARD GETS YOU SEEN FIRST.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 32 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 26, height: 26, borderRadius: "50%", border: `2px solid ${ring}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={xStr} strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: fgX, textTransform: "uppercase", letterSpacing: "0.07em" }}>THOUSANDS OF ATHLETES WILL COMPETE FOR ATTENTION...</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 26, height: 26, borderRadius: "50%", background: OG, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: fg, textTransform: "uppercase", letterSpacing: "0.07em" }}>YOUR PLAYER CARD PUTS YOU AHEAD OF THE PACK</span>
-              </div>
-            </div>
-            <a href="https://www.exporecruits.com/june15" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
-              <div style={{ display: "inline-block", background: OG, borderRadius: 10, padding: "16px 40px", fontFamily: FONT, fontSize: 15, color: "#fff", textTransform: "uppercase", letterSpacing: "0.2em", cursor: "pointer" }}>
-                JUMPSTART NOW
-              </div>
-            </a>
-          </div>
-          <div className="june15-banner-img">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://static.wixstatic.com/media/e49d37_31b774e319fb4863b8b8662d000b050d~mv2.png/v1/fill/w_742,h_782,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/ea443b42-63d2-4cdb-be9a-febaceaa5f1c.png"
-              alt="June 15 Recruiting"
-              style={{ width: "100%", display: "block", borderRadius: 12 }}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 

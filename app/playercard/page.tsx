@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { getPublicUserById } from "@/lib/data/users";
 import PlayerCardClient from "./playercard-client";
-
-const DEFAULT_ID = "f169ff24-a542-4e6a-b351-731f685d9482";
 
 type PageProps = {
   searchParams?: Promise<{ id?: string }>;
@@ -53,7 +52,13 @@ function getCardText(user: {
 
 export default async function PlayerCardPage({ searchParams }: PageProps) {
   const params = searchParams ? await searchParams : {};
-  const id = params.id ?? DEFAULT_ID;
+  const session = await auth();
+  const id = session?.user?.id ?? params.id;
+
+  if (!id) {
+    notFound();
+  }
+
   const user = await getPublicUserById({ id });
 
   if (!user) {

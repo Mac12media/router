@@ -240,11 +240,6 @@ function June15Banner({ dk }: { dk: boolean }) {
                 <span style={{ fontSize: 11, fontWeight: 700, color: fg, textTransform: "uppercase", letterSpacing: "0.07em" }}>YOUR PLAYER CARD PUTS YOU AHEAD OF THE PACK</span>
               </div>
             </div>
-            <a href="https://www.exporecruits.com/june15" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
-              <div style={{ display: "inline-block", background: OG, borderRadius: 10, padding: "16px 40px", fontFamily: FONT, fontSize: 15, color: "#fff", textTransform: "uppercase", letterSpacing: "0.2em", cursor: "pointer" }}>
-                JUMPSTART NOW
-              </div>
-            </a>
           </div>
           <div className="june15-banner-img">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -465,15 +460,6 @@ export default function PlayerCard2Client({ card, userId }: { card: Card2; userI
                 </div>
               ))}
             </div>
-            <a href="https://www.exporecruits.com/june15" target="_blank" rel="noreferrer" style={{ textDecoration: "none", display: "block" }}>
-              <div style={{
-                padding: "13px 0", borderRadius: 12, textAlign: "center",
-                border: `1px solid ${pg.btnOutBd}`,
-                fontFamily: FONT, fontSize: 12, color: OG, letterSpacing: "0.18em", textTransform: "uppercase",
-              }}>
-                LEARN ABOUT THE JUNE 15 WINDOW
-              </div>
-            </a>
           </div>
         </div>
       </div>
