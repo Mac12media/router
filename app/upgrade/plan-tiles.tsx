@@ -19,12 +19,13 @@ interface PlanProps {
   yearlyStripePriceId?: string;
   stripeProductId?: string;
   features: string[];
+  label?: string;
 }
 
 const ENV = process.env.NODE_ENV === "production" ? "prod" : "dev";
 
 /** ------------------------------------------------------------------ */
-/**  PLAN DEFINITIONS – matches the screenshot (ROOKIE, MVP, ELITE+)  */
+/**  PLAN DEFINITIONS – matches the pricing layout direction in the reference. */
 /** ------------------------------------------------------------------ */
 const plans: PlanProps[] = [
   {
@@ -61,6 +62,7 @@ const plans: PlanProps[] = [
       "Recruiting Coordinator",
       "Campaign Analytics",
     ],
+    label: "Most popular",
   },
   {
     name: "ELITE+",
@@ -89,18 +91,10 @@ const plans: PlanProps[] = [
 
 /* -------------------------------------------------------------------- */
 export const PlanTiles = ({ usage }: { usage?: { plan?: string } }) => {
-  console.log("[PlanTiles] Rendered with usage:", usage);
-
   return (
-    <section className="grid gap-12 px-4 max-w-6xl mx-auto">
-      <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold">Compare Plans</h2>
-        <p className="text-muted-foreground">
-          There&rsquo;s a plan for everyone. Choose the one that works for you...
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="grid gap-10 px-2 py-6 sm:px-4 max-w-6xl mx-auto">
+      
+      <div className="grid gap-6 md:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-stretch">
         {plans.map((plan) => (
           <Tile key={plan.name} plan={plan} currentPlan={usage?.plan} />
         ))}
@@ -127,83 +121,93 @@ const Tile = ({
 }) => {
   const isCurrentPlan =
     currentPlan?.toLowerCase() === plan.name.toLowerCase();
-  const isElite = plan.name === "ELITE+";
-
-  console.log("[Tile] Rendering plan:", plan.name);
-  console.log(" - isCurrentPlan:", isCurrentPlan);
-  console.log(" - monthlyPriceId:", plan.monthlyStripePriceId);
-  console.log(" - yearlyPriceId:", plan.yearlyStripePriceId);
+  const isFeatured = plan.label === "Most popular";
 
   return (
     <div
       className={cn(
-        "relative bg-black text-white p-6 rounded-xl shadow-md flex flex-col gap-4 transition-all",
-        isCurrentPlan && "border-2 border-yellow-400"
+        "group relative flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-sm transition-all duration-300 sm:p-7",
+        "hover:-translate-y-1 hover:shadow-xl",
+        isFeatured &&
+          "border-primary/50 shadow-lg ring-2 ring-primary/40 sm:-translate-y-1 md:-translate-y-2",
+        isCurrentPlan && "border-primary ring-2 ring-primary/60"
       )}
     >
-      {isCurrentPlan && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 px-3 py-1 rounded-full">
-          <p className="text-xs text-black font-medium">Current Plan</p>
+      {isFeatured && (
+        <div className="absolute left-0 right-0 top-0 mx-auto w-fit -translate-y-1/2">
+          <p className="rounded-full bg-primary px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-primary-foreground shadow">
+            {plan.label}
+          </p>
         </div>
       )}
 
-      <div className="space-y-2">
-        <h3 className="text-2xl font-bold text-center">{plan.name}</h3>
-        <p className="text-muted-foreground text-sm text-center">
+      {isCurrentPlan && (
+        <div className="absolute right-4 top-4 z-10 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.15em] border border-primary/40 text-primary">
+          Current Plan
+        </div>
+      )}
+
+      <div className="space-y-2 pt-4 text-center">
+        <h3 className="text-3xl font-black uppercase tracking-tight text-foreground">
+          {plan.name}
+        </h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {plan.description}
         </p>
       </div>
 
-      <ul className="space-y-2 text-sm">
-        {plan.features.map((feature) => (
-          <li key={feature} className="flex gap-2 items-start">
-            <Check
-              size={16}
-              className={isElite ? "text-yellow-400 mt-1" : "text-orange-500 mt-1"}
-            />
-            {feature}
-          </li>
-        ))}
-      </ul>
-
-      <div className="pt-4 mt-auto">
+      <div className="border-y border-border py-5 text-center">
         {plan.monthlyPrice === "Contact For Pricing" ? (
-          <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
-            ${plan.yearlyPrice}
-          </p>
+          <>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+              One-time fee
+            </p>
+            <p className="mt-1 text-5xl font-black tracking-tight text-foreground">{`$${plan.yearlyPrice}`}</p>
+          </>
         ) : (
           <>
-            <p className="text-center text-lg font-semibold bg-gradient-to-r from-orange-400 to-yellow-300 text-black px-4 py-2 rounded-md w-fit mx-auto">
-              ${plan.monthlyPrice}/mo
+            <p className="text-5xl font-black tracking-tight text-foreground">
+              ${plan.monthlyPrice}
+              <span className="text-base align-top font-semibold text-muted-foreground">
+                /mo
+              </span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Billed monthly, cancel anytime
             </p>
           </>
         )}
       </div>
 
-      <div className="pt-4 space-y-2">
+      <ul className="space-y-3 text-sm">
+        {plan.features.map((feature) => (
+          <li key={feature} className="flex gap-2 items-start">
+            <Check
+              size={16}
+              strokeWidth={3}
+              className="mt-1 shrink-0 text-primary"
+            />
+            <span className="text-foreground/90">{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="pt-2 mt-auto space-y-2">
         {!isCurrentPlan &&
           (plan.monthlyPrice === "Contact For Pricing" ? (
             <Button
-  className="w-full"
-  onClick={() => {
-    console.log("[Tile] ONE-TIME checkout initiated", {
-      plan: plan.name,
-      priceId: plan.yearlyStripePriceId,
-    });
-    window.location.href = "https://buy.stripe.com/28E14naixbAmcNL5TLafS00";
-  }}
->
-  One-Time Purchase
-</Button>
-
+              className="w-full font-bold text-sm"
+              onClick={() => {
+                window.location.href =
+                  "https://buy.stripe.com/28E14naixbAmcNL5TLafS00";
+              }}
+            >
+              One-Time Purchase
+            </Button>
           ) : (
             <Button
-              className="w-full"
+              className="w-full font-bold text-sm"
               onClick={() => {
-                console.log("[Tile] MONTHLY checkout initiated", {
-                  plan: plan.name,
-                  priceId: plan.monthlyStripePriceId,
-                });
                 postStripeSession({
                   priceId: plan.monthlyStripePriceId!,
                 });
@@ -225,7 +229,6 @@ const Tile = ({
               variant="secondary"
               className="w-full"
               onClick={() => {
-                console.log("[Tile] Manage Plan portal opened for", plan.name);
                 createCustomerPortalSession();
               }}
             >
