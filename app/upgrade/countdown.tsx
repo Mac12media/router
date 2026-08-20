@@ -6,10 +6,10 @@ function getTargetDate() {
   const now = new Date();
   const currentYear = now.getFullYear();
 
-  // July 30th, midnight (next upcoming July 30)
-  let target = new Date(currentYear, 6, 30, 0, 0, 0); // month is 0-based: 6 = July
+  // September 1st, midnight (next upcoming Sep 1)
+  let target = new Date(currentYear, 8, 1, 0, 0, 0); // month is 0-based: 8 = September
   if (now.getTime() >= target.getTime()) {
-    target = new Date(currentYear + 1, 6, 30, 0, 0, 0);
+    target = new Date(currentYear + 1, 8, 1, 0, 0, 0);
   }
 
   return target;
@@ -86,7 +86,7 @@ export function UpgradeCountdownBanner() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
             <span className="h-2 w-2 rounded-full bg-white" />
-            Ends July 30th
+            Ends Sep 1st
           </div>
 
           <h2 className="mt-3 text-xl font-black uppercase tracking-tight md:text-2xl">
