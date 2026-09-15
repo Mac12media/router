@@ -4,7 +4,7 @@ import Image, { StaticImageData } from "next/image";
 import { ModeToggle } from "@/components/parts/mode-toggle";
 import { getUsageForUser, getUserFull } from "@/lib/data/users";
 import { supabase } from "@/lib/supabase";
-import { LogInIcon, LucideProps, RocketIcon } from "lucide-react";
+import { Crown, LogInIcon, LucideProps, RocketIcon } from "lucide-react";
 
 import { useTheme } from "next-themes";
 
@@ -145,6 +145,8 @@ export default async function Nav() {
               </NavLink>
             ))}
 
+            {hasValidId && <UpgradeNavLink />}
+
             {/* Only show profile if ID is available */}
             {hasValidId && (
               <NavLink icon={User} href={`/profile/${id}`}>
@@ -221,6 +223,24 @@ const SportLink = ({
     </Link>
   );
 };
+
+function UpgradeNavLink() {
+  return (
+    <Link
+      href="/upgrade"
+      className="group relative -ml-2 flex overflow-hidden rounded-md p-2 text-sm font-medium text-orange-500 transition-colors hover:bg-orange-500/10 hover:text-orange-600 dark:text-orange-400 dark:hover:text-orange-300"
+    >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/4 -skew-x-12 bg-gradient-to-r from-transparent via-orange-300/35 to-transparent animate-nav-glare motion-reduce:hidden"
+      />
+      <span className="relative flex items-center gap-2">
+        <Crown size={20} />
+        Plans &amp; Upgrade
+      </span>
+    </Link>
+  );
+}
 
 // NavLink component
 interface NavLinkProps {

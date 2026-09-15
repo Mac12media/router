@@ -171,6 +171,16 @@
     @apply -translate-y-0.5;
   }
 
+  /* Moving highlight for promotional navigation links. */
+  .animate-nav-glare {
+    animation: nav-glare 3.5s ease-in-out infinite;
+  }
+  @keyframes nav-glare {
+    0%, 55% { transform: translateX(0) skewX(-12deg); opacity: 0; }
+    65% { opacity: 0.9; }
+    85%, 100% { transform: translateX(500%) skewX(-12deg); opacity: 0; }
+  }
+
   /* Fade in animation */
   .animate-fade-in {
     animation: fade-in 0.3s ease-out both;
