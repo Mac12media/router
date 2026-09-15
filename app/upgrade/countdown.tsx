@@ -6,10 +6,11 @@ function getTargetDate() {
   const now = new Date();
   const currentYear = now.getFullYear();
 
-  // September 1st, midnight (next upcoming Sep 1)
-  let target = new Date(currentYear, 8, 1, 0, 0, 0); // month is 0-based: 8 = September
+  // October 1st, midnight (next upcoming Oct 1).
+  // Dates use the visitor's local time so the displayed clock and deadline agree.
+  let target = new Date(currentYear, 9, 1, 0, 0, 0); // month is 0-based: 9 = October
   if (now.getTime() >= target.getTime()) {
-    target = new Date(currentYear + 1, 8, 1, 0, 0, 0);
+    target = new Date(currentYear + 1, 9, 1, 0, 0, 0);
   }
 
   return target;
@@ -86,18 +87,12 @@ export function UpgradeCountdownBanner() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
             <span className="h-2 w-2 rounded-full bg-white" />
-            Ends Sep 1st
+            Ends Oct 1st
           </div>
 
           <h2 className="mt-3 text-xl font-black uppercase tracking-tight md:text-2xl">
-            Preseason Sale / 60% Off
+            Mid Season Sale - 50% Off
           </h2>
-
-          <p className="mt-1 text-sm text-black md:text-base">
-            Use code{" "}
-            <span className="font-bold uppercase tracking-wide">PRE60</span>{" "}
-            at checkout to claim your discount.
-          </p>
         </div>
 
         <div className="mt-3 flex flex-col items-center justify-center rounded-xl bg-black/15 px-5 py-3 md:mt-0 md:items-center">
