@@ -20,6 +20,8 @@ export default async function Page() {
       <Breadcrumbs pageName={pageData?.name} />
       <PageWrapper>
         <div className="space-y-8">
+          <UpgradeCountdownBanner />
+
           <div className="rounded-3xl border border-border bg-card px-6 py-10 text-center shadow-sm">
             <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-primary">
               Recruiting plans
@@ -32,8 +34,6 @@ export default async function Page() {
               Every plan is built to help you stay visible and recruit smarter.
             </p>
           </div>
-
-          <UpgradeCountdownBanner />
         </div>
         <PlanTiles usage={usageData} />
       </PageWrapper>
