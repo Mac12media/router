@@ -114,10 +114,16 @@ switch (usageData?.plan) {
               usageData.plan === "elite" ? "col-span-3" : "col-span-2"
             }`}
           />
-                  <div className="grid grid-cols-1 gap-4" style={{gridTemplateRows: '.5fr 2fr'}}>
-  <Campaigns name={user?.name ?? "New Campaign"} id={user?.id ?? ""} campaigncount={usageData?.campaigncount} boostcount={usageData?.boostcount} profile={user} />
-  <FavPrograms />
-</div>
+          <div className="grid grid-cols-1 gap-4">
+            <Campaigns
+              name={user?.name ?? "New Campaign"}
+              id={user?.id ?? ""}
+              campaigncount={usageData?.campaigncount}
+              boostcount={usageData?.boostcount}
+              profile={user}
+            />
+            <FavPrograms />
+          </div>
 
         </div>
 

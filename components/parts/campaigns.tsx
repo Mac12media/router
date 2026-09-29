@@ -451,12 +451,12 @@ const payload = {
       <div className="p-4">
         {/* Header + buttons */}
         <div className="flex items-center justify-between">
-          <div className="flex space-x-2">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:gap-2">
             {/* Campaign Button */}
-            <div className="flex-col space-y-4 flex text-xs text-gray-500">
+            <div className="flex w-full flex-col gap-2 text-xs text-gray-500 sm:flex-1">
               <button
                 onClick={() => setShowModal(true)}
-                className="bg-orange-500 hover:bg-orange-600 gap-2 flex text-white px-4 py-2 rounded text-sm"
+                className="flex w-full items-center justify-center gap-2 rounded bg-orange-500 px-4 py-2 text-sm text-white hover:bg-orange-600"
               >
                 <SendIcon className="w-5 h-5 self-center" />
                 Start New Campaign
@@ -468,10 +468,10 @@ const payload = {
             </div>
 
             {/* Boost Button */}
-            <div className="flex-col space-y-4 flex text-xs text-gray-500">
+            <div className="flex w-full flex-col gap-2 text-xs text-gray-500 sm:flex-1">
               <button
                 onClick={() => setShowBoostModal(true)}
-                className="bg-black dark:bg-white hover:bg-gray-800 gap-2 flex dark:text-black text-white px-4 py-2 rounded text-sm"
+                className="flex w-full items-center justify-center gap-2 rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800 dark:bg-white dark:text-black"
               >
                 <RocketIcon className="w-5 h-5 self-center" />
                 Boost on X
