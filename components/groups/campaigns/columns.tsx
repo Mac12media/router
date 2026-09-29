@@ -2,27 +2,23 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/data-table/header";
-import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { MailIcon } from "lucide-react"; // or any email icon you prefer
-
-import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { toast } from "sonner";
-
+import CampaignModal from "./campaign-modal";
 
 export const columns: ColumnDef<CampaignRow>[] = [
 {
   accessorKey: "name",
   header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
   cell: ({ row }) => {
+    const campaign = row.original;
+
     return (
-      <Button asChild variant="link" className="px-0 text-sm" size="sm">
-        <Link href={`/campaigns/${row.getValue("id")}`} className="flex items-center space-x-2">
-          <MailIcon className="text-orange-500 w-4 h-4" />
-          <span>Email Campaign</span>
-        </Link>
-      </Button>
+      <CampaignModal
+        id={campaign.id}
+        name={campaign.name}
+        date={campaign.createdAt}
+        status={campaign.status}
+      />
     );
   },
   filterFn: (row, id, value) => {

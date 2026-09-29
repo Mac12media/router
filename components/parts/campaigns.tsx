@@ -9,6 +9,12 @@ import { createBoost } from "@/lib/data/endpoints"
 import { decreaseCampaignCount, decreaseBoostCount } from "@/lib/data/users"; // Assuming you have a function to decrease boost count
 import { Card } from "../ui/card";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 /**
  * Props
@@ -58,7 +64,7 @@ export function Campaigns({
 
   const profileData = {
     bio: profile.bio ?? "",
-    video: profile.film ?? profile.video ?? null,
+    video: String(profile.film ?? profile.video ?? ""),
     grad_year: profile.classYear ?? profile.grad_year ?? "",
     height: profile.height ?? "",
     weight: profile.weight ?? "",
@@ -201,16 +207,16 @@ const payload = {
   function renderCampaignTypeSelect() {
     return (
       <div>
-        <h3 className="text-sm font-semibold text-orange-600 mb-2">Campaign Type</h3>
+        <h3 className="text-sm font-semibold text-orange-500 mb-2">Campaign Type</h3>
         {CAMPAIGN_TYPE_OPTIONS.map((label) => (
           <label
             key={label}
-            className="flex items-center mb-2 text-sm bg-white rounded-md px-2 py-1 shadow-sm"
+            className="flex items-center mb-2 text-sm bg-white text-black rounded-md px-2 py-1 shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100"
           >
             <input
               type="checkbox"
               name="campaignType"
-              className="mr-2 accent-orange-500 bg-white text-black focus:ring-orange-400 rounded"
+              className="mr-2 accent-orange-500 bg-white text-black dark:bg-zinc-900 dark:text-white focus:ring-orange-400 rounded"
               checked={selectedType === label}
               onChange={() => selectCampaignType(label)}
               required
@@ -226,18 +232,18 @@ const payload = {
   function renderMaterialSelect() {
     return (
       <div>
-        <h3 className="text-sm font-semibold text-orange-600 mb-2">Campaign Material</h3>
+        <h3 className="text-sm font-semibold text-orange-500 mb-2">Campaign Material</h3>
         {[
           { label: "Use Saved Info (Profile)", isCustom: false },
           { label: "Use New Info (Custom)", isCustom: true },
         ].map(({ label, isCustom }) => (
           <label
             key={label}
-            className="flex items-center mb-2 text-sm bg-white rounded-md px-2 py-1 shadow-sm"
+            className="flex items-center mb-2 text-sm bg-white text-black rounded-md px-2 py-1 shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100"
           >
             <input
               type="checkbox"
-              className="mr-2 accent-orange-500 bg-white text-black focus:ring-orange-400 rounded"
+              className="mr-2 accent-orange-500 bg-white text-black dark:bg-zinc-900 dark:text-white focus:ring-orange-400 rounded"
               checked={isCustom ? useCustomInfo : !useCustomInfo}
               onChange={() => setUseCustomInfo(isCustom)}
             />
@@ -258,10 +264,10 @@ const payload = {
            <div className="grid grid-cols-3 gap-4">
 
               <div>
-                <label className="block text-sm font-medium mb-1">Class</label>
+                <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">Class</label>
                 <input
                   type="text"
-                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
+                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   placeholder="e.g. 2026"
                   value={customClass}
                   onChange={(e) => setCustomClass(e.target.value)}
@@ -269,20 +275,20 @@ const payload = {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Height</label>
+                <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">Height</label>
                 <input
                   type="text"
-                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
+                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   placeholder="e.g. 6'1\"
                   value={customHeight}
                   onChange={(e) => setCustomHeight(e.target.value)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Weight</label>
+                <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">Weight</label>
                 <input
                   type="text"
-                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm"
+                  className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
                   placeholder="e.g. 190 lbs"
                   value={customWeight}
                   onChange={(e) => setCustomWeight(e.target.value)}
@@ -292,10 +298,10 @@ const payload = {
             {/* Custom Bio */}
 
             <div>
-              <label className="block text-sm font-medium mb-1">Custom Bio</label>
+              <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">Custom Bio</label>
               <textarea
                 rows={2}
-                className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 placeholder="Write your custom bio..."
                 value={customBio}
                 onChange={(e) => setCustomBio(e.target.value)}
@@ -304,10 +310,10 @@ const payload = {
 
             {/* Custom Film */}
             <div>
-              <label className="block text-sm font-medium mb-1">Custom Film Link</label>
+              <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">Custom Film Link</label>
               <input
                 type="text"
-                className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
                 placeholder="Paste highlight link..."
                 value={customFilm}
                 onChange={(e) => setCustomFilm(e.target.value)}
@@ -318,29 +324,33 @@ const payload = {
                                      
           </>
         ) : (
-          <div className="text-sm bg-gray-100 text-black rounded-lg px-4 py-3 border border-gray-200 space-y-2">
+          <div className="text-sm bg-gray-100 text-black rounded-lg px-4 py-3 border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100 space-y-2">
             <div>
-              <strong>Bio:</strong> {profileData.bio}
+              <strong>Bio:</strong> {profileData.bio || "No bio added"}
             </div>
            <div>
   <strong>Film:</strong>{" "}
-  <a
-    href={profileData.video}
-    target="_blank"
-    rel="noreferrer"
-    className="text-orange-600 underline"
-  >
-    {profileData.video.length > 30
-      ? profileData.video.slice(0, 30) + "..."
-      : profileData.video}
-  </a>
+  {profileData.video ? (
+    <a
+      href={profileData.video}
+      target="_blank"
+      rel="noreferrer"
+      className="text-orange-600 dark:text-orange-400 underline"
+    >
+      {profileData.video.length > 30
+        ? profileData.video.slice(0, 30) + "..."
+        : profileData.video}
+    </a>
+  ) : (
+    <span className="text-zinc-500">No film link added</span>
+  )}
 </div>
 
             <div>
-              <strong>Class:</strong> {profileData.grad_year}
+              <strong className="dark:text-white">Class:</strong> {profileData.grad_year || "Not added"}
             </div>
             <div>
-              <strong>Height / Weight:</strong> {profileData.height} / {profileData.weight}
+              <strong className="dark:text-white">Height / Weight:</strong> {profileData.height || "Not added"} / {profileData.weight || "Not added"}
             </div>
           </div>
         )}
@@ -350,10 +360,10 @@ const payload = {
 
   function renderSegmentSelect() {
     return (
-      <div className="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200 shadow-inner">
+      <div className="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200 dark:border-white/10 dark:bg-zinc-900 shadow-inner">
         <h3 className="text-sm font-semibold text-orange-500 mb-2">Campaign Target</h3>
         {(Object.entries(SEGMENT_KEYS) as [SegmentKey, string][]).map(([key, label]) => (
-          <label key={key} className="flex items-center mb-2 text-sm">
+          <label key={key} className="flex items-center mb-2 text-sm text-zinc-900 dark:text-zinc-100">
             <input
               type="checkbox"
               className="mr-2 accent-orange-500"
@@ -374,13 +384,13 @@ const payload = {
 
                {/* X Username Input */}
         <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">X Username</label>
+          <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">X Username</label>
           <input
             type="text"
             placeholder="@yourhandle"
             value={xUsername}
             onChange={(e) => setXUsername(e.target.value)}
-            className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
         </div>
         
@@ -392,7 +402,7 @@ const payload = {
             return (
               <label
                 key={label}
-                className="flex items-center mb-2 text-sm rounded-md px-3 py-2 shadow-sm cursor-pointer"
+                className="flex items-center mb-2 text-sm rounded-md px-3 py-2 shadow-sm cursor-pointer bg-white text-black border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100"
               >
                 <input
                   type="radio"
@@ -409,13 +419,13 @@ const payload = {
 
         {/* Boost Link Input */}
         <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">Add Boost Content (Link)</label>
+          <label className="block text-sm font-medium mb-1 text-zinc-900 dark:text-zinc-100">Add Boost Content (Link)</label>
           <input
             type="text"
             placeholder="Add custom post film or Repost (X Post)"
             value={boostLink}
             onChange={(e) => setBoostLink(e.target.value)}
-            className="w-full rounded-lg bg-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full rounded-lg bg-white text-black placeholder:text-gray-500 px-4 py-2 text-sm shadow-sm border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
         </div>
 
@@ -432,11 +442,11 @@ const payload = {
         </button>
 
         {/* Promo Banner */}
-      <div className="mt-6 p-4 rounded-lg text-sm space-y-1 text-center shadow-sm">
+      <div className="mt-6 p-4 rounded-lg text-sm space-y-1 text-center shadow-sm text-black bg-gray-100 border border-gray-200 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-100">
         <p>
-          🚀 <strong>Get Your Film Seen</strong> by 250,000+ followers & 10,000+ College Coaches!
+          <strong className="dark:text-white">Get Your Film Seen</strong> by 250,000+ followers & 10,000+ College Coaches!
         </p>
-        <p className="font-bold text-orange-600">The Largest Player Marketing Platform</p>
+        <p className="font-bold text-orange-600 dark:text-orange-400">The Largest Player Marketing Platform</p>
       </div>
 
       </div>
@@ -453,15 +463,15 @@ const payload = {
         <div className="flex items-center justify-between">
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:gap-2">
             {/* Campaign Button */}
-            <div className="flex w-full flex-col gap-2 text-xs text-gray-500 sm:flex-1">
+            <div className="flex w-full flex-col gap-2 text-xs text-gray-500 dark:text-zinc-400 sm:flex-1">
               <button
                 onClick={() => setShowModal(true)}
-                className="flex w-full items-center justify-center gap-2 rounded bg-orange-500 px-4 py-2 text-sm text-white hover:bg-orange-600"
+                className="flex w-full items-center justify-center gap-2 rounded border border-orange-500/40 bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:border-orange-400 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/40"
               >
                 <SendIcon className="w-5 h-5 self-center" />
                 Start New Campaign
               </button>
-              <span>
+              <span className="text-gray-500 dark:text-zinc-400">
                 {localCampaignCount} remaining campaign
                 {localCampaignCount !== 1 ? "s" : ""}
               </span>
@@ -481,20 +491,13 @@ const payload = {
           </div>
         </div>
 
-        {/* ---------------- Modal: Start Campaign ---------------- */}
-        {showModal && (
-          <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
-            {/* Campaign Modal Content */}
-            <div className="bg-white text-black p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-gray-100 overflow-y-auto max-h-[90vh]">
-              <h2 className="text-2xl font-bold mb-6">Start a New Campaign</h2>
-
-              {/* Close Button */}
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-black hover:bg-gray-200 rounded-full p-2 transition"
-              >
-                ✕
-              </button>
+        <Dialog open={showModal} onOpenChange={setShowModal}>
+          <DialogContent className="z-[9999] max-h-[92vh] w-[calc(100vw-2rem)] max-w-5xl overflow-y-auto rounded-2xl border border-gray-200 bg-white p-4 text-black dark:border-white/10 dark:bg-[#0b0b0d] dark:text-zinc-100 shadow-[0_24px_80px_rgba(0,0,0,0.55)] sm:p-6 md:p-8 [&>button]:text-gray-500 [&>button:hover]:text-black dark:[&>button]:text-zinc-400 dark:[&>button:hover]:text-white">
+            <DialogHeader>
+              <DialogTitle className="mb-2 text-2xl font-bold text-black dark:text-white">
+                Start a New Campaign
+              </DialogTitle>
+            </DialogHeader>
 
               {/* Campaign Type + Material */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -512,40 +515,34 @@ const payload = {
               <button
                 disabled={isPending || isOutOfCampaigns}
                 onClick={handleStartCampaign}
-                className="w-full flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg text-sm font-medium transition disabled:opacity-50"
+                className="flex w-full items-center justify-center rounded-lg border border-orange-500/40 bg-orange-500 px-5 py-3 text-sm font-bold !text-white shadow-sm transition hover:border-orange-400 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500/40 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-100 disabled:!text-gray-400 dark:disabled:border-zinc-700 dark:disabled:bg-zinc-800 dark:disabled:!text-zinc-500 disabled:opacity-100"
               >
-                <SendIcon className="w-4 h-4 mr-2" />
-                {isPending ? "Starting..." : "Start Campaign"}
+                <SendIcon className="w-4 h-4 mr-2 text-current" />
+                <span className="text-current">
+                  {isPending ? "Starting..." : "Start Campaign"}
+                </span>
               </button>
               {isOutOfCampaigns && (
-                <p className="text-xs text-center mt-2 text-orange-600">
+                <p className="mt-2 text-center text-xs text-orange-600 dark:text-orange-400">
                   You’ve used all your campaigns.
                 </p>
               )}
-            </div>
-          </div>
-        )}
+          </DialogContent>
+        </Dialog>
 
         {/* ---------------- Modal: Boost ---------------- */}
-        {showBoostModal && (
-          <div className="fixed inset-0 z-[9999] bg-black/75 backdrop-blur-sm flex items-center justify-center px-4">
-            {/* Boost Modal Content */}
-            <div className="bg-black text-white p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-sm sm:max-w-md md:max-w-xl absolute shadow-[0_15px_30px_rgba(0,0,0,0.1)] overflow-y-auto max-h-[90vh]">
-              <h2 className="text-2xl font-bold mb-6">Boost Your Film on X</h2>
-
-              {/* Close Button */}
-              <button
-                onClick={() => setShowBoostModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white hover:bg-gray-800 p-2 rounded-full transition"
-              >
-                ✕
-              </button>
+        <Dialog open={showBoostModal} onOpenChange={setShowBoostModal}>
+          <DialogContent className="z-[9999] max-h-[92vh] w-[calc(100vw-2rem)] max-w-3xl overflow-y-auto rounded-2xl border border-gray-200 bg-white p-4 text-black dark:border-white/10 dark:bg-[#0b0b0d] dark:text-white shadow-[0_24px_80px_rgba(0,0,0,0.55)] sm:p-6 md:p-8 [&>button]:text-gray-500 [&>button:hover]:text-black dark:[&>button]:text-zinc-400 dark:[&>button:hover]:text-white">
+            <DialogHeader>
+              <DialogTitle className="mb-2 text-2xl font-bold text-black dark:text-white">
+                Boost Your Film on X
+              </DialogTitle>
+            </DialogHeader>
 
               {/* Boost Form */}
               {renderBoostForm()}
-            </div>
-          </div>
-        )}
+          </DialogContent>
+        </Dialog>
       </div>
     </Card>
   );
