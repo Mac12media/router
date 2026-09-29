@@ -145,8 +145,6 @@ export default async function Nav() {
               </NavLink>
             ))}
 
-            {hasValidId && <UpgradeNavLink />}
-
             {/* Only show profile if ID is available */}
             {hasValidId && (
               <NavLink icon={User} href={`/profile/${id}`}>
@@ -160,6 +158,8 @@ export default async function Nav() {
                 {link.text}
               </NavLink>
             ))}
+
+            {hasValidId && <UpgradeNavLink />}
           </div>
         </div>
 

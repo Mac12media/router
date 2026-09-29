@@ -6,11 +6,11 @@ function getTargetDate() {
   const now = new Date();
   const currentYear = now.getFullYear();
 
-  // October 1st, midnight (next upcoming Oct 1).
+  // October 15th, midnight (next upcoming Oct 15).
   // Dates use the visitor's local time so the displayed clock and deadline agree.
-  let target = new Date(currentYear, 9, 1, 0, 0, 0); // month is 0-based: 9 = October
+  let target = new Date(currentYear, 9, 15, 0, 0, 0); // month is 0-based: 9 = October
   if (now.getTime() >= target.getTime()) {
-    target = new Date(currentYear + 1, 9, 1, 0, 0, 0);
+    target = new Date(currentYear + 1, 9, 15, 0, 0, 0);
   }
 
   return target;
@@ -87,7 +87,7 @@ export function UpgradeCountdownBanner() {
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
             <span className="h-2 w-2 rounded-full bg-white" />
-            Ends Oct 1st
+            Ends Oct 15th
           </div>
 
           <h2 className="mt-3 text-xl font-black uppercase tracking-tight md:text-2xl">
